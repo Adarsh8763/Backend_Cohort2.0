@@ -37,6 +37,18 @@ authRouter.post("/register", async (req,res)=>{
     })
 })
 
+authRouter.get("/get-me", async (req,res)=>{
+    const token = req.cookies.JWT_token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    const user = await userModel.findById(decoded.id)
+    res.json({
+        name: user.name,
+        email: user.email
+    })
+})
+
+
 authRouter.post("/protected",(req,res)=>{
     console.log(req.cookies)
 
@@ -79,5 +91,6 @@ authRouter.post("/login", async (req,res)=>{
     })
 
 })
+
 
 module.exports = authRouter
