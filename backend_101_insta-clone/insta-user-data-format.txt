@@ -4,3 +4,8 @@
     => password
     => bio
     => profileImg
+
+==> Post data
+    => caption
+    => imgUrl
+    => user: user_id (from users collection)
