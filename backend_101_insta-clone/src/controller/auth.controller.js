@@ -31,7 +31,7 @@ async function registerController (req, res){
         {expiresIn: "1d"}
     )
 
-    res.cookie("Token",token)
+    res.cookie("token",token)
 
     res.status(201).json({
         msg: "User Registered",
