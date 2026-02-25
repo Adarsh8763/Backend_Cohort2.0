@@ -74,7 +74,7 @@ async function loginController (req,res){
         process.env.JWT_SECRET,
         {expiresIn: "1d"}
     )
-    res.cookie("Token", token)
+    res.cookie("token", token)
 
     res.status(200).json({
         msg: "User logged in",
