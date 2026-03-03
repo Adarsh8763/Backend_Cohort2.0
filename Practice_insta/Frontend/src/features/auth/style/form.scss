@@ -1,0 +1,36 @@
+@mixin flex-column($gap) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+main {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .form-container {
+    height: fit-content;
+    min-width: 350px;
+
+    @include flex-column(.95rem);
+
+    form {
+      @include flex-column(.7rem);
+
+      input {
+        padding-inline: 1rem;
+        padding-block: 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.95rem;
+      }
+    }
+    .toggleAuthForm{
+      color: rgb(222, 15, 15);
+      text-decoration: none;
+    }
+  }
+}
