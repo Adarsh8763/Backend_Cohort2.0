@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user)
             return response
         }catch(err){
-            console.log(err)
+            throw err
         }finally{
             setLoading(false)
         }
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user)
             return response
         }catch(err){
-            console.log(err)
+            throw err
         }finally{
             setLoading(false)
         }

@@ -53,7 +53,7 @@ async function loginController (req,res){
             {username},
             {email}
         ]
-    })
+    }).select("+password")
     if (!user){
         return res.status(404).json({
             msg: "User not found"

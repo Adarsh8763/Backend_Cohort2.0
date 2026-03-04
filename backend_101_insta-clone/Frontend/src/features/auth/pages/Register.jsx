@@ -18,7 +18,10 @@ const Register = () => {
     handleRegister(username, email, password)
     .then(res=>{
       console.log(res)
-      navigate('/')
+      
+      if(res){
+        navigate('/')
+      }
     })
     
     setUsername("")

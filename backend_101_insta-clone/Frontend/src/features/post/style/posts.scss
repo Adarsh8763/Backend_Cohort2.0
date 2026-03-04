@@ -1,0 +1,108 @@
+.feed-page {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  .feed {
+    width: 330px;
+    min-width: 250px;
+    max-width: 400px;
+    height: 100%;
+    
+
+    .posts {
+      width: 100%;
+    //   background-color: gold;
+
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
+      
+      .post {
+        width: 100%;
+        
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        padding-inline: 1rem;
+        padding-block: 1rem;
+        border-radius: 1rem;
+        
+        background-color: rgb(47, 42, 42);
+        .user {
+          width: 100%;
+
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          .profile-outer-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.2rem;
+
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            background: conic-gradient(red,gold,rgb(63, 165, 233),orange,red);
+
+            .profile-inner-circle {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 0.1rem;
+
+              aspect-ratio: 1/1;
+              border-radius: 50%;
+              background: black;
+
+              .profileImg {
+                width: 2.5rem;
+                aspect-ratio: 1/1;
+                border-radius: 50%;
+                object-fit: cover;
+                object-position: top;
+              }
+            }
+          }
+        }
+
+        .postImg{
+            width: 100%;
+            border-radius: 1rem;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+
+        .icons{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            .left, .right{
+                display: flex;
+                gap: .4rem;
+                padding-inline: .4rem;
+                svg{
+                    aspect-ratio: 1/1;
+                    width: 1.5rem;
+                }
+                .like{
+                  color: red;
+                }
+
+            }
+        }
+
+        .bottom{
+            padding-inline: .4rem;
+        }
+      }
+    }
+  }
+}
