@@ -11,6 +11,7 @@ const identifyUser = require("../middlewares/auth.middleware")
     @access - protected
 */
 postRouter.post("/", upload.single("image"), identifyUser, postController.createPostController)
+//"image naam se file ko accept krega Frontend se"
 
 /*
     @route - GET /api/post
@@ -27,12 +28,21 @@ postRouter.get("/",identifyUser, postController.getPostController)
 */
 postRouter.get("/details/:postId",identifyUser, postController.getPostDetailsController)
 
+
 /*
     @route - POST /api/post/like/:postId 
     @description - Like a specific post
     @access - protected
 */
 postRouter.post("/like/:postId", identifyUser, postController.likeController)
+
+
+/*  @route - POST /api/post/unlike/:postId 
+    @description - Unlike a specific post
+    @access - protected
+*/
+postRouter.post("/unlike/:postId", identifyUser, postController.unlikeController)
+
 
 /*
     @route - GET /api/post/feed

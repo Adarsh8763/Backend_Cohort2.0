@@ -1,20 +1,19 @@
 import { useState } from "react"
 import { createContext } from "react"
-import { getFeed } from "./services/post.api"
-
+import { getFeed, likePost, unlikePost, createPost } from "./services/post.api"
 
 export const PostContext = createContext()
 
 export const PostProvider = ({children}) => {
 
   const [loading, setLoading] = useState(false)
-  const [feed, seFeed] = useState(null)
+  const [feed, setFeed] = useState(null)
 
   const handleGetFeed = async () => {
     setLoading(true)
     try{
       const response = await getFeed()
-      seFeed(response.feed)
+      setFeed(response.feed.reverse())
       return response
     }catch(err){
       throw err
@@ -23,8 +22,41 @@ export const PostProvider = ({children}) => {
     }
   }
 
+  const handleLikePost = async (postId) => {
+    try{
+      const response = await likePost(postId)
+      await handleGetFeed()
+      return response
+    }catch(err){
+      throw err
+    }
+  }
+
+  const handleUnlikePost = async (postId) => {
+    try{
+      const response = await unlikePost(postId)
+      await handleGetFeed()
+      return response
+    }catch(err){
+      throw err
+    }
+  }
+
+  const handleCreatePost = async (imgFile, caption) => {
+    setLoading(true)
+
+    try{
+      const response = await createPost(imgFile, caption)
+      await handleGetFeed()
+    }catch(err){
+      throw err
+    }finally{
+      setFeed(false)
+    }
+  }
+
   return (
-    <PostContext.Provider value={{loading, feed, handleGetFeed}}>
+    <PostContext.Provider value={{loading, feed, handleGetFeed, handleLikePost, handleUnlikePost, handleCreatePost}}>
         {children}
     </PostContext.Provider>
   )

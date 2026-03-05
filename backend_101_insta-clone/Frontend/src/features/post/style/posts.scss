@@ -3,8 +3,9 @@
   height: auto;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-star;
 
   .feed {
     width: 330px;

@@ -1,27 +1,22 @@
 import React from "react";
 
-const Post = ({user, post}) => {
+const Post = ({ user, post, handleLikePost, handleUnlikePost }) => {
   return (
     <div className="post">
       <div className="user">
         <div className="profile-outer-circle">
           <div className="profile-inner-circle">
-            <img
-              className="profileImg"
-              src={user.profileImg}
-            />
+            <img className="profileImg" src={user.profileImg} />
           </div>
         </div>
         <h3>{user.username}</h3>
       </div>
-      <img
-        className="postImg"
-        src={post.imgUrl}
-      />
+      <img className="postImg" src={post.imgUrl} />
       <div className="icons">
         <div className="left">
           <svg
-            className={post.isLiked?"like":""}
+            className={post.isLiked ? "like" : ""}
+            onClick={() => { post.isLiked? handleUnlikePost(post._id) : handleLikePost(post._id) }}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"

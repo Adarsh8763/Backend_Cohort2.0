@@ -21,16 +21,11 @@ main{
         flex-direction: column;
         gap: .6rem;
         
-        input,button{
+        input{
             padding-inline: 1.5rem;
             padding-block: 1rem;
             border-radius: 1rem;
             font-size: 1rem;
-        }
-        button{
-            background-color: rgb(212, 27, 27);
-            color: whitesmoke;
-
         }
     }
     .toggleAuthForm{

@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import '../style/form.scss'
+import "../../shared/button.scss"
 import {Link} from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
@@ -37,7 +38,7 @@ const Register = () => {
           <input onChange= {(e)=> {setUsername(e.target.value)}} type="text" name='username' value={username} placeholder='Enter username'/>
           <input onChange= {(e)=> {setEmail(e.target.value)}} type="text" name='email' value={email} placeholder='Enter email'/>
           <input onChange={(e)=>{setPassword(e.target.value)}} type="text" name='password' value={password} placeholder='Enter password'/>
-          <button>Register</button>
+          <button className='button primary-button'>Register</button>
           <p>Already have an account? <Link className='toggleAuthForm' to='/login'>Login</Link> </p>
         </form>
         </div>

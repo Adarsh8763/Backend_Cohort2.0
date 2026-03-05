@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../style/form.scss";
+import "../../shared/button.scss"
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +58,7 @@ const Login = () => {
             value={password}
             placeholder="Enter password"
           />
-          <button>Login</button>
+          <button className="button primary-button">Login</button>
         </form>
         <p>
           Don't have an account?{" "}
