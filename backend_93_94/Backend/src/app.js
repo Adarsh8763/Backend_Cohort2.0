@@ -49,7 +49,7 @@ app.patch("/api/notes/:id", async(req, res) => {
 // console.log(__dirname);
 
 app.use("*name",(req,res)=>{
-    res.send("This is wild card")
+    // res.send("This is wild card")
     res.sendFile(path.join(__dirname,"..","/public/index.html"))
 })
 
