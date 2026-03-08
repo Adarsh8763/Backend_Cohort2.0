@@ -23,7 +23,7 @@ const Feed = () => {
   if(!feed){
     return (
       <main>
-        <h1>No Feed is there in DB or</h1>
+        <h1>No Feed is there in DB or </h1>
         <h1>U haven't logged in yet</h1>
       </main>
     )
