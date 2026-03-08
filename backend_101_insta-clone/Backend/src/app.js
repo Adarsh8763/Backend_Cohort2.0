@@ -10,7 +10,7 @@ app.use(express.static("./public"))
 
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:5173"
+    origin: "https://backend-cohort2-0-1-e72l.onrender.com/"
 }))
 
 // Require routes
