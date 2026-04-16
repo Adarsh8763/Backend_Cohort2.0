@@ -9,7 +9,7 @@ export async function login(username, password) {
   const response = await api.post("/login", {
     username,
     password,
-  });
+  }); 
   return response.data;
 }
 
@@ -23,8 +23,7 @@ export async function register(username, email, password) {
 }
 
 export async function getMe() {
-  const response = api.get("/get-me");
-
-  return response;
+  const response = await api.get("/get-me");
+  return response.data;
 }
 

@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     return(
         // Provider => fills the AuthContext container with value
-        // Niche pura code ka mtlb => iske andar jo bhi children h wo wrap ho gya <AuthContext.Provider> andar and wo ab ke gloablly availabel chizo ko direct use kr skta h
+        // Niche pura code ka mtlb => iske andar jo bhi children h wo wrap ho gya <AuthContext.Provider> andar and wo ab ke gloablly available chizo ko direct use kr skta h
         <AuthContext.Provider value = {{user, loading, handleLogin, handleRegister}}>
             {children}    
         </AuthContext.Provider>
