@@ -1,60 +1,67 @@
-import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+import {
+    FaceLandmarker,
+    FilesetResolver
+} from "@mediapipe/tasks-vision";
 
 
-export const init = async (faceLandmarkerRef, videoRef) => {
+export const init = async ({ landmarkerRef, videoRef, streamRef }) => {
     const vision = await FilesetResolver.forVisionTasks(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm",
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
     );
 
-    faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(vision, {
-      baseOptions: {
-        modelAssetPath:
-          "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-      },
-      runningMode: "VIDEO",
-      outputFaceBlendshapes: true,
-      numFaces: 1,
-    });
-
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoRef.current.srcObject = stream;
-  };
-
-
-  export const detect = async (faceLandmarkerRef, videoRef, setEmotion) => {
-    const video = videoRef.current;
-    const faceLandmarker = faceLandmarkerRef.current;
-
-    const result = await faceLandmarker.detectForVideo(
-      video,
-      performance.now(),
+    landmarkerRef.current = await FaceLandmarker.createFromOptions(
+        vision,
+        {
+            baseOptions: {
+                modelAssetPath:
+                    "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task"
+            },
+            outputFaceBlendshapes: true,
+            runningMode: "VIDEO",
+            numFaces: 1
+        }
     );
 
-    if (result.faceBlendshapes.length > 0) {
-      const shapes = result.faceBlendshapes[0].categories;
+    streamRef.current = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoRef.current.srcObject = streamRef.current;
+    await videoRef.current.play();
+};
 
-      const getScore = (name) =>
-        shapes.find((s) => s.categoryName === name)?.score || 0;
+export const detect = ({ landmarkerRef, videoRef, setExpression }) => {
+    if (!landmarkerRef.current || !videoRef.current) return;
 
-      const smile = getScore("mouthSmileLeft") + getScore("mouthSmileRight");
-      const browDown = getScore("browDownLeft") + getScore("browDownRight");
-      const mouthOpen = getScore("jawOpen");
-      const browInnerUp = getScore("browInnerUp");
-      const mouthFrown =
-        getScore("mouthFrownLeft") + getScore("mouthFrownRight");
+    const results = landmarkerRef.current.detectForVideo(
+        videoRef.current,
+        performance.now()
+    );
 
-      // console.log(browDown)
+    if (results.faceBlendshapes?.length > 0) {
+        const blendshapes = results.faceBlendshapes[ 0 ].categories;
 
-      let detectedEmotion = "Neutral";
+        const getScore = (name) =>
+            blendshapes.find((b) => b.categoryName === name)?.score || 0;
 
-      if (smile > 0.6) detectedEmotion = "Happy";
-      else if (mouthOpen > 0.6) detectedEmotion = "Surprised";
-      else if (browDown > 0.02) detectedEmotion = "Angry";
-      else if (browInnerUp > 0.4 || mouthFrown > 0.4) {
-        detectedEmotion = "Sad";
-      }
+        const smileLeft = getScore("mouthSmileLeft");
+        const smileRight = getScore("mouthSmileRight");
+        const jawOpen = getScore("jawOpen");
+        const browUp = getScore("browInnerUp");
+        const frownLeft = getScore("mouthFrownLeft");
+        const frownRight = getScore("mouthFrownRight");
 
-      setEmotion(detectedEmotion);
+        console.log(getScore("mouthFrownLeft"))
+
+        let currentExpression = "Neutral";
+
+        if (smileLeft > 0.5 && smileRight > 0.5) {
+            currentExpression = "happy";
+        } else if (jawOpen > 0.01 && browUp > 0.01) {
+            currentExpression = "surprised";
+        } else if (frownLeft > 0.0001 && frownRight > 0.0001) {
+            currentExpression = "sad";
+        }
+
+        setExpression(currentExpression);
+
+        return currentExpression
     }
-
-  };
+};

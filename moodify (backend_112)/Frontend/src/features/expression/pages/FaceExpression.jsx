@@ -1,30 +1,46 @@
-import React, { useEffect, useRef, useState } from "react";
-import "../style/faceExpression.scss";
-import "../../shared/button.scss"
-import { init, detect } from '../utils/utils'
+import { useEffect, useRef, useState } from "react";
+import { detect, init } from "../utils/utils";
 
-export default function FaceExpression() {
-  const videoRef = useRef(null);
-  const [emotion, setEmotion] = useState("Detecting...");
-  const faceLandmarkerRef = useRef(null);
 
-  useEffect(() => {
-    init(faceLandmarkerRef, videoRef);
-  }, []);
+export default function FaceExpression({ onClick = () => { } }) {
+    const videoRef = useRef(null);
+    const landmarkerRef = useRef(null);
+    const streamRef = useRef(null);
 
-  
+    const [ expression, setExpression ] = useState("Detecting...");
 
-  return (
-    <div className="face-expression-page" style={{ textAlign: "center" }}>
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        style={{ width: "25rem", borderRadius: "1rem", border: "solid 1px whitesmoke" }}
-      />
-      <h2>Emotion: {emotion}</h2>
-      <br />
-      <button className="button primary-button" onClick={()=>{detect(faceLandmarkerRef, videoRef, setEmotion)}}>Detect Expression</button>
-    </div>
-  );
+    useEffect(() => {
+        init({ landmarkerRef, videoRef, streamRef });
+
+        return () => {
+            if (landmarkerRef.current) {
+                landmarkerRef.current.close();
+            }
+
+            if (videoRef.current?.srcObject) {
+                videoRef.current.srcObject
+                    .getTracks()
+                    .forEach((track) => track.stop());
+            }
+        };
+    }, []);
+
+    async function handleClick() {
+        const expression = detect({ landmarkerRef, videoRef, setExpression })
+        console.log(expression)
+        onClick(expression)
+    }
+
+
+    return (
+        <div style={{ textAlign: "center" }}>
+            <video
+                ref={videoRef}
+                style={{ width: "350px", borderRadius: "12px" }}
+                playsInline
+            />
+            <h2>{expression}</h2>
+            <button onClick={handleClick} className="button primary-button">Detect expression</button>
+        </div>
+    );
 }
