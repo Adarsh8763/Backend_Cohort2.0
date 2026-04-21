@@ -33,5 +33,10 @@ authRouter.post("/logout", identifyUser, authController.logoutController)
 // @query   token
 authRouter.get("/verify-email", authController.verifyEmailController)
 
+// @desc    Resend verification email
+// @route   POST /api/auth/resend-verification-email
+// @access  Public
+// @query   email
+authRouter.post("/resend-verification-email", authController.resendVerificationEmailController)
 
 export default authRouter

@@ -40,7 +40,7 @@ async function registerController(req, res) {
             html: `<p>Hello, ${username}!</p>
                 <p>Thank you for registering with us. We're excited to have you on board!</p>
                 <p>Your email has been successfully registered. You can now log in to your account and explore our services.</p>
-                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Go to login</a>
+                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
                 <p>Best regards,<br/>The Perplexity Team</p>`
         });
 
@@ -92,7 +92,7 @@ async function loginController(req, res) {
         })
     }
 
-    if(!user.verified){
+    if (!user.verified) {
         return res.status(400).json({
             message: "Please verify ur email before logging in"
         })
@@ -150,32 +150,74 @@ async function logoutController(req, res) {
 }
 
 async function verifyEmailController(req, res) {
-    const {token} = req.query
+    const { token } = req.query
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     const user = await userModel.findOne({ email: decoded.email })
     if (!user) {
         return res.status(400).json({
-            message: "INvalid token",
+            message: "Invalid token",
             err: "User not found"
         })
     }
 
-    user.verified = true
+    if (!user.verified) {
+        user.verified = true
 
-    await user.save()
+        await user.save()
 
-    res.send(`
-        <h1>Email verified successfully</h1>
-        <p>Your email has been verified. Now u can log in to ur account.</p>
-    `)
+        res.send(`
+            <h1>Email verified successfully</h1>
+            <p>Your email has been verified. Now u can log in to ur account.</p>
+        `)
+    }
+    else {
+        res.send(`
+            <h1>Email already verified</h1>
+            <p>Your email is already verified. You can log in to your account.</p>
+            <p>If you are already logged in, then you can ignore this message.</p>
+        `)
+    }
 }
 
+async function resendVerificationEmailController(req, res) {
+    const { email } = req.body
+
+    const user = await userModel.findOne({ email })
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found with email."
+        })
+    }
+
+    const emailVerificationToken = jwt.sign(
+        {
+            email: user.email
+        },
+        process.env.JWT_SECRET
+    )
+
+    await sendEmail({
+        to: user.email,
+        subject: "Welcome to Perplexity",
+        html: `<p>Hello, ${user.username}!</p>
+                <p>Thank you for registering with us. We're excited to have you on board!</p>
+                <p>Your email has been successfully registered. You can now log in to your account and explore our services.</p>
+                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
+                <p>Best regards,<br/>The Perplexity Team</p>`
+    });
+
+    res.status(201).json({
+        message: "Verification email resent successfully",
+    })
+}
 
 export default {
     registerController,
     loginController,
     getMeController,
     logoutController,
-    verifyEmailController
+    verifyEmailController,
+    resendVerificationEmailController
 }

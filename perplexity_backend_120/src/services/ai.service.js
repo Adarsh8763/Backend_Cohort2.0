@@ -6,7 +6,7 @@ temperature: 0
 });
 
 export async function testAi(){
-    model.invoke("write a code for adding n natural numbers in js")
+    model.invoke("What is captial of India within 10 words")
     .then((res)=>{
         console.log(res.text)
     })

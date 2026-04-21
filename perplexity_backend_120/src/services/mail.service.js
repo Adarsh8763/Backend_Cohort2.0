@@ -30,7 +30,6 @@ export async function sendEmail ({to, subject, text, html})  {
         html, // html body
     });
 
-    const details = await transporter.sendMail(mailOptions)
-    console.log("Email sent: ", details)
+    console.log("Email sent: ", mailOptions)
 };
 
