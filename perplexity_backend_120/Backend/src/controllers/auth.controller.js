@@ -104,7 +104,7 @@ async function loginController(req, res) {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "3d"
+            expiresIn: "10d"
         }
     )
 
@@ -142,7 +142,7 @@ async function logoutController(req, res) {
 
     res.clearCookie("token")
 
-    await redis.set(`perplexity:${token}`, Date.now().toString(), "EX", 60 * 60)
+    await redis.set(`perplexity:${token}`, Date.now().toString(), "EX", 60 * 60 * 24 * 15)
 
     res.status(200).json({
         message: "User logged out successfully"

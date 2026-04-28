@@ -5,13 +5,13 @@ async function identifyUser(req, res, next){
     const token = req.cookies.token
 
     if(!token){
-        return res.status(404).json({
+        return res.status(401).json({
             message: "Token not provided"
         })
     }
 
-    const isTokenBalcklisted = await redis.get(`perplexity:${token}`)
-    if(isTokenBalcklisted){
+    const isTokenBlacklisted = await redis.get(`perplexity:${token}`)
+    if(isTokenBlacklisted){
         return res.status(401).json({
             message: "Invalid Token"
         })
