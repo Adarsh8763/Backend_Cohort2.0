@@ -20,11 +20,13 @@ authRouter.post("/login", authController.loginController)
 // @desc    Get current user
 // @route   GET /api/auth/get-me
 // @access  Private
+// @body    { userId }
 authRouter.get("/get-me", identifyUser, authController.getMeController)
 
 // @desc    Logout user
 // @route   POST /api/auth/logout
 // @access  Private
+// @body    { userId }
 authRouter.post("/logout", identifyUser, authController.logoutController)
 
 // @desc    Verify email

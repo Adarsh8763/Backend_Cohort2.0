@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
     chat: {
-        type: mongoose.Schema.Types.ObjectId(),
+        type: mongoose.Schema.Types.ObjectId,
         ref: "chats",
         required: [true, "Chat is required to for a message"]
     },
@@ -15,6 +15,8 @@ const messageSchema = new mongoose.Schema({
         required: true,
         enum: ["ai", "user"]
     }
+}, {
+    timestamps: true
 })
 
 const messageModel = mongoose.model("msgs", messageSchema)
