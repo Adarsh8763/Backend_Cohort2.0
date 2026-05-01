@@ -1,0 +1,43 @@
+@import './variables.scss';
+
+.message {
+  display: flex;
+  max-width: 80%;
+}
+
+.message--user {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.message--ai {
+  margin-right: auto;
+  justify-content: flex-start;
+}
+
+.message__bubble {
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  word-break: break-word;
+  background: #111623;
+  color: #edf2f7;
+}
+
+.message__bubble--user {
+  background: #10a37f;
+  color: #ffffff;
+  border-bottom-right-radius: 0.7rem;
+}
+
+.message__bubble--ai {
+  background: #161c28;
+  color: #d9e3f0;
+  border-bottom-left-radius: 0.7rem;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+}
