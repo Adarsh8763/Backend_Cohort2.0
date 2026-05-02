@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const chatSlice = createSlice({
     name: "chat",
-    reducers: {
-        chats:{},
+    initialState: {
+        chats: {},
         currentChatId: null,
         loading: false,
         error: null
@@ -37,5 +37,5 @@ const chatSlice = createSlice({
     }
 })
 
-const { createNewChat, addNewMessage, setChats, setCurrentChatId, setLoading, setError} = chatSlice.actions
+export const { createNewChat, addNewMessage, setChats, setCurrentChatId, setLoading, setError } = chatSlice.actions
 export default chatSlice.reducer

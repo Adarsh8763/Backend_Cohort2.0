@@ -38,6 +38,7 @@ export async function sendMessageController(req, res) {
 
     return res.status(201).json({
         aiMessage,
+        result,
         chat
     })
 }
