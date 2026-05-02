@@ -2,8 +2,8 @@ import messageModel from "../models/message.model.js"
 import chatModel from "../models/chat.model.js"
 import { generateChatTitle, generateResponse } from "../services/ai.service.js"
 
-export async function sendMessage(req, res) {
-    const { message, chat: chatId } = req.body
+export async function sendMessageController(req, res) {
+    const { message, chatId } = req.body
 
     let title = null, chat = null
 
@@ -36,26 +36,26 @@ export async function sendMessage(req, res) {
         role: "ai"
     })
 
-    res.json({
-        aiMessage: result,
-        title
+    return res.status(201).json({
+        aiMessage,
+        chat
     })
 }
 
-export async function getChats(req, res){
+export async function getChatsController(req, res){
     const user = req.user
 
     const chats = await chatModel.find({
         user: user.id
     })
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Chats fetched successfully",
         chats
     })
 }
 
-export async function getMessages(req, res) {
+export async function getMessagesController(req, res) {
     const chatId = req.params.chatId
 
     const chat = await chatModel.findOne({
@@ -73,7 +73,7 @@ export async function getMessages(req, res) {
         chat: chatId
     })
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Messages fetched successfully",
         messages
     })
@@ -81,7 +81,7 @@ export async function getMessages(req, res) {
 
 }
 
-export async function deleteChat(req, res){
+export async function deleteChatController(req, res){
     const chatId = req.params.chatId
     const user = req.user
 
@@ -99,7 +99,7 @@ export async function deleteChat(req, res){
         })
     }
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Chat deleted successfully."
     })
 }
