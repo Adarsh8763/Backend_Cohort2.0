@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useChat } from "../hooks/useChat";
 import "../styles/Chat.scss";
 import { initializeSocketconnection } from "../service/chat.socket";
+import remarkGfm from 'remark-gfm'
 
 const Dashboard = () => {
   const chat = useChat();
@@ -29,7 +30,7 @@ const Dashboard = () => {
   };
 
   const openChat = (chatId) => {
-    chat.handleOpenChat(chatId);
+    chat.handleOpenChat(chatId, chats);
   };
 
   return (
@@ -67,7 +68,7 @@ const Dashboard = () => {
                 {message.role === "user" ? (
                   <p>{message.content}</p>
                 ) : (
-                  <ReactMarkdown
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}
                     components={{
                       p: ({ children }) => (
                         <p className="mb-2 last:mb-0">{children}</p>
