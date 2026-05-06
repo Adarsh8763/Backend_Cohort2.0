@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@langchain/core": "^1.1.44",
+    "@langchain/mistralai": "^1.0.8",
+    "@langchain/textsplitters": "^1.0.1",
+    "@pinecone-database/pinecone": "^7.2.0",
+    "dotenv": "^17.4.2",
+    "fs": "^0.0.1-security",
+    "pdf-parse": "^2.4.5"
+  },
+  "name": "backend_130_rag",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
