@@ -10,7 +10,11 @@ app.get("/health", (req, res) => {
 })
 
 app.post("/use-graph", async(req, res) => {
-    await useGraph("What is the capital of India?")
+    const result = await useGraph("What is the capital of India?")
+    res.status(201).json({
+        "message": "Graph invoked successfully",
+        "result": result
+    })
 })
 
 export default app
