@@ -14,7 +14,7 @@ export const mistralModel = new ChatMistralAI({
     temperature: 0
 })
 
-export const cohere = new ChatCohere({
+export const cohereModel = new ChatCohere({
     model: "command-a-03-2025",
-    apiKey: config.MISTRAL_API_KEY,
+    apiKey: config.COHERE_API_KEY,
 })
