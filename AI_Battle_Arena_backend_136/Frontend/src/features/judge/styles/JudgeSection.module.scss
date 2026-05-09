@@ -1,0 +1,221 @@
+/* ============================================================
+   JUDGE SECTION — Verdict, scores, reasoning
+   ============================================================ */
+
+.judgeSection {
+  border-radius: $radius-xl;
+  border: 1px solid rgba($color-judge, 0.2);
+  background: linear-gradient(
+    160deg,
+    rgba($color-judge, 0.04) 0%,
+    rgba($color-surface, 0.8) 50%,
+    rgba($color-surface, 0.8) 100%
+  );
+  padding: $space-8;
+  animation: fadeIn $duration-slow $ease-out-expo;
+  box-shadow: 0 0 40px rgba($color-judge, 0.06), $shadow-lg;
+
+  @include max-md {
+    padding: $space-5;
+  }
+}
+
+.judgeHeader {
+  @include flex-between;
+  margin-bottom: $space-8;
+
+  @include max-md {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-4;
+  }
+}
+
+.judgeTitle {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.judgeBadge {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $color-judge-dim;
+  border: 1px solid rgba($color-judge, 0.3);
+  border-radius: $radius-full;
+  padding: $space-2 $space-4;
+  font-size: $text-sm;
+  font-weight: $weight-semibold;
+  color: $color-judge;
+  letter-spacing: $tracking-wide;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.judgeSubtitle {
+  font-size: $text-sm;
+  color: $color-text-muted;
+  margin-top: $space-1;
+}
+
+.winnerAnnouncement {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  background: rgba($color-judge, 0.08);
+  border: 1px solid rgba($color-judge, 0.25);
+  border-radius: $radius-lg;
+  padding: $space-3 $space-5;
+}
+
+.winnerLabel {
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  color: $color-judge;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wider;
+}
+
+.winnerName {
+  font-size: $text-lg;
+  font-weight: $weight-semibold;
+  color: $color-text-primary;
+}
+
+// ─── Score section ───────────────────────────────────────────
+.scoresGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-6;
+  margin-bottom: $space-8;
+
+  @include max-md {
+    grid-template-columns: 1fr;
+    gap: $space-4;
+  }
+}
+
+.scoreCard {
+  @include flex-col;
+  gap: $space-3;
+  padding: $space-5;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  transition: border-color $duration-base ease, box-shadow $duration-base ease;
+
+  &.winner {
+    border-color: rgba($color-judge, 0.3);
+    box-shadow: $shadow-glow-judge;
+  }
+}
+
+.scoreCardHeader {
+  @include flex-between;
+}
+
+.scoreModelName {
+  font-size: $text-base;
+  font-weight: $weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.scoreDot {
+  width: 8px;
+  height: 8px;
+  border-radius: $radius-full;
+
+  &.model1 { background: $color-primary; box-shadow: 0 0 6px $color-primary; }
+  &.model2 { background: $color-secondary; box-shadow: 0 0 6px $color-secondary; }
+}
+
+.scoreValue {
+  font-size: $text-2xl;
+  font-weight: $weight-bold;
+  font-variant-numeric: tabular-nums;
+
+  &.model1 { color: $color-primary; }
+  &.model2 { color: $color-secondary; }
+}
+
+.scoreBarTrack {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.scoreBarFill {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width 1.2s $ease-out-expo;
+
+  &.model1 { background: linear-gradient(90deg, $color-primary, #818cf8); }
+  &.model2 { background: linear-gradient(90deg, $color-secondary, #a78bfa); }
+}
+
+// ─── Reasoning section ───────────────────────────────────────
+.reasoningGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-6;
+
+  @include max-md {
+    grid-template-columns: 1fr;
+    gap: $space-4;
+  }
+}
+
+.reasoningCard {
+  @include flex-col;
+  gap: $space-3;
+  padding: $space-5;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+}
+
+.reasoningHeader {
+  @include flex-between;
+}
+
+.reasoningTitle {
+  font-size: $text-sm;
+  font-weight: $weight-semibold;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.reasoningText {
+  font-size: $text-sm;
+  line-height: $leading-normal;
+  color: $color-text-muted;
+}
+
+// ─── Judging skeleton ────────────────────────────────────────
+.judgingSkeleton {
+  @include flex-col;
+  gap: $space-4;
+  padding: $space-6 0;
+}
+
+.judgingLabel {
+  @include flex-center;
+  gap: $space-3;
+  font-size: $text-sm;
+  color: $color-judge;
+  font-weight: $weight-medium;
+
+  .judgingDot {
+    width: 8px;
+    height: 8px;
+    border-radius: $radius-full;
+    background: $color-judge;
+    animation: pulse-glow 1s ease-in-out infinite;
+  }
+}

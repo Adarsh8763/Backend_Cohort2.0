@@ -1,0 +1,127 @@
+/* ============================================================
+   PROMPT INPUT — Hero problem statement area
+   ============================================================ */
+
+.wrapper {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.label {
+  display: block;
+  font-size: $text-sm;
+  font-weight: $weight-medium;
+  color: $color-text-muted;
+  letter-spacing: $tracking-wide;
+  text-transform: uppercase;
+  margin-bottom: $space-3;
+}
+
+.textareaWrap {
+  position: relative;
+  border-radius: $radius-xl;
+  border: 1px solid $color-border;
+  background: $color-surface;
+  transition: border-color $duration-base $ease-out-expo, box-shadow $duration-base $ease-out-expo;
+  box-shadow: $shadow-sm;
+
+  &.focused {
+    border-color: rgba($color-primary, 0.5);
+    box-shadow: 0 0 0 3px $color-primary-dim, $shadow-md;
+  }
+
+  &:has(textarea:focus) {
+    border-color: rgba($color-primary, 0.5);
+    box-shadow: 0 0 0 3px $color-primary-dim, $shadow-md;
+  }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  max-height: 340px;
+  resize: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: $space-5 $space-6;
+  font-family: $font-sans;
+  font-size: $text-md;
+  color: $color-text-primary;
+  line-height: $leading-normal;
+  letter-spacing: -0.005em;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  @include max-md {
+    font-size: $text-base;
+    padding: $space-4;
+  }
+}
+
+.footer {
+  @include flex-between;
+  padding: $space-3 $space-6;
+  border-top: 1px solid $color-border;
+
+  @include max-md {
+    padding: $space-3 $space-4;
+  }
+}
+
+.hint {
+  font-size: $text-xs;
+  color: $color-text-muted;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+
+  kbd {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-family: $font-sans;
+  }
+}
+
+.charCount {
+  font-size: $text-xs;
+  color: $color-text-muted;
+  font-variant-numeric: tabular-nums;
+
+  &.warning { color: $color-warning; }
+  &.danger  { color: $color-error; }
+}
+
+.submitRow {
+  margin-top: $space-4;
+  display: flex;
+  justify-content: center;
+}
+
+.submitBtn {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    @include cover;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    transition: transform $duration-slower $ease-out-expo;
+  }
+
+  &:hover::before {
+    transform: translateX(100%);
+  }
+}

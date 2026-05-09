@@ -1,0 +1,216 @@
+/* ============================================================
+   BATTLE ARENA — Split screen comparison layout
+   ============================================================ */
+
+.arena {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  border-radius: $radius-xl;
+  border: 1px solid $color-border;
+  background: $color-surface;
+  overflow: hidden;
+  box-shadow: $shadow-lg;
+  min-height: 400px;
+
+  @include max-md {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+  }
+}
+
+.divider {
+  background: $color-border;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include max-md {
+    height: 1px;
+    width: 100%;
+  }
+}
+
+.vsBadge {
+  position: absolute;
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-full;
+  background: $color-surface-raised;
+  border: 1px solid $color-border;
+  font-size: $text-xs;
+  font-weight: $weight-bold;
+  color: $color-text-muted;
+  letter-spacing: $tracking-wide;
+  box-shadow: $shadow-sm;
+  z-index: 1;
+  user-select: none;
+}
+
+// ─── Individual Panel ─────────────────────────────────────────
+.panel {
+  @include flex-col;
+  min-width: 0;
+  padding: 0;
+
+  &.winning {
+    &.model1 { box-shadow: inset 0 0 40px rgba(99, 102, 241, 0.06); }
+    &.model2 { box-shadow: inset 0 0 40px rgba(139, 92, 246, 0.06); }
+  }
+}
+
+.panelHeader {
+  @include flex-between;
+  padding: $space-4 $space-5;
+  border-bottom: 1px solid $color-border;
+  flex-shrink: 0;
+}
+
+.modelInfo {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.modelDot {
+  width: 10px;
+  height: 10px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+
+  &.model1 {
+    background: $color-primary;
+    box-shadow: 0 0 8px rgba($color-primary, 0.6);
+  }
+  &.model2 {
+    background: $color-secondary;
+    box-shadow: 0 0 8px rgba($color-secondary, 0.6);
+  }
+}
+
+.modelName {
+  font-size: $text-base;
+  font-weight: $weight-semibold;
+  color: $color-text-primary;
+  letter-spacing: $tracking-snug;
+}
+
+.modelLabel {
+  font-size: $text-xs;
+  color: $color-text-muted;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $color-border;
+  border-radius: $radius-full;
+  padding: 2px $space-2;
+}
+
+.panelStatus {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.streamingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: $text-xs;
+  color: $color-text-muted;
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: $radius-full;
+    background: $color-judge;
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
+}
+
+.winnerBadge {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  color: $color-judge;
+  background: $color-judge-dim;
+  border: 1px solid rgba($color-judge, 0.25);
+  border-radius: $radius-full;
+  padding: 3px $space-3;
+  letter-spacing: $tracking-wide;
+  animation: scaleIn 0.4s $ease-spring;
+}
+
+.panelBody {
+  flex: 1;
+  padding: $space-5;
+  overflow-y: auto;
+  @include custom-scrollbar;
+  position: relative;
+}
+
+.responseText {
+  font-family: $font-sans;
+  font-size: $text-base;
+  line-height: $leading-normal;
+  color: $color-text-secondary;
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  &.complete { color: $color-text-primary; }
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: $color-primary;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink 1s ease-in-out infinite;
+}
+
+// ─── Skeleton ────────────────────────────────────────────────
+.skeleton {
+  @include flex-col;
+  gap: $space-3;
+
+  .skLine {
+    height: 14px;
+    border-radius: $radius-sm;
+    @include shimmer;
+
+    &:nth-child(1) { width: 90%; }
+    &:nth-child(2) { width: 75%; }
+    &:nth-child(3) { width: 85%; }
+    &:nth-child(4) { width: 60%; }
+    &:nth-child(5) { width: 80%; }
+  }
+}
+
+// ─── Idle state ──────────────────────────────────────────────
+.idleState {
+  @include flex-center;
+  @include flex-col;
+  gap: $space-3;
+  height: 100%;
+  min-height: 200px;
+  color: $color-text-muted;
+  text-align: center;
+  padding: $space-8;
+
+  .idleIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-lg;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid $color-border;
+    @include flex-center;
+    opacity: 0.5;
+  }
+
+  p { font-size: $text-sm; }
+}

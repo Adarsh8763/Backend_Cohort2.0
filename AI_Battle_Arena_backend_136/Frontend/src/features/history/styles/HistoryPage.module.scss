@@ -1,0 +1,80 @@
+/* ─── History Page ───────────────────────────────────────── */
+
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $space-12 $space-8;
+  min-height: calc(100vh - #{$navbar-height});
+
+  @include max-md { padding: $space-6 $space-4; }
+}
+
+.header {
+  margin-bottom: $space-8;
+
+  h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: $weight-bold;
+    letter-spacing: $tracking-tight;
+    color: $color-text-primary;
+  }
+}
+
+.subtitle {
+  font-size: $text-base;
+  color: $color-text-muted;
+  margin-top: $space-1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $space-4;
+}
+
+.card {
+  @include surface-2;
+  padding: $space-5;
+  @include flex-col;
+  gap: $space-3;
+  transition: border-color $duration-fast ease, box-shadow $duration-fast ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: $shadow-md;
+  }
+}
+
+.cardProblem {
+  font-size: $text-base;
+  color: $color-text-primary;
+  @include text-clamp(2);
+}
+
+.cardMeta {
+  @include flex-between;
+}
+
+.winner {
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  border-radius: $radius-full;
+  padding: 2px $space-3;
+  
+  &.m1 { background: $color-primary-dim; color: $color-primary; }
+  &.m2 { background: $color-secondary-dim; color: $color-secondary; }
+}
+
+.date {
+  font-size: $text-xs;
+  color: $color-text-muted;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: $space-20;
+  color: $color-text-muted;
+  font-size: $text-base;
+}

@@ -1,0 +1,85 @@
+/* ============================================================
+   BATTLE PAGE — Main page layout
+   ============================================================ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-12;
+  padding: $space-12 $space-8;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: calc(100vh - #{$navbar-height});
+
+  @include max-lg {
+    padding: $space-8 $space-5;
+    gap: $space-8;
+  }
+
+  @include max-md {
+    padding: $space-6 $space-4;
+    gap: $space-6;
+  }
+}
+
+.hero {
+  text-align: center;
+  @include flex-col;
+  align-items: center;
+  gap: $space-3;
+  padding-bottom: $space-4;
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wider;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid $color-border;
+  border-radius: $radius-full;
+  padding: 4px $space-4;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: $weight-bold;
+  letter-spacing: $tracking-tight;
+  background: linear-gradient(
+    135deg,
+    $color-text-primary 0%,
+    rgba($color-text-primary, 0.6) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.heroSubtitle {
+  font-size: $text-md;
+  color: $color-text-muted;
+  max-width: 480px;
+  line-height: $leading-normal;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  background: rgba($color-error, 0.08);
+  border: 1px solid rgba($color-error, 0.25);
+  border-radius: $radius-lg;
+  color: $color-error;
+  font-size: $text-sm;
+}
+
+.resetBtn {
+  margin-left: auto;
+}

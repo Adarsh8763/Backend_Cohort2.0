@@ -1,0 +1,107 @@
+/* ============================================================
+   NAVBAR — Top navigation
+   ============================================================ */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  height: #{$navbar-height};
+  @include flex-between;
+  padding: 0 $space-6;
+  @include glass(16px, rgba(10, 10, 15, 0.85));
+  border-bottom: 1px solid $color-border;
+
+  @include max-md {
+    padding: 0 $space-4;
+  }
+}
+
+.logo {
+  @include flex-center;
+  gap: $space-2;
+  font-size: $text-lg;
+  font-weight: $weight-semibold;
+  color: $color-text-primary;
+  letter-spacing: $tracking-snug;
+  text-decoration: none;
+  transition: opacity $duration-fast ease;
+
+  &:hover { opacity: 0.8; }
+
+  .logoIcon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, $color-primary, $color-secondary);
+    border-radius: $radius-sm;
+    @include flex-center;
+    font-size: 14px;
+    box-shadow: $shadow-glow-primary;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+
+  @include max-md { display: none; }
+}
+
+.navLink {
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  font-size: $text-sm;
+  font-weight: $weight-medium;
+  color: $color-text-muted;
+  text-decoration: none;
+  transition: color $duration-fast ease, background $duration-fast ease;
+  letter-spacing: 0;
+
+  &:hover {
+    color: $color-text-primary;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &.active {
+    color: $color-text-primary;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  @include flex-center;
+  font-size: $text-sm;
+  font-weight: $weight-semibold;
+  color: #fff;
+  cursor: pointer;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  transition: box-shadow $duration-fast ease;
+
+  &:hover { box-shadow: $shadow-glow-primary; }
+}
+
+.sidebarToggle {
+  @include button-reset;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  @include flex-center;
+  color: $color-text-muted;
+  transition: color $duration-fast ease, background $duration-fast ease;
+
+  &:hover {
+    color: $color-text-primary;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

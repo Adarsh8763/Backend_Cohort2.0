@@ -1,0 +1,150 @@
+// ============================================================
+// AI BATTLE ARENA — SCSS Mixins
+// ============================================================
+
+// ─── Responsive ──────────────────────────────────────────────
+@mixin sm { @media (min-width: 640px) { @content; } }
+@mixin md { @media (min-width: 768px) { @content; } }
+@mixin lg { @media (min-width: 1024px) { @content; } }
+@mixin xl { @media (min-width: 1280px) { @content; } }
+@mixin max-sm { @media (max-width: 639px) { @content; } }
+@mixin max-md { @media (max-width: 767px) { @content; } }
+@mixin max-lg { @media (max-width: 1023px) { @content; } }
+
+// ─── Flex helpers ────────────────────────────────────────────
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+// ─── Glassmorphism ───────────────────────────────────────────
+@mixin glass($blur: 12px, $bg: rgba(17, 17, 24, 0.7)) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $color-border;
+}
+
+@mixin glass-raised {
+  @include glass(16px, rgba(22, 22, 31, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: $shadow-md, inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+// ─── Focus ring ──────────────────────────────────────────────
+@mixin focus-ring($color: $color-primary) {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba($color, 0.4);
+}
+
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+// ─── Typography helpers ──────────────────────────────────────
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ─── Scrollbar ───────────────────────────────────────────────
+@mixin custom-scrollbar($width: 4px) {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: $radius-full;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+  }
+}
+
+// ─── Surface layers ──────────────────────────────────────────
+@mixin surface-1 {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+}
+
+@mixin surface-2 {
+  background: $color-surface-raised;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+// ─── Glow effects ────────────────────────────────────────────
+@mixin glow-primary {
+  box-shadow: $shadow-glow-primary;
+}
+
+@mixin glow-secondary {
+  box-shadow: $shadow-glow-secondary;
+}
+
+@mixin glow-judge {
+  box-shadow: $shadow-glow-judge;
+}
+
+// ─── Button base ─────────────────────────────────────────────
+@mixin button-reset {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-sans;
+  padding: 0;
+}
+
+// ─── Absolute cover ──────────────────────────────────────────
+@mixin cover {
+  position: absolute;
+  inset: 0;
+}
+
+// ─── Shimmer animation ───────────────────────────────────────
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}

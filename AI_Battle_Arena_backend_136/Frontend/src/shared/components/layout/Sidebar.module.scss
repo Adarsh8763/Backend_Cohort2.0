@@ -1,0 +1,162 @@
+/* ============================================================
+   SIDEBAR — Chat history sidebar
+   ============================================================ */
+
+.sidebar {
+  position: fixed;
+  top: #{$navbar-height};
+  left: 0;
+  bottom: 0;
+  width: #{$sidebar-width};
+  @include flex-col;
+  background: $color-surface;
+  border-right: 1px solid $color-border;
+  z-index: $z-sticky;
+  @include custom-scrollbar;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: transform $duration-slow $ease-out-expo, width $duration-slow $ease-out-expo;
+
+  &.hidden {
+    transform: translateX(-100%);
+
+    @include max-lg {
+      transform: translateX(-100%);
+    }
+  }
+}
+
+.sidebarHead {
+  padding: $space-4 $space-4 $space-2;
+  position: sticky;
+  top: 0;
+  background: $color-surface;
+  z-index: 1;
+  border-bottom: 1px solid $color-border;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: $space-3;
+  color: $color-text-muted;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  padding: $space-2 $space-3 $space-2 2.25rem;
+  font-size: $text-sm;
+  color: $color-text-primary;
+  font-family: $font-sans;
+  transition: border-color $duration-fast ease, box-shadow $duration-fast ease;
+
+  &::placeholder { color: $color-text-muted; }
+
+  &:focus {
+    outline: none;
+    border-color: $color-border-focus;
+    box-shadow: 0 0 0 2px $color-primary-dim;
+  }
+}
+
+.section {
+  padding: $space-3 $space-3 $space-2;
+}
+
+.sectionLabel {
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wider;
+  padding: 0 $space-1;
+  margin-bottom: $space-1;
+}
+
+.battleItem {
+  @include button-reset;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-2;
+  width: 100%;
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  text-align: left;
+  cursor: pointer;
+  transition: background $duration-fast ease;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+
+    .pinBtn { opacity: 1; }
+  }
+
+  &.selected {
+    background: $color-primary-dim;
+
+    .itemTitle { color: $color-text-primary; }
+  }
+}
+
+.winnerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+  margin-top: 5px;
+
+  &.model1 { background: $color-primary; box-shadow: 0 0 6px $color-primary; }
+  &.model2 { background: $color-secondary; box-shadow: 0 0 6px $color-secondary; }
+  &.tie { background: $color-text-muted; }
+}
+
+.itemContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTitle {
+  font-size: $text-sm;
+  color: $color-text-secondary;
+  @include text-truncate;
+  margin-bottom: 2px;
+}
+
+.itemMeta {
+  font-size: $text-xs;
+  color: $color-text-muted;
+}
+
+.pinBtn {
+  @include button-reset;
+  color: $color-text-muted;
+  opacity: 0;
+  transition: opacity $duration-fast ease, color $duration-fast ease;
+  padding: $space-1;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+
+  &:hover { color: $color-text-primary; }
+  &.pinned { opacity: 1; color: $color-primary; }
+}
+
+.empty {
+  padding: $space-8 $space-4;
+  text-align: center;
+  color: $color-text-muted;
+  font-size: $text-sm;
+}
+
+.newBattleBtn {
+  margin: $space-3 $space-3 $space-4;
+}
