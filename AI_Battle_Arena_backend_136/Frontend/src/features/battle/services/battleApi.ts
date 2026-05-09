@@ -14,10 +14,16 @@ export const battleApi = createApi({
     // POST /battle — start a new battle, returns full result
     startBattle: builder.mutation<BattleState, { problem: string }>({
       query: (body) => ({
-        url: '/battle',
+        url: '/use-graph',
         method: 'POST',
         body,
       }),
+      
+      transformResponse: (response: {
+        message: string;
+        result: BattleState;
+      }) => response.result,
+
       invalidatesTags: ['Battle'],
     }),
     // GET /battle/history — list past battles
