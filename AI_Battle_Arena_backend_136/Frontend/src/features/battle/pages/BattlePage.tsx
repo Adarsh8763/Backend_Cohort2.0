@@ -53,13 +53,6 @@ export default function BattlePage() {
         )}
       </AnimatePresence>
 
-      {/* Problem input */}
-      <PromptInput
-        onSubmit={submitProblem}
-        isLoading={isBusy}
-        defaultValue={problem}
-      />
-
       {/* Error banner */}
       <AnimatePresence>
         {error && (
@@ -124,6 +117,13 @@ export default function BattlePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Problem input */}
+      <PromptInput
+        onSubmit={submitProblem}
+        isLoading={isBusy}
+        defaultValue={problem}
+      />
     </main>
   );
 }

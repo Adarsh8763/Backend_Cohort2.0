@@ -3,11 +3,14 @@
    ============================================================ */
 
 .wrapper {
-  width: 100%;
-  max-width: 760px;
+  // width: 73%;
+  // max-width: 760px;
   margin: 0 auto;
   // background-color: red;
   height: fit-content;
+  position: fixed;
+  bottom: $space-4;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .label {
@@ -21,13 +24,13 @@
 }
 
 .textareaOuterWrap {
+  width: 100%;
   position: relative;
   border-radius: $radius-xl;
   border: 1px solid $color-border;
   background: $color-surface;
   transition: border-color $duration-base $ease-out-expo, box-shadow $duration-base $ease-out-expo;
   box-shadow: $shadow-sm;
-  // background-color: gold;
 
   &.focused {
     border-color: rgba($color-primary, 0.5);
@@ -59,7 +62,7 @@
   outline: none;
   padding: $space-2 $space-1;
   font-family: $font-sans;
-  font-size: $text-md;
+  font-size: $text-base;
   color: $color-text-primary;
   line-height: $leading-normal;
   letter-spacing: -0.005em;

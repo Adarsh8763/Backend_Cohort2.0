@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import { Swords } from "lucide-react";
+import { useAppSelector } from "@shared/hooks/useAppStore";
 import { Button } from "@shared/components/ui/Button";
 import styles from "../styles/PromptInput.module.scss";
 
@@ -20,6 +21,7 @@ export function PromptInput({
   const [value, setValue] = useState(defaultValue);
   const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { sidebarOpen } = useAppSelector((s) => s.ui);
 
   const charPct = value.length / MAX_CHARS;
 
@@ -52,6 +54,7 @@ export function PromptInput({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      style={{ width: sidebarOpen ? '76%' : '95%' }}
     >
       <label className={styles.label} htmlFor="battle-prompt">
         Problem Statement
@@ -72,7 +75,7 @@ export function PromptInput({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             maxLength={MAX_CHARS}
-            rows={3}
+            rows={2}
             aria-label="Battle problem statement"
             disabled={isLoading}
           />
@@ -87,7 +90,6 @@ export function PromptInput({
             className={styles.submitBtn}
             aria-label="Start AI battle"
           >
-            {/* {isLoading ? "Battle in Progress…" : "Start Battle"} */}
           </Button>
         </div>
 
@@ -110,7 +112,6 @@ export function PromptInput({
         </div>
       </div>
 
-      {/* <div className={styles.submitRow}></div> */}
     </motion.div>
   );
 }
