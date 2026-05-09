@@ -30,7 +30,7 @@ function ScoreBar({
           <span
             className={`${styles.scoreDot} ${model === 1 ? styles.model1 : styles.model2}`}
           />
-          {model === 1 ? 'GPT-4o' : 'Claude 3.5'}
+          {model === 1 ? 'Mistral' : 'Cohere'}
         </span>
         <span className={`${styles.scoreValue} ${model === 1 ? styles.model1 : styles.model2}`}>
           {score.toFixed(1)}
@@ -68,7 +68,7 @@ function ReasoningCard({
       <div className={styles.reasoningHeader}>
         <span className={styles.reasoningTitle}>
           <MessageSquare size={13} />
-          {model === 1 ? 'GPT-4o' : 'Claude 3.5'} — Judge's Reasoning
+          {model === 1 ? 'Mistral' : 'Cohere'} — Judge's Reasoning
         </span>
       </div>
       <p className={styles.reasoningText}>{reasoning}</p>
@@ -132,7 +132,7 @@ export function JudgeSection({ recommendation, status, winner }: JudgeSectionPro
               <div>
                 <div className={styles.winnerLabel}>Winner</div>
                 <div className={styles.winnerName}>
-                  {winner === 1 ? 'GPT-4o' : 'Claude 3.5'}
+                  {winner === 1 ? 'Mistral' : 'Cohere'}
                 </div>
               </div>
             </motion.div>

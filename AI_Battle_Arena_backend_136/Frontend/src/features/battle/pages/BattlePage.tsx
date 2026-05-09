@@ -46,7 +46,7 @@ export default function BattlePage() {
               Battle It Out
             </h1>
             <p className={styles.heroSubtitle}>
-              Submit a problem. Watch GPT-4o and Claude 3.5 compete. A Judge AI
+              Submit a problem. Watch Mistral and Cohere compete. A Judge AI
               declares the winner.
             </p>
           </motion.section>

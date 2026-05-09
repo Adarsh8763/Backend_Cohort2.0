@@ -43,6 +43,6 @@ export interface Model {
 }
 
 export const MODELS: Model[] = [
-  { id: 'gpt-4o',      name: 'GPT-4o',       label: 'OpenAI',    accent: 'primary' },
-  { id: 'claude-3-5',  name: 'Claude 3.5',   label: 'Anthropic', accent: 'secondary' },
+  { id: 'mistral', name: 'Mistral', label: 'MistralAI', accent: 'primary' },
+  { id: 'cohere', name: 'Cohere', label: 'Cohere', accent: 'secondary' },
 ];

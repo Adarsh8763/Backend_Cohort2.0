@@ -33,7 +33,7 @@ function BattleItem({ record, isSelected }: { record: BattleRecord; isSelected: 
         <div className={styles.itemTitle}>{record.problem}</div>
         <div className={styles.itemMeta}>{formatDate(record.createdAt)}</div>
       </div>
-      <motion.button
+      <motion.div
         className={`${styles.pinBtn} ${record.isPinned ? styles.pinned : ''}`}
         onClick={(e) => {
           e.stopPropagation();
@@ -43,7 +43,7 @@ function BattleItem({ record, isSelected }: { record: BattleRecord; isSelected: 
         aria-label={record.isPinned ? 'Unpin' : 'Pin'}
       >
         {record.isPinned ? <Pin size={12} /> : <PinOff size={12} />}
-      </motion.button>
+      </motion.div>
     </motion.button>
   );
 }

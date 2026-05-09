@@ -171,8 +171,8 @@ export function BattleArena({
     >
       <Panel
         modelIndex={1}
-        modelName="GPT-4o"
-        modelProvider="OpenAI"
+        modelName="Mistral"
+        modelProvider="MistralAI"
         text={solution1}
         status={status}
         streamingModel={streamingModel}
@@ -186,8 +186,8 @@ export function BattleArena({
 
       <Panel
         modelIndex={2}
-        modelName="Claude 3.5"
-        modelProvider="Anthropic"
+        modelName="Cohere"
+        modelProvider="Cohere"
         text={solution2}
         status={status}
         streamingModel={streamingModel}

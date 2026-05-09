@@ -6,6 +6,8 @@
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
+  // background-color: red;
+  height: fit-content;
 }
 
 .label {
@@ -18,13 +20,14 @@
   margin-bottom: $space-3;
 }
 
-.textareaWrap {
+.textareaOuterWrap {
   position: relative;
   border-radius: $radius-xl;
   border: 1px solid $color-border;
   background: $color-surface;
   transition: border-color $duration-base $ease-out-expo, box-shadow $duration-base $ease-out-expo;
   box-shadow: $shadow-sm;
+  // background-color: gold;
 
   &.focused {
     border-color: rgba($color-primary, 0.5);
@@ -37,20 +40,31 @@
   }
 }
 
+.textareaInnerWrap {
+  width: 100%;
+  display: flex;
+  gap: $space-2;
+  align-items: center;
+  padding-inline: $space-5;
+  // background-color: whitesmoke;
+}
+
 .textarea {
   width: 100%;
-  min-height: 120px;
-  max-height: 340px;
+  min-height: 70px;
+  max-height: 100px;
   resize: none;
   background: transparent;
   border: none;
   outline: none;
-  padding: $space-5 $space-6;
+  padding: $space-2 $space-1;
   font-family: $font-sans;
   font-size: $text-md;
   color: $color-text-primary;
   line-height: $leading-normal;
   letter-spacing: -0.005em;
+  overflow-y: auto;
+  // background-color: blue;
 
   &::placeholder {
     color: $color-text-muted;
@@ -64,7 +78,7 @@
 
 .footer {
   @include flex-between;
-  padding: $space-3 $space-6;
+  padding: $space-2 $space-5;
   border-top: 1px solid $color-border;
 
   @include max-md {
@@ -98,15 +112,22 @@
   &.danger  { color: $color-error; }
 }
 
-.submitRow {
-  margin-top: $space-4;
-  display: flex;
-  justify-content: center;
-}
+// .submitRow {
+//   margin-top: $space-4;
+//   display: flex;
+//   justify-content: center;
+// }
 
 .submitBtn {
+  width: fit-content;
+  height: fit-content;
   position: relative;
   overflow: hidden;
+  border-radius: 8px;
+  transition: all $duration-base $ease-out-expo;
+  flex-shrink: 0;
+  padding-block: $space-2;
+  padding-inline: $space-3;
 
   &::before {
     content: '';
@@ -114,14 +135,25 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.12) 50%,
       transparent 100%
     );
     transform: translateX(-100%);
-    transition: transform $duration-slower $ease-out-expo;
+    transition: transform $duration-base $ease-out-expo;
+    pointer-events: none;
   }
 
   &:hover::before {
     transform: translateX(100%);
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($color-primary, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }

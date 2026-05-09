@@ -1,8 +1,8 @@
-import { useRef, useState, useCallback, KeyboardEvent } from 'react';
-import { motion } from 'framer-motion';
-import { Swords, ArrowUp } from 'lucide-react';
-import { Button } from '@shared/components/ui/Button';
-import styles from '../styles/PromptInput.module.scss';
+import { useRef, useState, useCallback, KeyboardEvent } from "react";
+import { motion } from "framer-motion";
+import { Swords } from "lucide-react";
+import { Button } from "@shared/components/ui/Button";
+import styles from "../styles/PromptInput.module.scss";
 
 interface PromptInputProps {
   onSubmit: (problem: string) => void;
@@ -12,7 +12,11 @@ interface PromptInputProps {
 
 const MAX_CHARS = 2000;
 
-export function PromptInput({ onSubmit, isLoading = false, defaultValue = '' }: PromptInputProps) {
+export function PromptInput({
+  onSubmit,
+  isLoading = false,
+  defaultValue = "",
+}: PromptInputProps) {
   const [value, setValue] = useState(defaultValue);
   const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -25,7 +29,9 @@ export function PromptInput({ onSubmit, isLoading = false, defaultValue = '' }: 
   }, [value, isLoading, onSubmit]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (e.shiftKey && e.key === "Enter") {
+      return;
+    } else if (e.key === "Enter") {
       e.preventDefault();
       handleSubmit();
     }
@@ -35,7 +41,7 @@ export function PromptInput({ onSubmit, isLoading = false, defaultValue = '' }: 
     const el = textareaRef.current;
     if (!el) return;
     // Auto-resize
-    el.style.height = 'auto';
+    el.style.height = "auto";
     el.style.height = `${Math.min(el.scrollHeight, 340)}px`;
     setValue(el.value);
   };
@@ -51,32 +57,52 @@ export function PromptInput({ onSubmit, isLoading = false, defaultValue = '' }: 
         Problem Statement
       </label>
 
-      <div className={`${styles.textareaWrap} ${focused ? styles.focused : ''}`}>
-        <textarea
-          id="battle-prompt"
-          ref={textareaRef}
-          className={styles.textarea}
-          placeholder="Describe a problem you want AI models to battle over… e.g. &quot;Explain recursion with a real-world analogy&quot;"
-          value={value}
-          onInput={handleInput}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          maxLength={MAX_CHARS}
-          rows={4}
-          aria-label="Battle problem statement"
-          disabled={isLoading}
-        />
+      <div
+        className={`${styles.textareaOuterWrap} ${focused ? styles.focused : ""}`}
+      >
+        <div className={`${styles.textareaInnerWrap}`}>
+          <textarea
+            id="battle-prompt"
+            ref={textareaRef}
+            className={styles.textarea}
+            placeholder='Describe a problem you want AI models to battle over… e.g. "Explain recursion with a real-world analogy"'
+            value={value}
+            onInput={handleInput}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            maxLength={MAX_CHARS}
+            rows={3}
+            aria-label="Battle problem statement"
+            disabled={isLoading}
+          />
+          <Button
+            variant="primary"
+            // size="md"
+            leftIcon={<Swords size={15} />}
+            // rightIcon={<ArrowUp size={16} />}
+            onClick={handleSubmit}
+            loading={isLoading}
+            disabled={!value.trim() || isLoading}
+            className={styles.submitBtn}
+            aria-label="Start AI battle"
+          >
+            {/* {isLoading ? "Battle in Progress…" : "Start Battle"} */}
+          </Button>
+        </div>
 
         <div className={styles.footer}>
           <span className={styles.hint}>
-            <kbd>⌘</kbd>
             <kbd>Enter</kbd>
             to start
           </span>
           <span
             className={`${styles.charCount} ${
-              charPct > 0.9 ? styles.danger : charPct > 0.7 ? styles.warning : ''
+              charPct > 0.9
+                ? styles.danger
+                : charPct > 0.7
+                  ? styles.warning
+                  : ""
             }`}
           >
             {value.length} / {MAX_CHARS}
@@ -84,21 +110,7 @@ export function PromptInput({ onSubmit, isLoading = false, defaultValue = '' }: 
         </div>
       </div>
 
-      <div className={styles.submitRow}>
-        <Button
-          variant="primary"
-          size="xl"
-          leftIcon={<Swords size={18} />}
-          rightIcon={<ArrowUp size={16} />}
-          onClick={handleSubmit}
-          loading={isLoading}
-          disabled={!value.trim() || isLoading}
-          className={styles.submitBtn}
-          aria-label="Start AI battle"
-        >
-          {isLoading ? 'Battle in Progress…' : 'Start Battle'}
-        </Button>
-      </div>
+      {/* <div className={styles.submitRow}></div> */}
     </motion.div>
   );
 }
