@@ -1,10 +1,12 @@
 import React from 'react'
+import { RouterProvider } from 'react-router'
+import AppRoutes from './AppRoutes'
 import "./App.css"
 
 const App = () => {
   return (
     <>
-      <h1>Hleleo World</h1>
+      <RouterProvider router={AppRoutes} />
     </>
   )
 }

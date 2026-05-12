@@ -13,7 +13,7 @@ const validate = (req, res, next) => {
 export const registerValidation = [
     body("fullname")
         .notEmpty().withMessage("Fullname is required")
-        .length({ min: 3 }).withMessage("Fullname must be at least 3 characters long"),
+        .isLength({ min: 3 }).withMessage("Fullname must be at least 3 characters long"),
     body("email")
         .isEmail().withMessage("Invalid email format"),
     body("password")

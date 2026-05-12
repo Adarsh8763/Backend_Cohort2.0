@@ -1,5 +1,6 @@
-import { config } from "dotenv"
+import config from "../config/config.js"
 import userModel from "../models/user.model.js"
+import jwt from "jsonwebtoken"
 
 function sendTokenResponse(user, res, message) {
     const token = jwt.sign(
@@ -38,7 +39,7 @@ export const registerController = async (req, res) => {
             })
         }
 
-        const user = new userModel.create({
+        const user = await userModel.create({
             fullname,
             email,
             password,
