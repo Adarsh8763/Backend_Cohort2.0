@@ -2,7 +2,7 @@ import config from "../config/config.js"
 import userModel from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 
-function sendTokenResponse(user, res, message) {
+async function sendTokenResponse(user, res, message) {
     const token = jwt.sign(
         { id: user._id },
         config.JWT_SECRET,
@@ -47,7 +47,7 @@ export const registerController = async (req, res) => {
             role: isSeller ? "seller" : "buyer"
         })
 
-        sendTokenResponse(user, res, "User registered successfully.")
+        await sendTokenResponse(user, res, "User registered successfully.")
 
     }
     catch (error) {
@@ -57,3 +57,26 @@ export const registerController = async (req, res) => {
         })
     }
 }   
+
+export const loginController = async (req, res) => {
+    const {email, password} = req.body
+
+    const user = await userModel.findOne({email})
+
+    if(!user){
+        return res.status(404).json({
+            "message": "User not found."
+        })
+    }
+
+    const isMatch = await user.comparePassword(password)
+
+    if(!isMatch){
+        return res.status(401).json({
+            "message": "Invalid credentials."
+        })
+    }
+
+    await sendTokenResponse(user, res, "User Logged in successfully.")
+
+}

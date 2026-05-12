@@ -1,39 +1,32 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth.js";
-import { useNavigate} from "react-router"
+import { useNavigate } from "react-router";
 
-const Register = () => {
-  const { handleRegister} = useAuth()
-  const navigate = useNavigate()
+const Login = () => {
+  const { handleLogin } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
-    contactNumber: "",
     password: "",
-    isSeller: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    await handleRegister({
-      fullname: formData.fullName,
+    await handleLogin({
       email: formData.email,
       password: formData.password,
-      contact: formData.contactNumber,
-      isSeller: formData.isSeller
-    })
-    navigate("/")
+    });
+    navigate("/");
   };
 
   return (
@@ -42,7 +35,7 @@ const Register = () => {
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-[#0a0a0a]">
         {/* Full-bleed fashion model image */}
         <img
-          src="/fashion-model.png"
+          src="/fashion-model-login.png"
           alt="Fashion editorial"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-50 mix-blend-luminosity"
           style={{ objectPosition: "center top" }}
@@ -85,7 +78,7 @@ const Register = () => {
             className="text-white/70 text-base font-light"
             style={{ fontFamily: "Inter, sans-serif", fontStyle: "italic", letterSpacing: "0.05em" }}
           >
-            Dress to Define.
+            Enter the Collection.
           </p>
         </div>
       </div>
@@ -104,49 +97,12 @@ const Register = () => {
               className="text-white text-3xl font-bold tracking-tight mb-2"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              Create Account
+              Welcome Back
             </h2>
-            <p className="text-[#6b6b6b] text-sm">Join the Snitch community</p>
+            <p className="text-[#6b6b6b] text-sm">Sign in to your account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-            {/* ── Full Name ── */}
-            <div className="space-y-1.5">
-              <label
-                htmlFor="fullName"
-                className="block text-xs font-semibold text-[#9b8f7a] uppercase tracking-widest"
-              >
-                Full Name
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-4 flex items-center text-[#4f4634] pointer-events-none">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </span>
-                <input
-                  id="fullName"
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="Jane Doe"
-                  required
-                  className="w-full bg-[#1a1a1a] text-white placeholder-[#3a3a3a] pl-11 pr-4 py-3.5 rounded-lg text-sm border border-transparent outline-none transition-all duration-200 focus:border-[#d4a017] focus:shadow-[0_0_0_3px_rgba(212,160,23,0.12)]"
-                />
-              </div>
-            </div>
-
             {/* ── Email ── */}
             <div className="space-y-1.5">
               <label
@@ -184,50 +140,19 @@ const Register = () => {
               </div>
             </div>
 
-            {/* ── Contact Number ── */}
-            <div className="space-y-1.5">
-              <label
-                htmlFor="contactNumber"
-                className="block text-xs font-semibold text-[#9b8f7a] uppercase tracking-widest"
-              >
-                Contact Number
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-4 flex items-center text-[#4f4634] pointer-events-none">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 12 19.79 19.79 0 0 1 1 3.18 2 2 0 0 1 3.18 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                </span>
-                <input
-                  id="contactNumber"
-                  type="tel"
-                  name="contactNumber"
-                  value={formData.contactNumber}
-                  onChange={handleChange}
-                  placeholder="+1 (555) 000-0000"
-                  required
-                  className="w-full bg-[#1a1a1a] text-white placeholder-[#3a3a3a] pl-11 pr-4 py-3.5 rounded-lg text-sm border border-transparent outline-none transition-all duration-200 focus:border-[#d4a017] focus:shadow-[0_0_0_3px_rgba(212,160,23,0.12)]"
-                />
-              </div>
-            </div>
-
             {/* ── Password ── */}
             <div className="space-y-1.5">
-              <label
-                htmlFor="password"
-                className="block text-xs font-semibold text-[#9b8f7a] uppercase tracking-widest"
-              >
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-xs font-semibold text-[#9b8f7a] uppercase tracking-widest"
+                >
+                  Password
+                </label>
+                <a href="#" className="text-[#6b6b6b] hover:text-[#d4a017] text-xs font-medium transition-colors">
+                  Forgot Password?
+                </a>
+              </div>
               <div className="relative">
                 <span className="absolute inset-y-0 left-4 flex items-center text-[#4f4634] pointer-events-none">
                   <svg
@@ -294,43 +219,12 @@ const Register = () => {
               </div>
             </div>
 
-            {/* ── isSeller Toggle ── */}
-            <div className="bg-[#111111] border border-[#1f1f1f] rounded-xl p-4 flex items-center justify-between gap-4 transition-all duration-200 hover:border-[#d4a017]/20">
-              <div>
-                <p className="text-white text-sm font-semibold mb-0.5">
-                  Register as Seller
-                </p>
-                <p className="text-[#6b6b6b] text-xs leading-relaxed">
-                  Start selling your clothes on Snitch
-                </p>
-              </div>
-
-              {/* Toggle switch */}
-              <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                <input
-                  type="checkbox"
-                  id="isSeller"
-                  name="isSeller"
-                  checked={formData.isSeller}
-                  onChange={handleChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-[#2a2a2a] rounded-full peer peer-checked:bg-[#d4a017] transition-colors duration-300 relative">
-                  <div
-                    className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${
-                      formData.isSeller ? "translate-x-5" : "translate-x-0"
-                    }`}
-                  />
-                </div>
-              </label>
-            </div>
-
             {/* ── Submit CTA ── */}
             <button
               type="submit"
-              className="w-full bg-[#d4a017] text-[#0a0a0a] font-bold text-sm py-4 rounded-lg tracking-wide uppercase transition-all duration-200 hover:bg-[#e6b020] hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#d4a017]/50 mt-2"
+              className="w-full bg-[#d4a017] text-[#0a0a0a] font-bold text-sm py-4 rounded-lg tracking-wide uppercase transition-all duration-200 hover:bg-[#e6b020] hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#d4a017]/50 mt-4"
             >
-              Create Account
+              Sign In
             </button>
 
             {/* ── Divider ── */}
@@ -388,14 +282,14 @@ const Register = () => {
             </div>
           </form>
 
-          {/* ── Sign-in link ── */}
+          {/* ── Sign-up link ── */}
           <p className="text-center text-sm text-[#6b6b6b] mt-8">
-            Already have an account?{" "}
+            Don't have an account?{" "}
             <a
-              href="/login"
+              href="/register"
               className="text-[#d4a017] font-semibold hover:text-[#e6b020] transition-colors duration-200"
             >
-              Sign In
+              Sign Up
             </a>
           </p>
         </div>
@@ -404,4 +298,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
