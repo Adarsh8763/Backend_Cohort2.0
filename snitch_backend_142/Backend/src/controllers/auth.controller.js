@@ -1,17 +1,28 @@
 import { config } from "dotenv"
 import userModel from "../models/user.model.js"
 
-function sendTokenResponse(user, res) {
+function sendTokenResponse(user, res, message) {
     const token = jwt.sign(
         { id: user._id },
         config.JWT_SECRET,
         { expiresIn: "5d" }
     )
     res.cookie("token", token)
+
+    return res.status(201).json({
+        message,
+        "user": {
+            "id": user._id,
+            "fullname": user.fullname,
+            "email": user.email,
+            "contact": user.contact,
+            "role": user.role
+        }
+    })
 }
 
 export const registerController = async (req, res) => {
-    const { fullname, email, password, contact } = req.body
+    const { fullname, email, password, contact, isSeller } = req.body
 
     try {
         const existingUser = await userModel.findOne({
@@ -31,20 +42,11 @@ export const registerController = async (req, res) => {
             fullname,
             email,
             password,
-            contact
+            contact,
+            role: isSeller ? "seller" : "buyer"
         })
 
-        sendTokenResponse(user, res)
-
-        return res.status(201).json({
-            "message": "User registered successfully",
-            "user": {
-                "id": user._id,
-                "fullname": user.fullname,
-                "email": user.email,
-                "contact": user.contact
-            }
-        })
+        sendTokenResponse(user, res, "User registered successfully.")
 
     }
     catch (error) {
