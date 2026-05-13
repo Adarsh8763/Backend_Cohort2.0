@@ -80,3 +80,9 @@ export const loginController = async (req, res) => {
     await sendTokenResponse(user, res, "User Logged in successfully.")
 
 }
+
+export const googleCallbackController = async (req, res) =>{
+
+    console.log(req.user)
+    res.redirect("http://localhost:5173/")
+}

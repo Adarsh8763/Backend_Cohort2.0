@@ -348,6 +348,9 @@ const Register = () => {
               <button
                 type="button"
                 className="flex items-center justify-center gap-2.5 bg-[#111111] border border-[#1f1f1f] text-[#c8c6c5] text-sm font-medium py-3 rounded-lg transition-all duration-200 hover:border-[#d4a017]/30 hover:text-white focus:outline-none"
+                onClick={() => {
+                  window.location.href = "/api/auth/google"
+                }}
               >
                 <svg width="17" height="17" viewBox="0 0 24 24">
                   <path
