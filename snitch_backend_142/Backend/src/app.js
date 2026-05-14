@@ -23,8 +23,10 @@ passport.use(new GoogleStrategy({
 
 //Require Routes
 import authRouter from "./routes/auth.routes.js"
+import productRouter from "./routes/product.routes.js"
 
 //Use Routes
 app.use("/api/auth", authRouter)
+app.use("/api/products", productRouter)
 
 export default app

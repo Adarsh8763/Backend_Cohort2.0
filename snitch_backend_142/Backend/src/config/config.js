@@ -20,7 +20,8 @@ const config = {
     JWT_SECRET: process.env.JWT_SECRET,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     CLIENT_ID: process.env.CLIENT_ID,
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY
 }
 
 export default config
