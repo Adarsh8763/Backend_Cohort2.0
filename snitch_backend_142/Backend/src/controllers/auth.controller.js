@@ -56,14 +56,14 @@ export const registerController = async (req, res) => {
             "message": "Internal Server Error"
         })
     }
-}   
+}
 
 export const loginController = async (req, res) => {
-    const {email, password} = req.body
+    const { email, password } = req.body
 
-    const user = await userModel.findOne({email})
+    const user = await userModel.findOne({ email })
 
-    if(!user){
+    if (!user) {
         return res.status(404).json({
             "message": "User not found."
         })
@@ -71,7 +71,7 @@ export const loginController = async (req, res) => {
 
     const isMatch = await user.comparePassword(password)
 
-    if(!isMatch){
+    if (!isMatch) {
         return res.status(401).json({
             "message": "Invalid credentials."
         })
@@ -81,8 +81,32 @@ export const loginController = async (req, res) => {
 
 }
 
-export const googleCallbackController = async (req, res) =>{
+export const googleCallbackController = async (req, res) => {
 
     console.log(req.user)
-    res.redirect("http://localhost:5173/")
+
+    const { id, displayName, emails, photos } = req.user
+
+    const email = emails[0].value
+    const profilePic = photos[0].value
+
+    let user = await userModel.findOne({ email })
+
+    if (!user) {
+        user = await userModel.create({
+            fullname: displayName,
+            email: email,
+            googleId: id
+        })
+    }
+
+    const token = jwt.sign(
+        { id: user._id },
+        config.JWT_SECRET,
+        { expiresIn: "5d" }
+    )
+
+    res.cookie("token", token)
+
+    res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "/")
 }

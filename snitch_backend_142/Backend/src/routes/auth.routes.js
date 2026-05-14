@@ -2,6 +2,7 @@ import express from "express";
 import { googleCallbackController, loginController, registerController } from "../controllers/auth.controller.js";
 import { registerValidation } from "../validation/auth.validator.js";
 import passport from "passport";
+import config from "../config/config.js";
 
 const authRouter = express.Router()
 
@@ -19,7 +20,7 @@ authRouter.get("/google",
 authRouter.get("/google/callback",
     passport.authenticate("google", {
         session: false,
-        failureRedirect: "/"
+        failureRedirect: config.NODE_ENV === "development" ? "http://localhost:5173/login" : "/login"
     }),
     googleCallbackController
 )
