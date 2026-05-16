@@ -30,3 +30,23 @@ export async function createProductController(req, res) {
         product
     })
 }
+
+export async function getSellerProductsContoller(req, res) {
+    const seller = req.user
+
+    const products = await productModel.find({
+        seller: seller._id
+    })
+
+    if (products.length === 0) {
+        return res.status(404).json({
+            "message": "No Product found."
+        })
+    }
+
+    return res.status(200).json({
+        "message": "Products fetched successfully.",
+        products
+    })
+
+}

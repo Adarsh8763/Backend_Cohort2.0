@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen w-full overflow-hidden bg-[#fcfaf8] flex font-['Inter',sans-serif] text-[#2c2a28]">
+    <div className="h-screen w-full overflow-hidden bg-[#fcfaf8] flex font-['Inter',sans-serif] text-[#33302c]">
       {/* ── LEFT PANEL (Image Section) ── */}
       <div className="hidden lg:block lg:w-[45%] relative bg-[#e0d7c6]">
         <img
@@ -64,19 +64,19 @@ const Login = () => {
             Snitch
           </h1>
 
-          <div className="mb-5 text-center lg:text-left">
-            <h2 className="font-['Playfair_Display',serif] text-[#2c2a28] text-2xl mb-1">
+          <div className="mb-6 text-center lg:text-left">
+            <h2 className="font-['Playfair_Display',serif] text-[#33302c] text-3xl mb-1.5">
               Welcome Back
             </h2>
-            <p className="text-[#5c5853] text-xs font-light tracking-wide">
+            <p className="text-[#736e68] text-[13px] font-light tracking-wide">
               Sign in to your account
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Email */}
             <div className="space-y-1.5 group">
-              <label htmlFor="email" className="block text-[10px] font-medium text-[#a39171] uppercase tracking-[0.08em] group-focus-within:text-[#8c6b4a] transition-colors">
+              <label htmlFor="email" className="block text-[10px] font-medium text-[#b0a184] uppercase tracking-[0.12em] group-focus-within:text-[#8c6b4a] transition-colors">
                 Email Address
               </label>
               <input
@@ -87,17 +87,17 @@ const Login = () => {
                 onChange={handleChange}
                 placeholder="jane@example.com"
                 required
-                className="w-full bg-white border border-[#e0d7c6] text-[#2c2a28] placeholder-[#c2baad] px-3 py-2 text-xs focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
+                className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] px-3 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
               />
             </div>
 
             {/* Password */}
             <div className="space-y-1.5 group">
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-[10px] font-medium text-[#a39171] uppercase tracking-[0.08em] group-focus-within:text-[#8c6b4a] transition-colors">
+                <label htmlFor="password" className="block text-[10px] font-medium text-[#b0a184] uppercase tracking-[0.12em] group-focus-within:text-[#8c6b4a] transition-colors">
                   Password
                 </label>
-                <a href="#" className="text-[9px] font-medium text-[#a39171] hover:text-[#8c6b4a] transition-colors tracking-wide">
+                <a href="#" className="text-[9px] font-medium text-[#b0a184] hover:text-[#8c6b4a] transition-colors tracking-wide">
                   Forgot Password?
                 </a>
               </div>
@@ -110,12 +110,12 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-white border border-[#e0d7c6] text-[#2c2a28] placeholder-[#c2baad] pl-3 pr-9 py-2 text-xs focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
+                  className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] pl-3 pr-9 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c2baad] hover:text-[#8c6b4a] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#d1c8b8] hover:text-[#8c6b4a] transition-colors"
                 >
                   {showPassword ? (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -134,7 +134,7 @@ const Login = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-[#2c2a28] text-white py-2.5 mt-2 text-[11px] font-medium tracking-[0.1em] uppercase hover:bg-[#8c6b4a] transition-all duration-300 shadow-md hover:shadow-lg"
+              className="w-full bg-[#3b3834] text-white py-2.5 mt-3 text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-[#8c6b4a] transition-all duration-300 shadow-md hover:shadow-lg"
             >
               Sign In
             </button>
@@ -142,7 +142,7 @@ const Login = () => {
             {/* Divider */}
             <div className="flex items-center py-1 mt-2">
               <div className="flex-1 border-t border-[#ebe5d9]"></div>
-              <span className="px-3 text-[#a39171] text-[9px] uppercase tracking-[0.1em]">or continue with</span>
+              <span className="px-3 text-[#b0a184] text-[9px] uppercase tracking-[0.1em]">or continue with</span>
               <div className="flex-1 border-t border-[#ebe5d9]"></div>
             </div>
 
@@ -150,7 +150,7 @@ const Login = () => {
             <button
               type="button"
               onClick={() => { window.location.href = "/api/auth/google" }}
-              className="w-full bg-white border border-[#e0d7c6] text-[#2c2a28] py-2 text-xs flex items-center justify-center gap-2 hover:bg-[#f5f2eb] hover:border-[#c2baad] transition-all duration-300 shadow-sm"
+              className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] py-2 text-[12px] font-light flex items-center justify-center gap-2.5 hover:bg-[#f5f2eb] hover:border-[#c2baad] transition-all duration-300 shadow-sm"
             >
               <svg width="14" height="14" viewBox="0 0 24 24">
                 <path fill="#EA4335" d="M5.27 9.76A7.08 7.08 0 0 1 12 4.9c1.69 0 3.21.6 4.4 1.58l3.27-3.27A11.94 11.94 0 0 0 12 .9C8.07.9 4.7 3.05 2.9 6.24l2.37 3.52z"/>
@@ -163,7 +163,7 @@ const Login = () => {
           </form>
 
           {/* Sign Up Link */}
-          <p className="text-center text-[#5c5853] text-[11px] mt-4 tracking-wide">
+          <p className="text-center text-[#736e68] text-[11px] mt-6 tracking-wide">
             Don't have an account?{" "}
             <a href="/register" className="text-[#8c6b4a] font-medium border-b border-transparent hover:border-[#8c6b4a] pb-0.5 transition-colors duration-300">
               Sign Up
