@@ -17,4 +17,5 @@ productRouter.post("/", identifySeller, upload.array("images", 7), createProduct
 
 productRouter.get("/seller", identifySeller, getSellerProductsContoller)
 
+
 export default productRouter

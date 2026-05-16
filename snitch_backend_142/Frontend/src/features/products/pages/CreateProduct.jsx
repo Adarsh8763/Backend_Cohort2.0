@@ -11,7 +11,7 @@ const CreateProduct = () => {
     title: '',
     description: '',
     amount: '',
-    currency: 'USD',
+    currency: 'INR',
   });
   
   const [images, setImages] = useState([]);

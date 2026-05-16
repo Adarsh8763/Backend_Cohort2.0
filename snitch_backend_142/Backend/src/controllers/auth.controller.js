@@ -81,6 +81,28 @@ export const loginController = async (req, res) => {
 
 }
 
+export const getMeContoller = async (req, res) => {
+    const userId = req.user.id
+
+    const user = await userModel.findById(userId)
+
+    if (!user) {
+        return res.status(404).json({
+            "message": "User not found."
+        })
+    }
+
+    return res.status(200).json({
+        "user": {
+            "id": user._id,
+            "fullname": user.fullname,
+            "email": user.email,
+            "contact": user.contact,
+            "role": user.role
+        }
+    })
+}
+
 export const googleCallbackController = async (req, res) => {
 
     console.log(req.user)

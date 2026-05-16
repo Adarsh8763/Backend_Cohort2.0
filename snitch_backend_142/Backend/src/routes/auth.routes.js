@@ -1,8 +1,9 @@
 import express from "express";
-import { googleCallbackController, loginController, registerController } from "../controllers/auth.controller.js";
+import { getMeContoller, googleCallbackController, loginController, registerController } from "../controllers/auth.controller.js";
 import { registerValidation } from "../validation/auth.validator.js";
 import passport from "passport";
 import config from "../config/config.js";
+import identifyUser from "../../../../backend_101_insta-clone/Backend/src/middlewares/auth.middleware.js";
 
 const authRouter = express.Router()
 
@@ -10,6 +11,8 @@ const authRouter = express.Router()
 authRouter.post("/register", registerValidation, registerController)
 
 authRouter.post("/login", loginController)
+
+authRouter.get("/get-me", identifyUser, getMeContoller)
 
 authRouter.get("/google",
     passport.authenticate("google", {

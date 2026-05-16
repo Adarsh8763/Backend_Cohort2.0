@@ -1,24 +1,40 @@
 import { createBrowserRouter } from "react-router";
-import Register from "../features/auth/pages/Register.jsx"
-import Login from "../features/auth/pages/Login.jsx"
-import CreateProduct from "../features/products/pages/CreateProduct.jsx"
+import Register from "../features/auth/pages/Register.jsx";
+import Login from "../features/auth/pages/Login.jsx";
+import CreateProduct from "../features/products/pages/CreateProduct.jsx";
+import Protected from "../features/auth/components/Protected.jsx";
+import Dashboard from "../features/products/pages/Dashboard.jsx"
 
 const AppRoutes = createBrowserRouter([
-    {
-        path: "/register",
-        element: <Register/>
-    },
-    {
-        path: "/",
-        element: <h1>Home Page</h1>
-    },
-    {
-        path: "/login",
-        element: <Login/>
-    },{
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/",
+    element: <h1>Home Page</h1>,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/seller",
+    children: [
+      {
         path: "/seller/create-product",
-        element: <CreateProduct/>
-    }
-])
+        element: (
+        //   <Protected>
+            <CreateProduct />
+        //   </Protected>
+        ),
+      },
+      {
+        path: "/seller/dashboard",
+        element: <Dashboard />
+      },
+    ],
+  },
+]);
 
-export default AppRoutes
+export default AppRoutes;
