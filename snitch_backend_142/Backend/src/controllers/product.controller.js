@@ -50,3 +50,18 @@ export async function getSellerProductsContoller(req, res) {
     })
 
 }
+
+export async function getAllProductsController(req, res) {
+    const products = await productModel.find()
+
+    if (products.length === 0) {
+        return res.status(404).json({
+            "message": "No products found."
+        })
+    }
+
+    return res.status(200).json({
+        "message": "Products fetched successfully.",
+        products
+    })
+}

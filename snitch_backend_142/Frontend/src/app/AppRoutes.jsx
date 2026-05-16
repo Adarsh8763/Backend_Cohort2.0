@@ -4,6 +4,7 @@ import Login from "../features/auth/pages/Login.jsx";
 import CreateProduct from "../features/products/pages/CreateProduct.jsx";
 import Protected from "../features/auth/components/Protected.jsx";
 import Dashboard from "../features/products/pages/Dashboard.jsx";
+import Home from "../features/products/pages/Home.jsx"
 
 const AppRoutes = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ const AppRoutes = createBrowserRouter([
   },
   {
     path: "/",
-    element: <h1>Home Page</h1>,
+    element: <Home/>,
   },
   {
     path: "/login",

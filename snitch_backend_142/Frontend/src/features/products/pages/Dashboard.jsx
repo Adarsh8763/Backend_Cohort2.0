@@ -45,14 +45,14 @@ const Dashboard = () => {
                 {/* Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 sm:gap-x-8 md:gap-x-10 gap-y-12 sm:gap-y-16">
                     {/* Products */}
-                    {sellerProducts?.map((product) => (
+                    {sellerProducts?.map((product, index) => (
                         <div 
-                            key={product._id || product.id || Math.random()} 
+                            key={index} 
                             className="group flex flex-col cursor-pointer w-full"
                         >
-                            <div className="relative aspect-square bg-[#EBE5D9] overflow-hidden mb-3 sm:mb-3.3 shadow-sm md:group-hover:shadow-[0_15px_35px_-10px_rgba(140,107,74,0.15)] transition-all duration-500 rounded-xl">
+                            <div className="relative aspect-[4/5] bg-[#EBE5D9] overflow-hidden mb-3 sm:mb-3.3 shadow-sm md:group-hover:shadow-[0_15px_35px_-10px_rgba(140,107,74,0.15)] transition-all duration-500 rounded-xl">
                                 <img 
-                                    src={product.image || product.imageUrl || 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'} 
+                                    src={product.images[index]?.url || product.imageUrl || 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'} 
                                     alt={product.title}
                                     className="w-full h-full object-cover transition-transform duration-1000 md:group-hover:scale-[1.03]"
                                 />
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
                     {/* Add New Item Card */}
                     <div className="flex flex-col max-w-[400px] mx-auto sm:max-w-none w-full">
-                        <a href="/seller/create-product" className="group flex flex-col items-center justify-center aspect-square bg-[#EBE5D9]/40 hover:bg-[#EBE5D9]/80 transition-all duration-500 cursor-pointer border border-transparent hover:border-[#DCD5CB]/50 shadow-sm md:hover:shadow-md mb-5 rounded-xl">
+                        <a href="/seller/create-product" className="group flex flex-col items-center justify-center aspect-[4/5] bg-[#EBE5D9]/40 hover:bg-[#EBE5D9]/80 transition-all duration-500 cursor-pointer border border-transparent hover:border-[#DCD5CB]/50 shadow-sm md:hover:shadow-md mb-5 rounded-xl">
                             <span className="text-3xl font-light text-[#8C6B4A] mb-4 group-hover:scale-110 transition-transform duration-500">+</span>
                             <span className="text-[10px] tracking-[0.2em] uppercase text-[#716A60] group-hover:text-[#2C2A28] transition-colors duration-300 font-medium">
                                 Add New Item

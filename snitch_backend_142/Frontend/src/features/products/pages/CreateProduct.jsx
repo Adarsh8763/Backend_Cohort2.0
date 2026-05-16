@@ -15,6 +15,7 @@ const CreateProduct = () => {
   });
   
   const [images, setImages] = useState([]);
+  const [imageError, setImageError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +23,7 @@ const CreateProduct = () => {
   };
 
   const handleFiles = (files) => {
+    if (files.length > 0) setImageError("");
     setImages(prev => {
       const remainingSlots = 7 - prev.length;
       if (remainingSlots <= 0) return prev;
@@ -61,6 +63,11 @@ const CreateProduct = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    if(images.length === 0){
+      setImageError("This field is mandatory");
+      return;
+    }
+    setImageError("");
     console.log({ ...formData, images });
     try{
       const data = new FormData();
@@ -71,8 +78,10 @@ const CreateProduct = () => {
       images.forEach((image, index) => {
         data.append("images", image.file);
       })
-      await handleCreateProduct(data)
-      navigate('/')
+      if(images.length !== 0){
+        await handleCreateProduct(data)
+        navigate('/')
+      }
     }
     catch(error){
       console.log("error in creating listing", error)
@@ -219,6 +228,9 @@ const CreateProduct = () => {
                   </div>
                 ))}
               </div>
+            )}
+            {imageError && (
+              <p className="text-[#ba1a1a] text-xs font-medium tracking-wide pt-1">{imageError}</p>
             )}
           </div>
 

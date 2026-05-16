@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SNITCH - The Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#fff8f2",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#5d4123",
+                    "inverse-surface": "#33302c",
+                    "secondary": "#645e50",
+                    "on-tertiary-container": "#f8f6f4",
+                    "surface-variant": "#e8e1db",
+                    "on-secondary-fixed": "#1f1b11",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary-fixed-dim": "#cec6b5",
+                    "on-primary-fixed": "#2c1701",
+                    "primary": "#715334",
+                    "secondary-fixed": "#ebe1d0",
+                    "surface-container": "#f4ede6",
+                    "primary-fixed-dim": "#e8bf98",
+                    "surface-tint": "#775839",
+                    "primary-fixed": "#ffdcbd",
+                    "tertiary-container": "#717170",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#686254",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#4c463a",
+                    "on-background": "#1e1b18",
+                    "surface-container-highest": "#e8e1db",
+                    "outline": "#81756b",
+                    "surface-dim": "#dfd9d3",
+                    "outline-variant": "#d3c4b8",
+                    "inverse-on-surface": "#f7f0e9",
+                    "tertiary": "#585957",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f9f2ec",
+                    "surface-container-high": "#eee7e1",
+                    "secondary-container": "#e8dfcd",
+                    "background": "#fff8f2",
+                    "primary-container": "#8c6b4a",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-surface": "#1e1b18",
+                    "inverse-primary": "#e8bf98",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#4f453c",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#fff5f0",
+                    "surface-bright": "#fff8f2",
+                    "on-tertiary-fixed": "#1b1c1b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-tablet": "40px",
+                    "margin-mobile": "20px",
+                    "container-max": "1440px",
+                    "margin-desktop": "80px",
+                    "gutter": "24px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-xl": [
+                            "Playfair Display"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-xl-mobile": [
+                            "Playfair Display"
+                    ],
+                    "display-lg-mobile": [
+                            "Playfair Display"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Playfair Display"
+                    ],
+                    "headline-md": [
+                            "Playfair Display"
+                    ]
+            },
+            "fontSize": {
+                    "headline-xl": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-xl-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "72px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcfaf8; /* Overriding with specific requested brand color, though tailwind config has similar */
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface border-b border-outline-variant/30 w-full z-50 sticky top-0">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-base max-w-container-max mx-auto h-[80px]">
+<!-- Mobile Menu Toggle (Decorative for structural purposes) -->
+<div class="md:hidden flex items-center">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+<!-- Brand Logo -->
+<a class="font-headline-xl text-headline-xl tracking-tighter text-primary dark:text-primary-fixed-dim" href="#">
+                SNITCH
+            </a>
+<!-- Navigation Links (Desktop) -->
+<div class="hidden md:flex space-x-8 items-center">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-300" href="#">
+                    New Arrivals
+                </a>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b border-primary pb-1 opacity-70 transition-opacity hover:text-primary dark:hover:text-primary-fixed-dim duration-300" href="#">
+                    Collections
+                </a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-300" href="#">
+                    Lookbook
+                </a>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center space-x-6">
+<!-- Search (Implicit from search_bar: "on_right") -->
+<span class="material-symbols-outlined text-primary cursor-pointer hover:text-primary-container transition-colors duration-300">search</span>
+<a class="hidden md:block font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-300" href="#">
+                    Account
+                </a>
+<a class="relative group" href="#">
+<span class="material-symbols-outlined text-primary group-hover:text-primary-container transition-colors duration-300" data-icon="shopping_bag">shopping_bag</span>
+<!-- Optional badge for cart could go here -->
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full flex flex-col max-w-container-max mx-auto">
+<!-- Subtle Hero Section -->
+<section class="w-full px-margin-mobile md:px-margin-desktop pt-[120px] pb-[80px] flex flex-col items-center text-center">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-inverse-surface mb-6 max-w-3xl">
+                The Collection
+            </h1>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-xl mx-auto leading-relaxed">
+                Curated essentials for the modern aesthetic. Uncompromising materials meeting minimalist silhouettes, designed for effortless sophistication.
+            </p>
+</section>
+<!-- Product Grid Section -->
+<section class="w-full px-margin-mobile md:px-margin-desktop pb-[160px]">
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-gutter gap-y-[80px]">
+<!-- Product Card 1 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Silk Draped Blouse" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A fashion editorial shot of a model wearing a luxurious silk draped blouse in a soft cream color. The model is standing in a minimalist, light-filled studio with vast whitespace. The lighting is soft and diffused, emphasizing the high-quality texture and flow of the silk fabric. The overall mood is quiet luxury, sophisticated, and elegant, fitting a premium digital boutique aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC-sufAcN0Dpns2iZoHNZHtBymwrlaeNyxvt323wvO8JsGX3slm25x8MfehY2qeIYh4U0rGIHsCFTCjBkYkfkrSKeRFgKw29DJXnjGQdy5uV399-qCHQrXU3Pq4EcDSo5so502jLDA3BIQVB6T3jTYk4M-QoY5X8POY7iepR77G4cuKNZgjNF_KZzqy_cmi9hFrN7kFfKvdgK-QOIrYhYXUpV7jsyTTI2vuzk8fpuVAZ9L_RKGdWyklTPzzpIp--LuINgyr4VZ7wk"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Silk Draped Blouse</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$240</p>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Tailored Wool Coat" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A high-end editorial photograph of a tailored wool coat in deep umber, draped over a wooden chair in a minimalist room. The setting is bright and spacious, with soft, natural sunlight casting subtle, diffused shadows. The styling is understated and elegant, focusing on the structured silhouette and premium material of the coat. The atmosphere conveys exclusivity and calm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5tNSRZOUHMzqfXrVn1YsvgYidayyjbZL3O2jJ0dP3JdkgfVrzDOfC41L2FSq5j_ejekpKzehgr4uH598iswDAaFdkA7x-7hOC9h_z3jnG0oegfk7Dpq9ZzIBYv_kgLB_MN4Jq9z6tMd090Jo9xjAudd84xi2Biy1Qn8vnBhiMyHX1bXEqIGls7MPauGnDjcNji7TOYI5Ue9xZekODAtxBxTbJYazqHEF41rY_3ki5BDJLfaIlNkFu_R-MacIFCxnvcsitLfvo_w8"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Tailored Wool Coat</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$850</p>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Wide-Leg Linen Trousers" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A close-up fashion editorial shot focusing on wide-leg linen trousers in a soft ivory shade. The model is captured mid-stride against a pristine, bright background, creating a dynamic yet serene composition. The lighting highlights the natural weave and relaxed drape of the linen. The visual style is highly structured, contrasting with the soft luxury cream palette of the environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP3qq-e06ZKDtqs8ONaAgg1AN9YamxoE8V2OEoArvF2Csi-sTYC_jgOlzCl1JXEwUBrX9rSbACbQYdQE6iIBl1k3McyW1bacfhv4wENiz0EFPM2iXhgQ1StBr3SK9PHjovLX9QRgmk3IqMivEvSf9PzeTkqGqxZraFCeCAsQ-_BXJMt5v_TA1JGWt3vFVbP0SxjB0kD0aMad9nj2edeV8ZmDiPaaRhkd5i5yr6blnEz4fEFoOOnI-u66E_GkH-kcuyEE9pGt6vMY4"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Linen Trousers</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$185</p>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Structured Leather Tote" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A minimalist still life photograph of a structured leather tote bag in rich brown, placed on a subtle pedestal against a seamless #fcfaf8 background. The lighting is meticulous, creating gentle highlights on the leather's surface while casting a very soft, diffused ambient shadow beneath the bag. The image feels like a page from a premium print fashion magazine, emphasizing clean lines and craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWBRat5EggpPRUZcywsnrAKBiVBa1LfS_r_VfXf_mMpl8qiZNfxJyjnHfbpND4nDWgbJ8RJ-fneJIOJHiEMpHj85OxxWhjtXCyF-oeYhf7a8c1E3J2EdX0YJfTjBYKTEojlPYLa5baEQ5-ktcauXpHpouLZSowslRCC6fRHQZ53_PSnCxTk4xLq3Zo_SZ0lZePNtbTQKUfpiMdfYfGmI5Cn-Sf1Z33CCxg1Bynx6I1mUMsMTgmFTBhsTIlgOSDQe-H_X3gXu9jGPA"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Structured Tote</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$420</p>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Cashmere Turtleneck" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A fashion portrait of a model wearing a minimalist cashmere turtleneck in a soft charcoal gray. The background is a stark, clean off-white canvas, allowing the subject to stand out. The image utilizes high contrast and crisp focus typical of luxury editorial photography. The mood is sophisticated and modern, reflecting an exclusive digital boutique aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHo6__QKB2EN5os8iwhUqQfxyJfYT4NTlHK-y_5dssaWo9JPry8IT2LfJBjAQJC74jictaWmeiO7NML6qAd-vaqUM2gHkX83a8_9QkxGzQg6PApUZJScO7b7MIvgeqk6fl0TbwMYeFfcjl9SCEtiKMhF28v3RNhB7-ku8pdYbxWF2p-bYwmlltL2OEtAe10CjovY4kW8GzYyJfl_ehz1M9sEg6dMfM99327EMOFQrGD69XEbXNHqn03SoHQjFTBMwbTflN3WBPXQ8"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Cashmere Turtleneck</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$310</p>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Minimalist Sandals" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="An artistic detail shot of a pair of minimalist leather sandals resting on a smooth stone surface within a bright, airy environment. The surrounding space is vast, emphasizing negative space. The lighting creates a serene, almost museum-like display, with delicate 1px border-like shadows tracing the footwear. The overall look is clean, quiet luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4KayQkpo0P4OvMBd8E-RXQMm1TU_pEim_BtQ_zsbPT8H-Vgk70Vz0v5PXdP9Gpe45J8I-2h_WBc-mlE8ntuKkl_aL7mYjPSdzOGE4egAZ_OLM1fvXCrqXFNkR9nyx5_-PCve1U4VVeTeIvOJwyuse9zFRyzE7w0bP9Q0GKJl0buK-LhDfDBnqBYlyPCKY3lzAMvdIiUAoiEBP9a5ARwjLXOWMRApBKxXG7uws2A6KaP8u-k7rv1xWI_RTAAL59GMdMamE6CjdgMw"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Minimalist Sandals</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$195</p>
+</div>
+</div>
+<!-- Product Card 7 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Oversized Poplin Shirt" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A fashion editorial image featuring an oversized poplin shirt in crisp white. The model stands against a textured, light beige wall, creating a subtle tonal shift. The lighting is bright and airy, capturing the structured folds of the cotton fabric. The visual aesthetic is modern minimalism, evoking a sense of effortless high fashion." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXc6i6ND7pbFHLjV5f_Wq_e-rW3p6SObD3E0OqU0NR7Sl07cbcHn1iWc0WA_GGVZNdI_jBx17FcUu4l6nw-u9JE7C6HaGKj8FpBxzNHWvpjiMU20p_nXv83BsZ-9J06Zt_gphiD2sA69sYWoM9bGESKdYL7qrApLD7BXpLQB45e4-1kFLEdcU8v9VNo42Mm70SGJhNAV6kTwdZDAl-9lev1RH8BQ2NXdhsRluVbtKfttu6RgfVUMVG4_G1krzspD23pwlvwkt8wO0"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Poplin Shirt</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$160</p>
+</div>
+</div>
+<!-- Product Card 8 -->
+<div class="group flex flex-col cursor-pointer">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-high mb-6">
+<img alt="Bias-Cut Slip Dress" class="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A full-length editorial shot of a model in a sleek, bias-cut slip dress in a dark taupe color. The setting is an empty, light-filled gallery space with smooth floors and white walls, emphasizing a gallery-like presentation. The mood is tranquil and exclusive. The image relies on a refined color palette, feeling seamlessly integrated into a digital luxury boutique." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCISQcMKN4ZLRF4-mZTWnxm51phBZCW5lvHmoL97dJn3_u2GALRhn9WQU_Z_YkGuvnJD9-iBfbxkYNcbPd35oBjDg5MRtz7VsJ5URnY29cnlG7chM4zagKBSt9v7qlRigm6mubGCcq8ADKQhYpxLNvDgZROFkc6Ice2WQ9p8nuTgq-lLC1HWKPAmpjiPYRMK3T2Iyw3JTaWWx9-6jx4tokN9OzgKXCroUF1rg2Sp93XPA2yu6mB98vgAmE7LpEmip5tZuJTRoOg8eY"/>
+<div class="absolute inset-0 bg-inverse-surface/0 group-hover:bg-inverse-surface/5 transition-colors duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center text-center px-4">
+<h3 class="font-headline-md text-[20px] text-inverse-surface mb-2">Bias-Cut Slip Dress</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">$280</p>
+</div>
+</div>
+</div>
+<!-- Load More Action -->
+<div class="w-full flex justify-center mt-20">
+<button class="font-label-md text-label-md text-primary-container bg-transparent border border-primary-container px-8 py-3 rounded hover:bg-primary-container hover:text-on-primary transition-colors duration-300">
+                    Discover More
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface border-t border-outline-variant/30 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-12 max-w-container-max mx-auto gap-8 md:gap-0">
+<!-- Footer Brand -->
+<div class="font-headline-md text-[24px] text-primary dark:text-primary-fixed-dim">
+                SNITCH
+            </div>
+<!-- Footer Links -->
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface-variant hover:underline transition-all" href="#">Journal</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface-variant hover:underline transition-all" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface-variant hover:underline transition-all" href="#">Terms</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-surface-variant hover:underline transition-all" href="#">Shipping</a>
+</div>
+<!-- Copyright -->
+<div class="font-body-md text-[14px] text-on-surface-variant dark:text-on-surface-variant text-center md:text-right">
+                © 2024 SNITCH. ALL RIGHTS RESERVED.
+            </div>
+</div>
+</footer>
+</body></html>
