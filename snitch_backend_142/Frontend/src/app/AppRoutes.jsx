@@ -3,7 +3,7 @@ import Register from "../features/auth/pages/Register.jsx";
 import Login from "../features/auth/pages/Login.jsx";
 import CreateProduct from "../features/products/pages/CreateProduct.jsx";
 import Protected from "../features/auth/components/Protected.jsx";
-import Dashboard from "../features/products/pages/Dashboard.jsx"
+import Dashboard from "../features/products/pages/Dashboard.jsx";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -24,14 +24,18 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/seller/create-product",
         element: (
-        //   <Protected>
+          <Protected>
             <CreateProduct />
-        //   </Protected>
+          </Protected>
         ),
       },
       {
         path: "/seller/dashboard",
-        element: <Dashboard />
+        element: (
+          <Protected>
+            <Dashboard />
+          </Protected>
+        ),
       },
     ],
   },

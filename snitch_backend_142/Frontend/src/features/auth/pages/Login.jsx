@@ -134,7 +134,8 @@ const Login = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-[#3b3834] text-white py-2.5 mt-3 text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-[#8c6b4a] transition-all duration-300 shadow-md hover:shadow-lg"
+              disabled={!formData.email || !formData.password}
+              className={`w-full bg-[#3b3834] text-white py-2.5 mt-3 text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-300 shadow-md ${(!formData.email || !formData.password) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#8c6b4a] hover:shadow-lg'}`}
             >
               Sign In
             </button>

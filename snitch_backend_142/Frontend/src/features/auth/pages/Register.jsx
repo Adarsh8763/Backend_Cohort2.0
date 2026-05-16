@@ -23,16 +23,21 @@ const Register = () => {
     }));
   };
 
+  const isFormValid = formData.fullName && formData.email && formData.contactNumber && formData.password;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isFormValid) return;
+    
     console.log("Form submitted:", formData);
-    await handleRegister({
+    const data = {
       fullname: formData.fullName,
       email: formData.email,
       password: formData.password,
       contact: formData.contactNumber,
       isSeller: formData.isSeller,
-    });
+    };
+    await handleRegister(data);
     navigate("/");
   };
 
@@ -188,7 +193,8 @@ const Register = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-[#3b3834] text-white py-2.5 mt-2 text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-[#8c6b4a] transition-all duration-300 shadow-md hover:shadow-lg"
+              disabled={!isFormValid}
+              className={`w-full bg-[#3b3834] text-white py-2.5 mt-2 text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-300 shadow-md ${!isFormValid ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#8c6b4a] hover:shadow-lg'}`}
             >
               Create Account
             </button>
