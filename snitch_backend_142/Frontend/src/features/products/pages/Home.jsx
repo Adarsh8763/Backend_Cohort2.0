@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useProduct } from '../hooks/useProduct.jsx'
+import { useNavigate } from 'react-router'
 
 const Home = () => {
     const allProducts = useSelector(state => state.products.allProducts)
     const { handleGetAllProducts } = useProduct()
+    const navigate = useNavigate()
 
     useEffect(() => {
         handleGetAllProducts()
@@ -60,7 +62,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 lg:gap-x-10 gap-y-16">
                         {allProducts && allProducts.length > 0 ? (
                             allProducts.map((product, index) => (
-                                <div key={index} className="group flex flex-col cursor-pointer transition-all duration-700 ease-out hover:-translate-y-1.5">
+                                <div onClick={()=> navigate(`/product/${product._id}`)} key={index} className="group flex flex-col cursor-pointer transition-all duration-700 ease-out hover:-translate-y-1.5">
                                     <div className="relative w-full aspect-[4/5] bg-[#EBE5D9] overflow-hidden mb-5 shadow-sm md:group-hover:shadow-[0_15px_35px_-10px_rgba(140,107,74,0.15)] transition-all duration-500 rounded-xl">
                                         <img 
                                             src={product.images[index]?.url || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop"} 

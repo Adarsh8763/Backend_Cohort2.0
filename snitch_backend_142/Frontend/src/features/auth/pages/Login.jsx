@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
 
 const Login = () => {
@@ -22,11 +22,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleLogin({
+    const user = await handleLogin({
       email: formData.email,
       password: formData.password,
     });
-    navigate("/");
+    if(user.role === "seller"){
+      navigate("/seller/dashboard");
+    }
+    else{
+      navigate("/")
+    }
   };
 
   return (

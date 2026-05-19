@@ -1,29 +1,41 @@
-import { setAllProducts, setSellerProducts } from "../state/product.slice.js"
-import { createProduct, getAllProducts, getSellerProducts } from "../service/product.api.js"
-import { useDispatch } from "react-redux"
+import { setAllProducts, setSellerProducts } from "../state/product.slice.js";
+import {
+  createProduct,
+  getAllProducts,
+  getSellerProducts,
+} from "../service/product.api.js";
+import { useDispatch } from "react-redux";
+import { getProductDetails } from "../../products/service/product.api.js"
+
 
 export const useProduct = () => {
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  async function handleCreateProduct(formData) {
+    const data = await createProduct(formData);
+    return data.products;
+  }
+  async function handleGetSellerProducts() {
+    const data = await getSellerProducts();
+    dispatch(setSellerProducts(data.products));
+    return data.products;
+  }
 
-    async function handleCreateProduct(formData){
-        const data = await createProduct(formData)
-        return data.products
-    }
-    async function handleGetSellerProducts(){
-        const data = await getSellerProducts()
-        dispatch(setSellerProducts(data.products))
-        return data.products
-    }
+  async function handleGetAllProducts() {
+    const data = await getAllProducts();
+    dispatch(setAllProducts(data.products));
+    return data.products;
+  }
 
-    async function handleGetAllProducts(){
-        const data = await getAllProducts()
-        dispatch(setAllProducts(data.products))
-        return data.products
-    }
-    return {
-        handleCreateProduct,
-        handleGetSellerProducts,
-        handleGetAllProducts
-    }
-}
+  async function handleGetProductDetails(productId) {
+    const data = await getProductDetails(productId);
+    return data.product;
+  }
+
+  return {
+    handleCreateProduct,
+    handleGetSellerProducts,
+    handleGetAllProducts,
+    handleGetProductDetails,
+  };
+};

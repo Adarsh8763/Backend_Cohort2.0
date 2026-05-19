@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
 
 const Register = () => {
@@ -29,7 +29,7 @@ const Register = () => {
     e.preventDefault();
     if (!isFormValid) return;
     
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
     const data = {
       fullname: formData.fullName,
       email: formData.email,
@@ -38,7 +38,12 @@ const Register = () => {
       isSeller: formData.isSeller,
     };
     await handleRegister(data);
-    navigate("/");
+    if(formData.isSeller){
+      navigate("/seller/dashboard")
+    }
+    else{
+      navigate("/");
+    }
   };
 
   return (
