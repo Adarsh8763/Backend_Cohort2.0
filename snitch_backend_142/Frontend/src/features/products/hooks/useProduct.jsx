@@ -13,7 +13,7 @@ export const useProduct = () => {
 
   async function handleCreateProduct(formData) {
     const data = await createProduct(formData);
-    return data.products;
+    return data.product;
   }
   async function handleGetSellerProducts() {
     const data = await getSellerProducts();
