@@ -10,7 +10,7 @@ const validate = (req, res, next) => {
     })
 }
 
-export const createProductValidation = [
+export const createProductValidator = [
     body("title")
         .notEmpty().withMessage("Title is required"),
     body("description")

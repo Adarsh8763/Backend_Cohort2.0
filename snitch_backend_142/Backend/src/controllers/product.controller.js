@@ -71,13 +71,67 @@ export async function getProductDetailsController(req, res) {
 
     const product = await productModel.findById(productId)
 
-    if(!product){
+    if (!product) {
         return res.status(404).json({
             "message": "Product not found."
         })
     }
     return res.status(200).json({
         "message": "Product details fetched successfully.",
+        product
+    })
+}
+
+export async function addProductVariant(req, res) {
+
+    const sellerId = req.user._id
+
+    const productId = req.params.productId
+    const product = await productModel.findOne({
+        _id: productId,
+        seller: sellerId
+    })
+
+    if (!product) {
+        return res.status(404).json({
+            "message": "Product not found."
+        })
+    }
+
+    const files = req.files
+    const images = []
+    if (files || files.length !== 0) {
+        (await Promise.all(files.map(async (file) => {
+            let image = await uploadFile({
+                buffer: file.buffer,
+                fileName: file.originalname
+            })
+            return image
+        }))).map(image => images.push(image))
+    }
+
+    const priceAmount = req.body.priceAmount
+    const stock = req.body.stock
+    const attributes = JSON.parse(req.body.attributes || "{}")
+
+    // console.log(images, priceAmount, stock, attributes)
+
+    product.variants.push({
+        images, 
+        stock, 
+        attributes, 
+        price: {
+            amount: priceAmount,
+            currency: req.body.priceCurrency || product.price.currency
+        }
+    })
+
+    await product.save()
+    // console.log(product)
+
+    return res.status(200).json({
+        "message": "Product variant added successfully.",
+        success: true,
         product
     })
 }
