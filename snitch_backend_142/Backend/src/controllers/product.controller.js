@@ -127,7 +127,7 @@ export async function addProductVariant(req, res) {
     })
 
     await product.save()
-    // console.log(product)
+    console.log(product + "heleloeo")
 
     return res.status(200).json({
         "message": "Product variant added successfully.",

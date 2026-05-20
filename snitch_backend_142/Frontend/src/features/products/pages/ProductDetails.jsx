@@ -10,6 +10,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [addedToBag, setAddedToBag] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const sliderRef = useRef(null);
 
   async function fetchProductDetails() {
@@ -54,6 +55,26 @@ const ProductDetails = () => {
       sliderRef.current.scrollTo({ left: width * idx, behavior: "smooth" });
     }
   };
+
+  const handleVariantClick = (idx) => {
+    setSelectedVariant(idx);
+    setSelectedImage(0);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
+    }
+  };
+
+  const displayImages = product && selectedVariant !== null && product.variants?.[selectedVariant]
+    ? product.variants[selectedVariant].images
+    : product?.images || [];
+
+  const displayPrice = product && selectedVariant !== null && product.variants?.[selectedVariant]?.price
+    ? product.variants[selectedVariant].price
+    : product?.price;
+
+  const displayAttributes = product && selectedVariant !== null && product.variants?.[selectedVariant]?.attributes
+    ? product.variants[selectedVariant].attributes
+    : null;
 
   return (
     <div className="text-[#33302c] antialiased min-h-screen flex flex-col bg-[#fcfaf8] font-['Inter',sans-serif]">
@@ -158,8 +179,8 @@ const ProductDetails = () => {
                   onScroll={handleScroll}
                   className="flex w-full h-full overflow-x-auto hide-scrollbar snap-x snap-mandatory scroll-smooth"
                 >
-                  {product.images?.length > 0 ? (
-                    product.images.map((img, idx) => (
+                  {displayImages?.length > 0 ? (
+                    displayImages.map((img, idx) => (
                       <div key={img._id || idx} className="w-full h-full flex-shrink-0 snap-center relative">
                         <img
                           src={img.url}
@@ -183,19 +204,19 @@ const ProductDetails = () => {
                 <div className="absolute inset-0 bg-[#4a3520]/0 group-hover:bg-[#4a3520]/5 transition-colors duration-700 pointer-events-none" />
 
                 {/* Image counter badge */}
-                {product.images?.length > 1 && (
+                {displayImages?.length > 1 && (
                   <div className="absolute bottom-5 right-5 bg-[#fcfaf8]/80 backdrop-blur-sm px-3 py-1.5 shadow-sm">
                     <span className="text-[10px] uppercase tracking-[0.15em] text-[#736e68]">
-                      {selectedImage + 1} / {product.images.length}
+                      {selectedImage + 1} / {displayImages.length}
                     </span>
                   </div>
                 )}
               </div>
 
               {/* Thumbnail Strip */}
-              {product.images?.length > 1 && (
+              {displayImages?.length > 1 && (
                 <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
-                  {product.images.map((img, idx) => (
+                  {displayImages.map((img, idx) => (
                     <button
                       key={img._id || idx}
                       onClick={() => scrollToImage(idx)}
@@ -232,8 +253,8 @@ const ProductDetails = () => {
               {/* Price */}
               <div className="flex items-baseline gap-3 mb-8">
                 <span className="font-['Playfair_Display',serif] text-2xl md:text-3xl text-[#8c6b4a]">
-                  {product.price?.currency === "INR" ? "₹" : product.price?.currency}{" "}
-                  {product.price?.amount?.toLocaleString("en-IN") ?? product.price}
+                  {displayPrice?.currency === "INR" ? "₹" : displayPrice?.currency}{" "}
+                  {displayPrice?.amount?.toLocaleString("en-IN") ?? displayPrice}
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.12em] text-[#b0a184]">
                   Inclusive of all taxes
@@ -242,6 +263,69 @@ const ProductDetails = () => {
 
               {/* Divider */}
               <div className="w-full h-px bg-[#e0d7c6] mb-8" />
+
+              {/* Variants */}
+              {product.variants?.length > 0 && (
+                <div className="mb-10">
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-[#b0a184] mb-5">
+                    Variants
+                  </p>
+                  
+                  <div className="flex gap-6 overflow-x-auto pb-4 hide-scrollbar">
+                    {/* Base Product */}
+                    <div className="flex flex-col items-center gap-3 group cursor-pointer" onClick={() => handleVariantClick(null)}>
+                      <div
+                        className={`flex-shrink-0 w-20 aspect-square bg-[#ebe5d9] overflow-hidden transition-all duration-500 ease-out ${
+                          selectedVariant === null
+                            ? "ring-[1px] ring-[#8c6b4a] opacity-100 shadow-sm ring-offset-[3px] ring-offset-[#fcfaf8]"
+                            : "opacity-60 group-hover:opacity-100 ring-[1px] ring-transparent group-hover:ring-[#e0d7c6] ring-offset-[3px] ring-offset-[#fcfaf8]"
+                        }`}
+                      >
+                        <img
+                          src={product.images?.[0]?.url || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"}
+                          alt="Original"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                      <span className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
+                        selectedVariant === null ? "text-[#736e68] font-medium" : "text-[#b0a184]"
+                      }`}>
+                        ORIGINAL
+                      </span>
+                    </div>
+
+                    {/* Variants */}
+                    {product.variants.map((variant, idx) => {
+                      const label = variant.attributes && Object.values(variant.attributes).length > 0
+                        ? Object.values(variant.attributes).join(' / ')
+                        : `V${idx + 1}`;
+                      
+                      return (
+                        <div key={variant._id || idx} className="flex flex-col items-center gap-3 group cursor-pointer" onClick={() => handleVariantClick(idx)}>
+                          <div
+                            className={`flex-shrink-0 w-20 aspect-square bg-[#ebe5d9] overflow-hidden transition-all duration-500 ease-out ${
+                              selectedVariant === idx
+                                ? "ring-[1px] ring-[#8c6b4a] opacity-100 shadow-sm ring-offset-[3px] ring-offset-[#fcfaf8]"
+                                : "opacity-60 group-hover:opacity-100 ring-[1px] ring-transparent group-hover:ring-[#e0d7c6] ring-offset-[3px] ring-offset-[#fcfaf8]"
+                            }`}
+                          >
+                            <img
+                              src={variant.images?.[0]?.url || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"}
+                              alt={`Variant ${idx + 1}`}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                          </div>
+                          <span className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
+                            selectedVariant === idx ? "text-[#736e68] font-medium" : "text-[#b0a184]"
+                          }`}>
+                            {label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Description */}
               {product.description && (
@@ -285,6 +369,17 @@ const ProductDetails = () => {
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[#b0a184] mb-1">
                   Details
                 </p>
+
+                {displayAttributes && Object.entries(displayAttributes).map(([key, value], idx) => (
+                  <div key={`attr-${idx}`} className="flex justify-between items-start py-3 border-b border-[#ebe5d9]">
+                    <span className="text-[12px] uppercase tracking-[0.1em] text-[#b0a184]">
+                      {key}
+                    </span>
+                    <span className="text-[12px] text-[#736e68] font-light text-right">
+                      {value}
+                    </span>
+                  </div>
+                ))}
 
                 <div className="flex justify-between items-start py-3 border-b border-[#ebe5d9]">
                   <span className="text-[12px] uppercase tracking-[0.1em] text-[#b0a184]">

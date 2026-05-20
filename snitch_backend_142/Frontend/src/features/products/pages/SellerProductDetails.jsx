@@ -27,6 +27,9 @@ const SellerProductDetails = () => {
     setLoading(true);
     const data = await handleGetProductDetails(productId);
     setProduct(data);
+    if (data?.variants) {
+      setVariantProduct(data.variants);
+    }
     setLoading(false);
   }
 
@@ -132,9 +135,17 @@ const SellerProductDetails = () => {
         formData.append("images", image.file);
       });
       if (variantForm.images.length !== 0) {
-        const prod = await handleAddProductVariant({ productId, formData })
-        setVariantProduct((prev) => [...prev, prod]);
-        // console.log("1first")
+        const updatedProduct = await handleAddProductVariant({ productId, formData })
+        setVariantProduct(updatedProduct.variants || []);
+        
+        setVariantForm({
+          attributes: [{ key: "Color", value: "" }],
+          stock: "",
+          priceAmount: "",
+          currency: "INR",
+          images: [],
+        });
+        setImageError("");
       }
       // console.log("hleleo")
     } catch (error) {
@@ -377,27 +388,31 @@ const SellerProductDetails = () => {
                   Existing Variants
                 </h2>
                 <span className="text-[11px] font-semibold text-[#736e68] uppercase tracking-[0.2em]">
-                  3 Variations Active
+                  {variantProduct.length} Variations Active
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
                 {/* Mock Variant Cards */}
                 {variantProduct.map((variant, idx) => (
-                  <div key={idx} className="group cursor-pointer">
-                    <div className="aspect-square bg-[#ebe5d9] overflow-hidden mb-4 border border-[#e0d7c6] group-hover:border-[#33302c] transition-colors">
+                  <div
+                    key={idx}
+                    className="group cursor-pointer p-3 rounded-lg hover:shadow-md transition-shadow"
+                  >
+                    <div className="aspect-square bg-[#ebe5d9] overflow-hidden mb-3 border border-[#e0d7c6] group-hover:border-[#33302c] transition-colors rounded-md">
                       <img
                         className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-700 group-hover:scale-105"
-                        src={variant.images[0].url}
+                        src={variant.images?.[0]?.url}
+                        alt={variant.images?.[0]?.alt || `Variant ${idx + 1}`}
                       />
                     </div>
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-center gap-3">
                       <div>
-                        <p className="text-[11px] font-semibold text-[#33302c] uppercase tracking-[0.2em]">
-                          {variant.price.currency + variant.price.amount}
+                        <p className="text-[12px] font-semibold text-[#33302c] uppercase tracking-[0.18em]">
+                          {variant.price?.currency || ""} {variant.price?.amount || ""}
                         </p>
                       </div>
-                      <span className="text-[10px] font-semibold bg-[#e0d7c6]/50 text-[#33302c] px-2 py-1 tracking-[0.2em]">
+                      <span className="text-[10px] font-semibold bg-[#e0d7c6]/50 text-[#33302c] px-2 py-1 tracking-[0.2em] rounded">
                         {variant.stock} LEFT
                       </span>
                     </div>
@@ -658,6 +673,11 @@ const SellerProductDetails = () => {
                         </>
                       )}
                     </div>
+                    {imageError && (
+                      <p className="text-[10px] text-red-500 uppercase tracking-[0.1em] font-semibold mt-2">
+                        {imageError}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-6 pt-8">
