@@ -4,7 +4,8 @@ import productModel from "../models/product.model.js"
 export async function createProductController(req, res) {
     const sellerId = req.user._id
 
-    const { title, description, priceAmount, priceCurrency } = req.body
+    const { title, description, priceAmount, priceCurrency, stock } = req.body
+    const attributes = JSON.parse(req.body.attributes || "{}")
 
     const images = await Promise.all(req.files.map(async (file) => {
         return await uploadFile({
@@ -12,6 +13,18 @@ export async function createProductController(req, res) {
             fileName: file.originalname
         })
     }))
+
+    const variants = [
+        {
+            images,
+            stock,
+            attributes,
+            price: {
+                amount: priceAmount,
+                currency: priceCurrency || "INR"
+            }
+        }
+    ]
 
     const product = await productModel.create({
         title,
@@ -21,7 +34,8 @@ export async function createProductController(req, res) {
             amount: priceAmount,
             currency: priceCurrency || "INR"
         },
-        images
+        images,
+        variants
     })
 
     return res.status(201).json({
@@ -117,9 +131,9 @@ export async function addProductVariant(req, res) {
     // console.log(images, priceAmount, stock, attributes)
 
     product.variants.push({
-        images, 
-        stock, 
-        attributes, 
+        images,
+        stock,
+        attributes,
         price: {
             amount: priceAmount,
             currency: req.body.priceCurrency || product.price.currency

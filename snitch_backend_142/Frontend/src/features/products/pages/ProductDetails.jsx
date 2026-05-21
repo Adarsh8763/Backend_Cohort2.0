@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from "react-router";
 import { useProduct } from "../hooks/useProduct.jsx";
 import { useEffect, useState, useRef } from "react";
+import { useCart } from "../../cart/hook/useCart.js";
 
 const ProductDetails = () => {
+  const { handleAddToCart } = useCart();
   const { productId } = useParams();
   const navigate = useNavigate();
   const { handleGetProductDetails } = useProduct();
@@ -12,11 +14,19 @@ const ProductDetails = () => {
   const [addedToBag, setAddedToBag] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const sliderRef = useRef(null);
+  const [variantId, setVariantId] = useState(null)
 
   async function fetchProductDetails() {
     setLoading(true);
     const data = await handleGetProductDetails(productId);
     setProduct(data);
+    if (data?.variants && data.variants.length > 0) {
+      setSelectedVariant(0);
+      setVariantId(data.variants[0]._id);
+    } else {
+      setSelectedVariant(null);
+      setVariantId(null);
+    }
     setLoading(false);
   }
 
@@ -24,9 +34,10 @@ const ProductDetails = () => {
     fetchProductDetails();
   }, [productId]);
 
-  const handleAddToBag = () => {
+  const handleAddToBag = async () => {
     setAddedToBag(true);
-    setTimeout(() => setAddedToBag(false), 2000);
+    await handleAddToCart({ productId, variantId });
+    setTimeout(() => setAddedToBag(false), 1000);
   };
 
   const formatDate = (dateStr) => {
@@ -59,22 +70,41 @@ const ProductDetails = () => {
   const handleVariantClick = (idx) => {
     setSelectedVariant(idx);
     setSelectedImage(0);
+    if (idx === null) {
+      setVariantId(null);
+    } else {
+      console.log(product.variants[idx]._id);
+      setVariantId(product.variants[idx]._id);
+    }
     if (sliderRef.current) {
       sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
     }
   };
 
-  const displayImages = product && selectedVariant !== null && product.variants?.[selectedVariant]
-    ? product.variants[selectedVariant].images
-    : product?.images || [];
+  const displayImages =
+    product && selectedVariant !== null && product.variants?.[selectedVariant]
+      ? product.variants[selectedVariant].images
+      : product?.images || [];
 
-  const displayPrice = product && selectedVariant !== null && product.variants?.[selectedVariant]?.price
-    ? product.variants[selectedVariant].price
-    : product?.price;
+  const displayPrice =
+    product &&
+    selectedVariant !== null &&
+    product.variants?.[selectedVariant]?.price
+      ? product.variants[selectedVariant].price
+      : product?.price;
 
-  const displayAttributes = product && selectedVariant !== null && product.variants?.[selectedVariant]?.attributes
-    ? product.variants[selectedVariant].attributes
-    : null;
+  const displayAttributes =
+    product &&
+    selectedVariant !== null &&
+    product.variants?.[selectedVariant]?.attributes
+      ? product.variants[selectedVariant].attributes
+      : null;
+
+  const isOutOfStock =
+    product &&
+    (selectedVariant !== null && product.variants?.[selectedVariant]
+      ? product.variants[selectedVariant].stock === 0
+      : product.stock === 0);
 
   return (
     <div className="text-[#33302c] antialiased min-h-screen flex flex-col bg-[#fcfaf8] font-['Inter',sans-serif]">
@@ -137,7 +167,6 @@ const ProductDetails = () => {
 
       {/* ── Main Content ── */}
       <main className="flex-grow w-full max-w-[1440px] mx-auto px-5 md:px-20 py-8 md:py-12">
-
         {/* ── Loading State ── */}
         {loading && (
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -169,7 +198,6 @@ const ProductDetails = () => {
         {/* ── Product Detail Layout ── */}
         {!loading && product && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 xl:gap-28 items-start">
-
             {/* ── LEFT: Image Section (Sticky) ── */}
             <div className="flex flex-col gap-4 lg:sticky lg:top-[120px] lg:h-max">
               {/* Main Image Slider */}
@@ -181,7 +209,10 @@ const ProductDetails = () => {
                 >
                   {displayImages?.length > 0 ? (
                     displayImages.map((img, idx) => (
-                      <div key={img._id || idx} className="w-full h-full flex-shrink-0 snap-center relative">
+                      <div
+                        key={img._id || idx}
+                        className="w-full h-full flex-shrink-0 snap-center relative"
+                      >
                         <img
                           src={img.url}
                           alt={`${product.title} - View ${idx + 1}`}
@@ -239,7 +270,6 @@ const ProductDetails = () => {
 
             {/* ── RIGHT: Product Info (Scrollable naturally) ── */}
             <div className="flex flex-col justify-start pb-12 lg:pb-24">
-
               {/* Category Breadcrumb */}
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#b0a184] mb-4">
                 Collection · New Arrival
@@ -253,8 +283,11 @@ const ProductDetails = () => {
               {/* Price */}
               <div className="flex items-baseline gap-3 mb-8">
                 <span className="font-['Playfair_Display',serif] text-2xl md:text-3xl text-[#8c6b4a]">
-                  {displayPrice?.currency === "INR" ? "₹" : displayPrice?.currency}{" "}
-                  {displayPrice?.amount?.toLocaleString("en-IN") ?? displayPrice}
+                  {displayPrice?.currency === "INR"
+                    ? "₹"
+                    : displayPrice?.currency}{" "}
+                  {displayPrice?.amount?.toLocaleString("en-IN") ??
+                    displayPrice}
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.12em] text-[#b0a184]">
                   Inclusive of all taxes
@@ -270,10 +303,13 @@ const ProductDetails = () => {
                   <p className="text-[10px] uppercase tracking-[0.25em] text-[#b0a184] mb-5">
                     Variants
                   </p>
-                  
+
                   <div className="flex gap-6 overflow-x-auto pb-4 hide-scrollbar">
-                    {/* Base Product */}
-                    <div className="flex flex-col items-center gap-3 group cursor-pointer" onClick={() => handleVariantClick(null)}>
+                    {/* Base Product
+                    <div
+                      className="flex flex-col items-center gap-3 group cursor-pointer"
+                      onClick={() => handleVariantClick(null)}
+                    >
                       <div
                         className={`flex-shrink-0 w-20 aspect-square bg-[#ebe5d9] overflow-hidden transition-all duration-500 ease-out ${
                           selectedVariant === null
@@ -282,26 +318,39 @@ const ProductDetails = () => {
                         }`}
                       >
                         <img
-                          src={product.images?.[0]?.url || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"}
+                          src={
+                            product.images?.[0]?.url ||
+                            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"
+                          }
                           alt="Original"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                       </div>
-                      <span className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
-                        selectedVariant === null ? "text-[#736e68] font-medium" : "text-[#b0a184]"
-                      }`}>
+                      <span
+                        className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
+                          selectedVariant === null
+                            ? "text-[#736e68] font-medium"
+                            : "text-[#b0a184]"
+                        }`}
+                      >
                         ORIGINAL
                       </span>
-                    </div>
+                    </div> */}
 
                     {/* Variants */}
                     {product.variants.map((variant, idx) => {
-                      const label = variant.attributes && Object.values(variant.attributes).length > 0
-                        ? Object.values(variant.attributes).join(' / ')
-                        : `V${idx + 1}`;
-                      
+                      const label =
+                        variant.attributes &&
+                        Object.values(variant.attributes).length > 0
+                          ? Object.values(variant.attributes).join(" / ")
+                          : `V${idx + 1}`;
+
                       return (
-                        <div key={variant._id || idx} className="flex flex-col items-center gap-3 group cursor-pointer" onClick={() => handleVariantClick(idx)}>
+                        <div
+                          key={variant._id || idx}
+                          className="flex flex-col items-center gap-3 group cursor-pointer"
+                          onClick={() => handleVariantClick(idx)}
+                        >
                           <div
                             className={`flex-shrink-0 w-20 aspect-square bg-[#ebe5d9] overflow-hidden transition-all duration-500 ease-out ${
                               selectedVariant === idx
@@ -310,14 +359,21 @@ const ProductDetails = () => {
                             }`}
                           >
                             <img
-                              src={variant.images?.[0]?.url || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"}
+                              src={
+                                variant.images?.[0]?.url ||
+                                "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=207&auto=format&fit=crop"
+                              }
                               alt={`Variant ${idx + 1}`}
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                           </div>
-                          <span className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
-                            selectedVariant === idx ? "text-[#736e68] font-medium" : "text-[#b0a184]"
-                          }`}>
+                          <span
+                            className={`text-[9px] uppercase tracking-[0.25em] transition-colors duration-500 text-center w-20 truncate px-1 ${
+                              selectedVariant === idx
+                                ? "text-[#736e68] font-medium"
+                                : "text-[#b0a184]"
+                            }`}
+                          >
                             {label}
                           </span>
                         </div>
@@ -344,13 +400,16 @@ const ProductDetails = () => {
                 <button
                   id="add-to-bag-btn"
                   onClick={handleAddToBag}
+                  disabled={isOutOfStock}
                   className={`w-full py-4 text-[11px] font-medium tracking-[0.2em] uppercase transition-all duration-500 shadow-sm ${
-                    addedToBag
+                    isOutOfStock
+                      ? "bg-[#e0d7c6] text-[#736e68] cursor-not-allowed"
+                      : addedToBag
                       ? "bg-[#5a7a3a] text-white"
                       : "bg-[#3b3834] text-white hover:bg-[#8c6b4a] hover:shadow-md"
                   }`}
                 >
-                  {addedToBag ? "✓ Added to Bag" : "Add to Bag"}
+                  {isOutOfStock ? "Out of Stock" : addedToBag ? "✓ Added to Bag" : "Add to Bag"}
                 </button>
 
                 <button
@@ -370,16 +429,20 @@ const ProductDetails = () => {
                   Details
                 </p>
 
-                {displayAttributes && Object.entries(displayAttributes).map(([key, value], idx) => (
-                  <div key={`attr-${idx}`} className="flex justify-between items-start py-3 border-b border-[#ebe5d9]">
-                    <span className="text-[12px] uppercase tracking-[0.1em] text-[#b0a184]">
-                      {key}
-                    </span>
-                    <span className="text-[12px] text-[#736e68] font-light text-right">
-                      {value}
-                    </span>
-                  </div>
-                ))}
+                {displayAttributes &&
+                  Object.entries(displayAttributes).map(([key, value], idx) => (
+                    <div
+                      key={`attr-${idx}`}
+                      className="flex justify-between items-start py-3 border-b border-[#ebe5d9]"
+                    >
+                      <span className="text-[12px] uppercase tracking-[0.1em] text-[#b0a184]">
+                        {key}
+                      </span>
+                      <span className="text-[12px] text-[#736e68] font-light text-right">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
 
                 <div className="flex justify-between items-start py-3 border-b border-[#ebe5d9]">
                   <span className="text-[12px] uppercase tracking-[0.1em] text-[#b0a184]">
@@ -506,4 +569,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-

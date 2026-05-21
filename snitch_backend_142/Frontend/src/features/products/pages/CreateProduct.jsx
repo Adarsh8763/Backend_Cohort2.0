@@ -12,6 +12,8 @@ const CreateProduct = () => {
     description: '',
     amount: '',
     currency: 'INR',
+    stock: '',
+    attributes: [{ key: 'Color', value: '' }],
   });
   
   const [images, setImages] = useState([]);
@@ -75,6 +77,13 @@ const CreateProduct = () => {
       data.append("description", formData.description);
       data.append("priceAmount", formData.amount)
       data.append("priceCurrency", formData.currency);
+      data.append("stock", formData.stock);
+      
+      const formattedAttributes = formData.attributes.reduce((acc, curr) => {
+        if (curr.key && curr.value) acc[curr.key] = curr.value;
+        return acc;
+      }, {});
+      data.append("attributes", JSON.stringify(formattedAttributes));
       images.forEach((image, index) => {
         data.append("images", image.file);
       })
@@ -176,6 +185,89 @@ const CreateProduct = () => {
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Stock & Attributes */}
+          <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="stock" className="text-xs uppercase tracking-widest text-[#5C5853] font-medium">
+                Initial Stock
+              </label>
+              <input
+                type="number"
+                id="stock"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                placeholder="Number of items available"
+                className="w-full bg-transparent border-b border-[#C2BAAD] pb-2 text-[#1d1b19] focus:outline-none focus:border-[#8C6B4A] hover:border-[#8C6B4A]/50 transition-all duration-300 placeholder-[#C2BAAD] font-light"
+                required
+                min="0"
+              />
+            </div>
+
+            <div className="flex flex-col space-y-4">
+              <div className="flex justify-between items-center">
+                <label className="text-xs uppercase tracking-widest text-[#5C5853] font-medium">
+                  Attributes
+                </label>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      attributes: [...prev.attributes, { key: "", value: "" }],
+                    }))
+                  }
+                  className="text-xs uppercase tracking-widest text-[#8C6B4A] hover:text-[#715334] font-medium transition-colors"
+                >
+                  + Add Detail
+                </button>
+              </div>
+              
+              {formData.attributes.map((attr, index) => (
+                <div key={index} className="flex gap-4 relative group/attr">
+                  <input
+                    type="text"
+                    placeholder="e.g. Size"
+                    value={attr.key}
+                    onChange={(e) => {
+                      const newAttr = [...formData.attributes];
+                      newAttr[index].key = e.target.value;
+                      setFormData({ ...formData, attributes: newAttr });
+                    }}
+                    className="w-1/3 bg-transparent border-b border-[#C2BAAD] pb-2 text-[#1d1b19] focus:outline-none focus:border-[#8C6B4A] hover:border-[#8C6B4A]/50 transition-all duration-300 placeholder-[#C2BAAD] font-light"
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g. Medium"
+                    value={attr.value}
+                    onChange={(e) => {
+                      const newAttr = [...formData.attributes];
+                      newAttr[index].value = e.target.value;
+                      setFormData({ ...formData, attributes: newAttr });
+                    }}
+                    className="flex-1 bg-transparent border-b border-[#C2BAAD] pb-2 text-[#1d1b19] focus:outline-none focus:border-[#8C6B4A] hover:border-[#8C6B4A]/50 transition-all duration-300 placeholder-[#C2BAAD] font-light"
+                  />
+                  {formData.attributes.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newAttr = formData.attributes.filter(
+                          (_, i) => i !== index
+                        );
+                        setFormData({ ...formData, attributes: newAttr });
+                      }}
+                      className="absolute right-0 opacity-0 group-hover/attr:opacity-100 transition-opacity text-[#ba1a1a] p-2 hover:bg-[#ba1a1a]/5 rounded-full"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
