@@ -3,27 +3,23 @@ import { useProduct } from "../hooks/useProduct.jsx";
 import { useEffect, useState, useRef } from "react";
 import { useCart } from "../../cart/hook/useCart.js";
 import Navbar from "../components/Navbar.jsx";
+import RecommendedProducts from "../components/RecommendedProducts.jsx";
 
 const ProductDetails = () => {
   const { handleAddToCart } = useCart();
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { handleGetProductDetails } = useProduct();
+  const { handleGetProductDetails, handleProductRecommendation } = useProduct();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [addedToBag, setAddedToBag] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const sliderRef = useRef(null);
-  const [variantId, setVariantId] = useState(null)
-  const [recommendProduct, setRecommendProduct] = useState([])
-
-  async function fetchRecommendation(){
-    setLoading(true)
-    const products = handleProductRecommendation(product._id)
-    setRecommendProduct(products)
-    setLoading(false)
-  }
+  const [variantId, setVariantId] = useState(null);
+  const [recommendProducts, setRecommendProducts] = useState([]);
+  const [recLoading, setRecLoading] = useState(false);
+  const [headingIndex, setHeadingIndex] = useState(0);
 
   async function fetchProductDetails() {
     setLoading(true);
@@ -37,11 +33,27 @@ const ProductDetails = () => {
       setVariantId(null);
     }
     setLoading(false);
+
+    // Fetch recommendations only after we have the product ID
+    if (data?._id) {
+      setRecLoading(true);
+      try {
+        const recs = await handleProductRecommendation(data._id);
+        setRecommendProducts(recs || []);
+      } catch {
+        setRecommendProducts([]);
+      } finally {
+        setRecLoading(false);
+      }
+    }
   }
 
   useEffect(() => {
+    setRecommendProducts([]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetchProductDetails();
-    fetchRecommendation()
+    // Rotate editorial heading each time a new product is opened
+    setHeadingIndex((prev) => (prev + 1) % 3);
   }, [productId]);
 
   const handleAddToBag = async () => {
@@ -182,7 +194,7 @@ const ProductDetails = () => {
                         <img
                           src={img.url}
                           alt={`${product.title} - View ${idx + 1}`}
-                          className="w-full h-full object-cover object-center"
+                          className="rounded-xl w-full h-full object-cover object-center"
                         />
                       </div>
                     ))
@@ -507,6 +519,17 @@ const ProductDetails = () => {
           </div>
         )}
       </main>
+
+      {/* ── Recommendation Section ── */}
+      {(recLoading || recommendProducts.length > 0) && (
+        <div className="w-full border-t border-[#e0d7c6]/60">
+          <RecommendedProducts
+            products={recommendProducts}
+            headingIndex={headingIndex}
+            isLoading={recLoading}
+          />
+        </div>
+      )}
 
       {/* ── Footer ── */}
       <footer className="bg-[#fcfaf8] border-t border-[#e0d7c6]/50 mt-auto">

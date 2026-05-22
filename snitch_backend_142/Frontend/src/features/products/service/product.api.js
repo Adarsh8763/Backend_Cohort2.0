@@ -39,6 +39,6 @@ export async function searchProducts({search}){
 }
 
 export async function productRecommendation(productId){
-    const response = await productApiInstance.get(`/:${productId}/recommendation`)
+    const response = await productApiInstance.get(`/${productId}/recommendation`)
     return response.data
 }

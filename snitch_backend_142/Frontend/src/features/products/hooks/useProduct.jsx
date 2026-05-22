@@ -55,6 +55,7 @@ export const useProduct = () => {
     handleGetAllProducts,
     handleGetProductDetails,
     handleAddProductVariant,
-    handleSearchProducts
+    handleSearchProducts,
+    handleProductRecommendation
   };
 };
