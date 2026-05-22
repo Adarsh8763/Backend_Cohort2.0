@@ -3,6 +3,7 @@ import {
   createProduct,
   getAllProducts,
   getSellerProducts,
+  productRecommendation,
   searchProducts,
 } from "../service/product.api.js";
 import { useDispatch } from "react-redux";
@@ -40,6 +41,11 @@ export const useProduct = () => {
 
   async function handleSearchProducts({search}){
     const data = await searchProducts({search})
+    return data.products
+  }
+
+  async function handleProductRecommendation(productId){
+    const data = await productRecommendation(productId)
     return data.products
   }
 

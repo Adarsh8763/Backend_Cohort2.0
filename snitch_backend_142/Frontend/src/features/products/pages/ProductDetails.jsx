@@ -16,6 +16,14 @@ const ProductDetails = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const sliderRef = useRef(null);
   const [variantId, setVariantId] = useState(null)
+  const [recommendProduct, setRecommendProduct] = useState([])
+
+  async function fetchRecommendation(){
+    setLoading(true)
+    const products = handleProductRecommendation(product._id)
+    setRecommendProduct(products)
+    setLoading(false)
+  }
 
   async function fetchProductDetails() {
     setLoading(true);
@@ -33,6 +41,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     fetchProductDetails();
+    fetchRecommendation()
   }, [productId]);
 
   const handleAddToBag = async () => {

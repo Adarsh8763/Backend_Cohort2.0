@@ -37,3 +37,8 @@ export async function searchProducts({search}){
     const response = await productApiInstance.get(`/search?search=${search}`)
     return response.data
 }
+
+export async function productRecommendation(productId){
+    const response = await productApiInstance.get(`/:${productId}/recommendation`)
+    return response.data
+}

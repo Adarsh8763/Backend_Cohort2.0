@@ -67,7 +67,9 @@ const Home = () => {
                         {displayProducts && displayProducts.length > 0 ? (
                             displayProducts.map((product, index) => (
                                 <div
-                                    onClick={() => navigate(`/product/${product._id}`)}
+                                    onClick={() => {
+                                        navigate(`/product/${product._id}`)}
+                                    }
                                     key={product._id || index}
                                     className="group flex flex-col cursor-pointer transition-all duration-700 ease-out hover:-translate-y-1.5"
                                 >

@@ -176,3 +176,34 @@ export async function addProductVariant(req, res) {
         product
     })
 }
+
+export async function productRecommendationController(req, res) {
+
+    const {productId} = req.params
+
+    const product = await productModel.findById(productId)
+
+    if(!product){
+        return res.status(404).json({
+            "message": "Product not found.",
+        })
+    }
+
+    const products = await productModel.find({
+        _id: { $ne: productId},
+        $text: {
+            $search: product.title
+        }
+    })
+
+    if(products.length === 0) {
+        return res.status(404).json({
+            "message": "No product found for recommendation."
+        })
+    }
+    
+    return res.status(200).json({
+        "message": "Product recommendations fetched successfully.",
+        products
+    })
+}
