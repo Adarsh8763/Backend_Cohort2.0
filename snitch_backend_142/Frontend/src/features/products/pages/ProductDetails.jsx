@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router";
 import { useProduct } from "../hooks/useProduct.jsx";
 import { useEffect, useState, useRef } from "react";
 import { useCart } from "../../cart/hook/useCart.js";
+import Navbar from "../components/Navbar.jsx";
 
 const ProductDetails = () => {
   const { handleAddToCart } = useCart();
@@ -119,51 +120,7 @@ const ProductDetails = () => {
       `}</style>
 
       {/* ── Navigation ── */}
-      <nav className="bg-[#fcfaf8]/90 backdrop-blur-sm border-b border-[#e0d7c6]/50 w-full z-50 sticky top-0">
-        <div className="flex justify-between items-center w-full px-5 md:px-20 py-2 max-w-[1440px] mx-auto h-[80px]">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[#736e68] hover:text-[#8c6b4a] transition-colors duration-300 group"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="group-hover:-translate-x-0.5 transition-transform duration-300"
-            >
-              <path d="M19 12H5M12 5l-7 7 7 7" />
-            </svg>
-            Back
-          </button>
-
-          <a
-            className="font-['Playfair_Display',serif] text-2xl tracking-[0.15em] text-[#8c6b4a] uppercase"
-            href="/"
-          >
-            SNITCH
-          </a>
-
-          <div className="flex items-center gap-6">
-            <a
-              className="hidden md:block text-[12px] uppercase tracking-widest text-[#736e68] hover:text-[#8c6b4a] transition-colors duration-300"
-              href="/login"
-            >
-              Account
-            </a>
-            <a
-              className="relative text-[#8c6b4a] text-xs uppercase tracking-widest hover:text-[#6b5035] transition-colors duration-300"
-              href="#"
-            >
-              Bag (0)
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Navbar backButton={true} showSearch={false} cartCount={0} />
 
       {/* ── Main Content ── */}
       <main className="flex-grow w-full max-w-[1440px] mx-auto px-5 md:px-20 py-8 md:py-12">

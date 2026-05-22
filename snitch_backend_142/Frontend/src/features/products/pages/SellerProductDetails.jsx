@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router";
 import { useProduct } from "../hooks/useProduct.jsx";
 import { useEffect, useState, useRef } from "react";
+import Navbar from "../components/Navbar.jsx";
 
 const SellerProductDetails = () => {
   const { productId } = useParams();
@@ -162,85 +163,9 @@ const SellerProductDetails = () => {
       `}</style>
 
       {/* ── Navigation ── */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-16 h-20 bg-[#fcfaf8]/90 backdrop-blur-sm border-b border-[#e0d7c6]">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-[#736e68] hover:text-[#33302c] transition-colors"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M19 12H5M12 5l-7 7 7 7" />
-            </svg>
-            <span className="hidden md:block text-[11px] uppercase tracking-[0.2em] font-semibold mt-0.5">
-              Back
-            </span>
-          </button>
-          <nav className="hidden md:flex gap-8 ml-8">
-            <a
-              className="text-[13px] uppercase tracking-[0.15em] text-[#736e68] hover:text-[#33302c] transition-colors font-medium"
-              href="#"
-            >
-              Collection
-            </a>
-            <a
-              className="text-[13px] uppercase tracking-[0.15em] text-[#33302c] border-b border-[#33302c] pb-1 font-medium"
-              href="#"
-            >
-              Inventory
-            </a>
-            <a
-              className="text-[13px] uppercase tracking-[0.15em] text-[#736e68] hover:text-[#33302c] transition-colors font-medium"
-              href="#"
-            >
-              Reports
-            </a>
-          </nav>
-        </div>
-        <div className="font-['Playfair_Display',serif] text-3xl tracking-tighter text-[#33302c]">
-          L'ÉLÉGANCE
-        </div>
-        <div className="flex items-center gap-6 text-[#33302c]">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="cursor-pointer hover:opacity-70 transition-opacity"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="cursor-pointer hover:opacity-70 transition-opacity"
-          >
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </div>
-      </header>
+      <Navbar backButton={true} showSearch={false} cartCount={0} />
 
-      <main className="pt-20 pb-24 max-w-[1440px] mx-auto px-4 md:px-16">
+      <main className="pb-24 max-w-[1440px] mx-auto px-4 md:px-16">
         {loading ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
             <div className="w-8 h-8 border border-[#8c6b4a]/30 border-t-[#8c6b4a] rounded-full animate-spin" />

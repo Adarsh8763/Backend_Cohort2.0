@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useProduct } from '../hooks/useProduct.jsx';
 import { useNavigate } from 'react-router';
+import Navbar from '../components/Navbar.jsx';
 
 const CreateProduct = () => {
 
@@ -99,7 +100,11 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fef8f5] font-['Inter'] text-[#1d1b19] py-16 px-6 md:px-12 lg:px-24 flex items-center justify-center">
+    <div className="min-h-screen bg-[#fef8f5] font-['Inter'] text-[#1d1b19] flex flex-col">
+      {/* Navbar — no search on create product page */}
+      <Navbar showSearch={false} backButton={false} cartCount={0} />
+
+      <div className="flex-1 flex items-center justify-center py-16 px-6 md:px-12 lg:px-24">
       <div className="max-w-2xl w-full bg-[#FCFAF8] shadow-[0_4px_40px_rgba(140,107,74,0.08)] rounded-none md:rounded-xl p-8 md:p-14 border border-[#F5F2EB]">
         
         <div className="text-center mb-12">
@@ -336,6 +341,7 @@ const CreateProduct = () => {
             </button>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );

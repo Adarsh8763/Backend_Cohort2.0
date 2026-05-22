@@ -3,6 +3,7 @@ import {
   createProduct,
   getAllProducts,
   getSellerProducts,
+  searchProducts,
 } from "../service/product.api.js";
 import { useDispatch } from "react-redux";
 import { getProductDetails } from "../../products/service/product.api.js"
@@ -37,11 +38,17 @@ export const useProduct = () => {
     return data.product
   }
 
+  async function handleSearchProducts({search}){
+    const data = await searchProducts({search})
+    return data.products
+  }
+
   return {
     handleCreateProduct,
     handleGetSellerProducts,
     handleGetAllProducts,
     handleGetProductDetails,
-    handleAddProductVariant
+    handleAddProductVariant,
+    handleSearchProducts
   };
 };
