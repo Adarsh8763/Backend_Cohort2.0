@@ -80,6 +80,33 @@ export async function getAllProductsController(req, res) {
     })
 }
 
+export async function searchProductsController(req, res) {
+
+    const { search } = req.query
+
+    const products = await productModel.find({
+        $or: [
+            {
+                title: {
+                    $regex: search,
+                    $options: "i"
+                }
+            },
+            {
+                description: {
+                    $regex: search,
+                    $options: "i"
+                }
+            }
+        ]
+    })
+
+    return res.status(200).json({
+        message: "Products fetched successfully.",
+        products
+    })
+}
+
 export async function getProductDetailsController(req, res) {
     const { productId } = req.params
 
