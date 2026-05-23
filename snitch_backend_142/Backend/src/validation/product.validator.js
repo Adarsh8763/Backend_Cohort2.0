@@ -21,19 +21,23 @@ export const createProductValidator = [
         .notEmpty().withMessage("Price currency is required"),
     body("stock")
         .isInt({ min: 0 }).withMessage("Stock must be a non-negative integer"),
-    body("attributes")
-        .isObject().withMessage("Attributes must be an object"),
     validate
 ]
 
-export const createVariantValidator =[
+export const createVariantValidator = [
     body("stock")
         .isInt({ min: 0 }).withMessage("Stock must be a non-negative integer"),
-    body("attributes")
-        .isObject().withMessage("Attributes must be an object"),
     body("priceAmount")
         .isFloat({ gt: 0 }).withMessage("Price must be a positive number"),
     body("priceCurrency")
         .notEmpty().withMessage("Price currency is required"),
+    // body("attributes")
+    //     .isArray().withMessage("Attributes must be an array"),
+
+    // body("attributes.*.key")
+    //     .notEmpty().withMessage("Attribute key is required"),
+
+    // body("attributes.*.value")
+    //     .notEmpty().withMessage("Attribute value is required"),
     validate
 ]

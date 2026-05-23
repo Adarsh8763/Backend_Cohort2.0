@@ -82,6 +82,20 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
   const pId = typeof product === "object" ? product?._id : product;
   const vId = typeof variant === "object" ? variant?._id : variant;
 
+  const productVariant = typeof product === "object" ? product?.variants?.find(v => v._id === vId) : null;
+  const stock = productVariant ? productVariant.stock : null;
+
+  const getStockMessage = (s) => {
+    if (s === null || s === undefined) return null;
+    if (s === 0) return "Out of stock";
+    if (s <= 3) return `Only ${s} left`;
+    if (s <= 6) return "Low in stock";
+    if (s <= 10) return "Few pieces remaining";
+    return null;
+  };
+
+  const stockMsg = getStockMessage(stock);
+
   const handleIncrease = async () => {
     setQtyLoading(true);
     try {
@@ -135,7 +149,7 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
           </h3>
 
           {variantAttributes && Object.keys(variantAttributes).length > 0 ? (
-            <div className="flex flex-wrap gap-x-3.5 gap-y-1 mb-2">
+            <div className="flex flex-wrap gap-x-3.5 gap-y-1 mb-1.5">
               {Object.entries(variantAttributes).map(([key, val]) => (
                 <span
                   key={key}
@@ -146,9 +160,19 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
               ))}
             </div>
           ) : (
-            <div className="mb-2">
+            <div className="mb-1.5">
               <span className="text-[9.5px] uppercase tracking-[0.18em] text-[#8c8680] font-medium">
                 Standard
+              </span>
+            </div>
+          )}
+
+          {/* Subtle Stock Indicator */}
+          {stockMsg && (
+            <div className="flex items-center gap-1.5 mb-2.5 mt-0.5">
+              <span className={`w-1 h-1 rounded-full opacity-80 ${stock === 0 ? 'bg-[#a34b4b]' : 'bg-[#c28e5a] animate-pulse'}`} />
+              <span className="text-[9px] uppercase tracking-[0.2em] text-[#a89278] font-medium">
+                {stockMsg}
               </span>
             </div>
           )}
