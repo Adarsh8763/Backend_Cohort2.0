@@ -2,6 +2,7 @@ import cartModel from "../models/cart.model.js"
 import productModel from "../models/product.model.js"
 import { stockOfVariant } from "../dao/product.dao.js"
 import userModel from "../models/user.model.js"
+import { decode } from "jsonwebtoken"
 
 export async function addToCartController(req, res) {
     const decoded = req.user
@@ -84,4 +85,21 @@ export async function addToCartController(req, res) {
         success: true
     })
 }
-    
+   
+export async function getCartController(req, res){
+    const decoded = req.user
+    // console.log(decoded.id)
+    const cart = await cartModel.findOne({
+        userId: decoded.id
+    })
+
+    if(!cart){
+        return res.status(404).json({
+            "message": "No items found in cart."
+        })
+    }
+    return res.status(200).json({
+        "message": "Cart items fetched successfully.",
+        cart
+    })
+}
