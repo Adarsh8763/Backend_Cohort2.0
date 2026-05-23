@@ -40,7 +40,7 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/seller/create-product",
         element: (
-          <Protected>
+          <Protected allowedRoles={["seller"]}>
             <CreateProduct />
           </Protected>
         ),
@@ -48,7 +48,7 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/seller/dashboard",
         element: (
-          <Protected>
+          <Protected allowedRoles={["seller"]}>
             <Dashboard />
           </Protected>
         ),
@@ -56,7 +56,7 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/seller/product/:productId",
         element: (
-          <Protected>
+          <Protected allowedRoles={["seller"]}>
             <SellerProductDetails />
           </Protected>
         ),

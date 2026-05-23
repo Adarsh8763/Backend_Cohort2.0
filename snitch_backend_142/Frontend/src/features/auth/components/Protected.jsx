@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux'
 import { Navigate } from "react-router"
 
-const Protected = ({children}) => {
+const Protected = ({children, allowedRoles}) => {
 
     const user = useSelector(state=> state.auth.user)
     const loading = useSelector (state=>state.auth.loading)
@@ -15,7 +15,7 @@ const Protected = ({children}) => {
         return <Navigate to="/login"/>
     }
 
-    if(user.role !== "seller"){
+    if(allowedRoles && !allowedRoles.includes(user.role)){
         return <Navigate to="/"/>
     }
 

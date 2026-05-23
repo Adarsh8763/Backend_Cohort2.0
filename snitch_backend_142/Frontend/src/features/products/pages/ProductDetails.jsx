@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 import { useProduct } from "../hooks/useProduct.jsx";
 import { useEffect, useState, useRef } from "react";
 import { useCart } from "../../cart/hook/useCart.js";
@@ -6,6 +7,9 @@ import Navbar from "../components/Navbar.jsx";
 import RecommendedProducts from "../components/RecommendedProducts.jsx";
 
 const ProductDetails = () => {
+  const user = useSelector(state => state.auth.user);
+  const items = useSelector(state => state.cart?.items || []);
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
   const { handleAddToCart } = useCart();
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -57,6 +61,10 @@ const ProductDetails = () => {
   }, [productId]);
 
   const handleAddToBag = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     setAddedToBag(true);
     await handleAddToCart({ productId, variantId });
     setTimeout(() => setAddedToBag(false), 1000);
@@ -128,6 +136,12 @@ const ProductDetails = () => {
       ? product.variants[selectedVariant].stock === 0
       : product.stock === 0);
 
+  const stockLeft =
+    product &&
+    (selectedVariant !== null && product.variants?.[selectedVariant]
+      ? product.variants[selectedVariant].stock
+      : product.stock);
+
   return (
     <div className="text-[#33302c] antialiased min-h-screen flex flex-col bg-[#fcfaf8] font-['Inter',sans-serif]">
       <style>{`
@@ -141,7 +155,7 @@ const ProductDetails = () => {
       `}</style>
 
       {/* ── Navigation ── */}
-      <Navbar backButton={true} showSearch={false} cartCount={0} />
+      <Navbar backButton={true} showSearch={false} cartCount={cartCount} />
 
       {/* ── Main Content ── */}
       <main className="flex-grow w-full max-w-[1440px] mx-auto px-5 md:px-20 py-8 md:py-12">
@@ -372,6 +386,14 @@ const ProductDetails = () => {
                   </p>
                 </div>
               )}
+
+              {/* Stock Status */}
+              <div className="mb-6 flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full ${isOutOfStock ? 'bg-[#a34b4b]' : stockLeft <= 5 ? 'bg-[#c28e5a] animate-pulse' : 'bg-[#5a7a3a]'}`} />
+                <p className="text-[11px] uppercase tracking-[0.15em] text-[#736e68] font-medium">
+                  {isOutOfStock ? 'Out of Stock' : `${stockLeft} in stock`}
+                </p>
+              </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col gap-3 mb-10">

@@ -222,9 +222,9 @@ const Navbar = ({
                 }`}
               >
                 {navLinks.map(({ label, path }) => (
-                  <a
+                  <button
                     key={label}
-                    href={path}
+                    onClick={() => navigate(path)}
                     className={`relative text-[10.5px] uppercase tracking-[0.16em] transition-colors duration-300 group whitespace-nowrap ${
                       isActive(path)
                         ? 'text-[#8c6b4a]'
@@ -237,7 +237,7 @@ const Navbar = ({
                         isActive(path) ? 'w-full' : 'w-0 group-hover:w-full'
                       }`}
                     />
-                  </a>
+                  </button>
                 ))}
               </nav>
             )}
@@ -248,8 +248,8 @@ const Navbar = ({
             )}
 
             {/* ── Bag icon ── */}
-            <a
-              href="/cart"
+            <button
+              onClick={() => navigate('/cart')}
               aria-label="Shopping Bag"
               className={`relative group flex-shrink-0 text-[#736e68] hover:text-[#8c6b4a] transition-all duration-300 ${
                 searchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -270,7 +270,7 @@ const Navbar = ({
                   {cartCount}
                 </span>
               )}
-            </a>
+            </button>
 
             {/* ── Search area ── */}
             {showSearch && (
@@ -539,16 +539,15 @@ const Navbar = ({
         >
           <nav className="flex flex-col px-7 py-5 gap-5">
             {navLinks.map(({ label, path }) => (
-              <a
+              <button
                 key={label}
-                href={path}
-                onClick={() => setMenuOpen(false)}
-                className={`text-[10.5px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+                onClick={() => { setMenuOpen(false); navigate(path); }}
+                className={`text-[10.5px] text-left uppercase tracking-[0.2em] transition-colors duration-300 ${
                   isActive(path) ? 'text-[#8c6b4a]' : 'text-[#736e68] hover:text-[#33302c]'
                 }`}
               >
                 {label}
-              </a>
+              </button>
             ))}
 
             {/* Mobile search row */}

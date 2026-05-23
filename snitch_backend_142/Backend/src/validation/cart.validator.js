@@ -27,3 +27,9 @@ export const cartItemQuantityValidator = [
         .isMongoId().withMessage("Invalid variant ID"),
     validate
 ]
+
+export const removeCartItemValidator = [
+    param("cartItemId")
+        .isMongoId().withMessage("Invalid cart item ID"),
+    validate
+]
