@@ -19,3 +19,11 @@ export const addToCartValidator = [
         .isInt({ gt: 0 }).withMessage("Quantity must be a positive integer"),
     validate
 ];
+
+export const cartItemQuantityValidator = [
+    param("productId")
+        .isMongoId().withMessage("Invalid product ID"),
+    param("variantId")
+        .isMongoId().withMessage("Invalid variant ID"),
+    validate
+]

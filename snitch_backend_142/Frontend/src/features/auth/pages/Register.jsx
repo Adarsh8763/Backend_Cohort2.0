@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const { handleRegister } = useAuth();
@@ -23,13 +24,13 @@ const Register = () => {
     }));
   };
 
+  const error = useSelector((state) => state.auth.error);
   const isFormValid = formData.fullName && formData.email && formData.contactNumber && formData.password;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
-    
-    // console.log("Form submitted:", formData);
+
     const data = {
       fullname: formData.fullName,
       email: formData.email,
@@ -38,10 +39,11 @@ const Register = () => {
       isSeller: formData.isSeller,
     };
     await handleRegister(data);
-    if(formData.isSeller){
-      navigate("/seller/dashboard")
-    }
-    else{
+    // Guard: if registration failed, auth error will be set — don't navigate
+    if (error) return;
+    if (formData.isSeller) {
+      navigate("/seller/dashboard");
+    } else {
       navigate("/");
     }
   };

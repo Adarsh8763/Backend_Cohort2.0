@@ -249,7 +249,7 @@ const Navbar = ({
 
             {/* ── Bag icon ── */}
             <a
-              href="#"
+              href="/cart"
               aria-label="Shopping Bag"
               className={`relative group flex-shrink-0 text-[#736e68] hover:text-[#8c6b4a] transition-all duration-300 ${
                 searchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'

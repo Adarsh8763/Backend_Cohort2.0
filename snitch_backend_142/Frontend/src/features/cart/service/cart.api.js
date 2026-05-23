@@ -16,3 +16,18 @@ export async function getCart(){
     const response = await cartInstanceApi.get("/")
     return response.data
 }
+
+export async function incrementCartItemQuantity({ productId, variantId }) {
+    const response = await cartInstanceApi.patch(`/quantity/increment/${productId}/${variantId}`)
+    return response.data
+}
+
+export async function decrementCartItemQuantity({ productId, variantId }) {
+    const response = await cartInstanceApi.patch(`/quantity/decrement/${productId}/${variantId}`)
+    return response.data
+}
+
+export async function removeCartItem({ cartItemId }) {
+    const response = await cartInstanceApi.delete(`/item/${cartItemId}`)
+    return response.data
+}

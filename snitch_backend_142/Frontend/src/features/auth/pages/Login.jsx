@@ -26,11 +26,12 @@ const Login = () => {
       email: formData.email,
       password: formData.password,
     });
-    if(user.role === "seller"){
+    // Guard: user is undefined when login throws (handleLogin catches and returns nothing)
+    if (!user) return;
+    if (user.role === "seller") {
       navigate("/seller/dashboard");
-    }
-    else{
-      navigate("/")
+    } else {
+      navigate("/");
     }
   };
 

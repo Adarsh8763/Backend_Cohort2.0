@@ -7,6 +7,7 @@ import Dashboard from "../features/products/pages/Dashboard.jsx";
 import Home from "../features/products/pages/Home.jsx";
 import ProductDetails from "../features/products/pages/ProductDetails.jsx";
 import SellerProductDetails from "../features/products/pages/SellerProductDetails.jsx";
+import Cart from "../features/cart/pages/Cart.jsx";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -20,6 +21,14 @@ const AppRoutes = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/cart",
+    element: (
+      <Protected>
+        <Cart />
+      </Protected>
+    ),
   },
   {
     path: "/product/:productId",

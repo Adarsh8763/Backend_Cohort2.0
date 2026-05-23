@@ -43,7 +43,7 @@ export function useAuth() {
             dispatch(setUser(data.user))
         }
         catch(error){
-            dispatch(setError(error.response?.data?.message))
+            dispatch(setError(error.response?.data?.message || "Session expired"))
         }
         finally{
             dispatch(setLoading(false))

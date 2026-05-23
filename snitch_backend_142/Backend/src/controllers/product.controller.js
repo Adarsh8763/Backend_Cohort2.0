@@ -123,7 +123,7 @@ export async function getProductDetailsController(req, res) {
     })
 }
 
-export async function addProductVariant(req, res) {
+export async function addProductVariantController(req, res) {
 
     const sellerId = req.user._id
 

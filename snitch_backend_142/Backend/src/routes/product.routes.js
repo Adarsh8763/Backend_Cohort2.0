@@ -1,8 +1,8 @@
 import express from "express"
 import { identifySeller } from "../middlewares/auth.middleware.js"
 import multer from "multer"
-import { createProductController, getAllProductsController, getSellerProductsContoller, getProductDetailsController, addProductVariant, searchProductsController, productRecommendationController } from "../controllers/product.controller.js"
-import { createProductValidator } from "../validation/product.validator.js"
+import { createProductController, getAllProductsController, getSellerProductsContoller, getProductDetailsController, addProductVariantController, searchProductsController, productRecommendationController } from "../controllers/product.controller.js"
+import { createProductValidator, createVariantValidator } from "../validation/product.validator.js"
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -21,7 +21,7 @@ productRouter.get("/", getAllProductsController)
 
 productRouter.get("/details/:productId", getProductDetailsController)
 
-productRouter.post("/:productId/variants", identifySeller, upload.array("images",7), addProductVariant)
+productRouter.post("/:productId/variants", identifySeller, upload.array("images",7), createVariantValidator, addProductVariantController)
 
 productRouter.get("/search", searchProductsController)
 
