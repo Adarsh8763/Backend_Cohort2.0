@@ -1,5 +1,5 @@
 import { addToCart, getCart, incrementCartItemQuantity, decrementCartItemQuantity, removeCartItem } from "../service/cart.api.js";
-import { setItems, addItem, incrementItemQuantity, decrementItemQuantity, removeItem } from "../state/cart.slice.js";
+import { setCart, addItem, incrementItemQuantity, decrementItemQuantity, removeItem } from "../state/cart.slice.js";
 import { useDispatch } from "react-redux"
 
 export const useCart = () => {
@@ -13,7 +13,8 @@ export const useCart = () => {
 
     async function handleGetCart() {
         const data = await getCart()
-        dispatch(setItems(data.cart.items))
+        console.log(data.cart)
+        dispatch(setCart(data.cart))
         return data.cart
     }
 
@@ -31,9 +32,7 @@ export const useCart = () => {
 
     async function handleRemoveItem({ cartItemId }) {
         const data = await removeCartItem({ cartItemId })
-        if (data.success && data.cart) {
-            dispatch(setItems(data.cart.items))
-        }
+        dispatch(setCart(data.cart))
         return data
     }
 

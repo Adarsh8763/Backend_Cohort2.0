@@ -31,13 +31,5 @@ export const createVariantValidator = [
         .isFloat({ gt: 0 }).withMessage("Price must be a positive number"),
     body("priceCurrency")
         .notEmpty().withMessage("Price currency is required"),
-    // body("attributes")
-    //     .isArray().withMessage("Attributes must be an array"),
-
-    // body("attributes.*.key")
-    //     .notEmpty().withMessage("Attribute key is required"),
-
-    // body("attributes.*.value")
-    //     .notEmpty().withMessage("Attribute value is required"),
     validate
 ]

@@ -90,15 +90,67 @@ export async function addToCartController(req, res) {
 export async function getCartController(req, res) {
     const decoded = req.user
     // console.log(decoded.id)
-    const cart = await cartModel.findOne({
-        userId: decoded.id
-    }).populate("items.product")
+    const cart = await cartModel.aggregate([
+        {
+            $match: {
+                userId: new mongoose.Types.ObjectId(decoded.id)
+            }
+        },
+        { $unwind: { path: '$items' } },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'items.product',
+                foreignField: '_id',
+                as: 'items.product'
+            }
+        },
+        { $unwind: { path: '$items.product' } },
+        {
+            $unwind: { path: '$items.product.variants' }
+        },
+        {
+            $match: {
+                $expr: {
+                    $eq: [
+                        '$items.product.variants._id',
+                        '$items.variant'
+                    ]
+                }
+            }
+        },
+        {
+            $addFields: {
+                itemPrice: {
+                    $multiply: [
+                        '$items.product.variants.price.amount',
+                        '$items.quantity'
+                    ]
+                }
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                total: { $sum: '$itemPrice' },
+                currency: {
+                    $first: '$items.price.currency'
+                },
+                items: { $push: '$items' }
+            }
+        }
+    ])[0]
 
     console.log(cart)
 
     if (!cart) {
-        return res.status(404).json({
-            "message": "No items found in cart."
+        return res.status(200).json({
+            "message": "Cart items fetched successfully.",
+            cart: {
+                items: [],
+                total: 0,
+                currency: "INR"
+            }
         })
     }
     return res.status(200).json({
@@ -115,7 +167,7 @@ export async function incrementCartItemQuantityController(req, res) {
         "variants._id": variantId
     })
 
-    if(!product){
+    if (!product) {
         return res.status(404).json({
             "message": "Product not found.",
             success: false
@@ -126,7 +178,7 @@ export async function incrementCartItemQuantityController(req, res) {
         userId: req.user.id
     })
 
-    if(!cart){
+    if (!cart) {
         return res.status(404).json({
             "message": "Cart not found.",
             success: false
@@ -137,7 +189,7 @@ export async function incrementCartItemQuantityController(req, res) {
 
     const itemQuantityInCart = cart.items.find(item => item.product.toString() === productId && item.variant.toString() === variantId)?.quantity || 0
 
-    if(itemQuantityInCart + 1 > stock){
+    if (itemQuantityInCart + 1 > stock) {
         return res.status(400).json({
             "message": `Only ${stock - itemQuantityInCart} items left in stock.`,
             success: false
@@ -146,7 +198,7 @@ export async function incrementCartItemQuantityController(req, res) {
     await cartModel.findOneAndUpdate({
         userId: req.user.id,
         "items.product": productId,
-        "items.variant": variantId  
+        "items.variant": variantId
     }, {
         $inc: {
             "items.$.quantity": 1
@@ -169,7 +221,7 @@ export async function decrementCartItemQuantityController(req, res) {
         "variants._id": variantId
     })
 
-    if(!product){
+    if (!product) {
         return res.status(404).json({
             "message": "Product not found.",
             success: false
@@ -180,7 +232,7 @@ export async function decrementCartItemQuantityController(req, res) {
         userId: req.user.id
     })
 
-    if(!cart){
+    if (!cart) {
         return res.status(404).json({
             "message": "Cart not found.",
             success: false
@@ -189,7 +241,7 @@ export async function decrementCartItemQuantityController(req, res) {
 
     const itemQuantityInCart = cart.items.find(item => item.product.toString() === productId && item.variant.toString() === variantId)?.quantity || 0
 
-    if(itemQuantityInCart - 1 < 0){
+    if (itemQuantityInCart - 1 < 0) {
         return res.status(400).json({
             "message": `Cannot decrement quantity below 0.`,
             success: false
@@ -198,7 +250,7 @@ export async function decrementCartItemQuantityController(req, res) {
     await cartModel.findOneAndUpdate({
         userId: req.user.id,
         "items.product": productId,
-        "items.variant": variantId  
+        "items.variant": variantId
     }, {
         $inc: {
             "items.$.quantity": -1
@@ -217,20 +269,21 @@ export async function removeItemController(req, res) {
     const decoded = req.user
     const { cartItemId } = req.params
 
-    const cart = await cartModel.findOne({ 
+    const cart = await cartModel.findOne({
         userId: decoded.id
-     }).populate("items.product")
-    if (!cart) 
+    }).populate("items.product")
+    if (!cart)
         return res.status(404).json({
-         message: "Cart not found.", 
-         success: false 
+            message: "Cart not found.",
+            success: false
         })
 
     cart.items = cart.items.filter(item => item._id.toString() !== cartItemId)
     await cart.save()
 
-    return res.status(200).json({ message: "Item removed from cart.", 
-        success: true, 
-        cart 
+    return res.status(200).json({
+        message: "Item removed from cart.",
+        success: true,
+        cart
     })
 }

@@ -68,21 +68,27 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
   const { product, variant, quantity, price, _id } = item;
 
   const productTitle = typeof product === "object" ? product?.title : null;
-  const variantAttributes =
-    typeof variant === "object" ? variant?.attributes : null;
-
-  const displayImages =
-    typeof variant === "object" && variant?.images?.length > 0
-      ? variant.images
-      : typeof product === "object" && product?.images?.length > 0
-        ? product.images
-        : null;
-  const displayImage = displayImages?.[0]?.url || FALLBACK_IMAGE;
-
   const pId = typeof product === "object" ? product?._id : product;
   const vId = typeof variant === "object" ? variant?._id : variant;
 
-  const productVariant = typeof product === "object" ? product?.variants?.find(v => v._id === vId) : null;
+  const productVariant = typeof product === "object" 
+    ? (Array.isArray(product?.variants) 
+        ? product.variants.find(v => v._id === vId) 
+        : product?.variants) 
+    : null;
+
+  const variantAttributes = productVariant?.attributes || (typeof variant === "object" ? variant?.attributes : null);
+
+  const displayImages =
+    productVariant?.images?.length > 0
+      ? productVariant.images
+      : typeof variant === "object" && variant?.images?.length > 0
+        ? variant.images
+        : typeof product === "object" && product?.images?.length > 0
+          ? product.images
+          : null;
+  const displayImage = displayImages?.[0]?.url || FALLBACK_IMAGE;
+
   const stock = productVariant ? productVariant.stock : null;
 
   const getStockMessage = (s) => {
