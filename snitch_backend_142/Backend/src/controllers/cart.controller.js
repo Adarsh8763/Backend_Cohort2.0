@@ -89,8 +89,8 @@ export async function addToCartController(req, res) {
 
 export async function getCartController(req, res) {
     const decoded = req.user
-    // console.log(decoded.id)
-    const cart = await cartModel.aggregate([
+    // console.log(decoded)
+    const cart = (await cartModel.aggregate([
         {
             $match: {
                 userId: new mongoose.Types.ObjectId(decoded.id)
@@ -139,18 +139,14 @@ export async function getCartController(req, res) {
                 items: { $push: '$items' }
             }
         }
-    ])[0]
+    ]))[0]
 
-    console.log(cart)
+    // console.log("In backend cart.ctrller in getCartCtrller", cart)
 
     if (!cart) {
         return res.status(200).json({
-            "message": "Cart items fetched successfully.",
-            cart: {
-                items: [],
-                total: 0,
-                currency: "INR"
-            }
+            "message": "No items found in cart.",
+            suceess: false
         })
     }
     return res.status(200).json({

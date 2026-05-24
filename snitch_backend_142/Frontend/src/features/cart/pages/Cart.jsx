@@ -102,6 +102,9 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
 
   const stockMsg = getStockMessage(stock);
 
+  const displayPriceAmount = productVariant?.price?.amount ?? price?.amount;
+  const displayPriceCurrency = productVariant?.price?.currency ?? price?.currency ?? "INR";
+
   const handleIncrease = async () => {
     setQtyLoading(true);
     try {
@@ -185,7 +188,7 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
 
           {/* Price — mobile */}
           <p className="md:hidden font-['Playfair_Display',serif] text-[15px] text-[#7a5c38]">
-            {formatCurrency(price?.amount, price?.currency)}
+            {formatCurrency(displayPriceAmount, displayPriceCurrency)}
           </p>
         </div>
 
@@ -200,7 +203,7 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
 
           {/* Price — desktop */}
           <p className="hidden md:block font-['Playfair_Display',serif] text-[16px] text-[#7a5c38] w-24 text-right">
-            {formatCurrency(price?.amount, price?.currency)}
+            {formatCurrency(displayPriceAmount, displayPriceCurrency)}
           </p>
 
           {/* Remove */}
@@ -229,11 +232,29 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
 // ORDER SUMMARY — Spacious, padded, softly framed
 // ─────────────────────────────────────────────────────────
 const OrderSummary = ({ items, onCheckout, navigate }) => {
-  const subtotal = items.reduce(
-    (acc, item) => acc + (item.price?.amount || 0) * item.quantity,
-    0,
-  );
-  const currency = items[0]?.price?.currency || "INR";
+  const subtotal = items.reduce((acc, item) => {
+    let itemPriceAmount = item.price?.amount || 0;
+    if (typeof item.product === "object" && item.product?.variants) {
+      if (Array.isArray(item.product.variants)) {
+        const vId = typeof item.variant === "object" ? item.variant?._id : item.variant;
+        const variant = item.product.variants.find(v => v._id === vId);
+        itemPriceAmount = variant?.price?.amount ?? itemPriceAmount;
+      } else {
+        itemPriceAmount = item.product.variants?.price?.amount ?? itemPriceAmount;
+      }
+    }
+    return acc + itemPriceAmount * item.quantity;
+  }, 0);
+
+  let currency = "INR";
+  if (items.length > 0) {
+    const firstItem = items[0];
+    if (typeof firstItem.product === "object" && firstItem.product?.variants && !Array.isArray(firstItem.product.variants)) {
+      currency = firstItem.product.variants?.price?.currency ?? firstItem.price?.currency ?? "INR";
+    } else {
+      currency = firstItem.price?.currency ?? "INR";
+    }
+  }
 
   return (
     <div className="w-full bg-[#faf7f3] border border-[#e8e2d8] px-7 py-7">
