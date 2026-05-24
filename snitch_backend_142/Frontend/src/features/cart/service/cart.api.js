@@ -5,6 +5,18 @@ const cartInstanceApi = axios.create({
     withCredentials: true
 })
 
+// Add response interceptor for debugging
+cartInstanceApi.interceptors.response.use(
+    (response) => {
+        console.log("Cart API Response:", response.data)
+        return response
+    },
+    (error) => {
+        console.error("Cart API Error:", error.response?.data || error.message)
+        return Promise.reject(error)
+    }
+)
+
 export async function addToCart({productId, variantId}){
     const response = await cartInstanceApi.post(`/add/${productId}/${variantId}`, {
         quantity: 1
