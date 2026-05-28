@@ -3,12 +3,7 @@ import config from "./config.js"
 
 async function connectToDB() {
     await mongoose.connect(config.MONGO_URI)
-        .then(() => {
-            console.log("Connected to DB")
-        })
-        .catch(() => {
-            console.log("Problem connecting with DB")
-        })
+    console.log("Connected to DB")
 }
 
 export default connectToDB

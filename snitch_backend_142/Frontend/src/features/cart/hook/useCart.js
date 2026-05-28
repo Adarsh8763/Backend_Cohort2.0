@@ -1,4 +1,4 @@
-import { addToCart, getCart, incrementCartItemQuantity, decrementCartItemQuantity, removeCartItem } from "../service/cart.api.js";
+import { addToCart, getCart, incrementCartItemQuantity, decrementCartItemQuantity, removeCartItem, createCartOrder, verifyCartOrder } from "../service/cart.api.js";
 import { setCart, addItem, incrementItemQuantity, decrementItemQuantity, removeItem } from "../state/cart.slice.js";
 import { useDispatch } from "react-redux"
 
@@ -22,7 +22,7 @@ export const useCart = () => {
             const data = await getCart()
             console.log("Cart data received:", data)
             if (data && data.cart) {
-                console.log("Dispatching cart to Redux:", data.cart)
+                // console.log("Dispatching cart to Redux:", data.cart)
                 dispatch(setCart(data.cart))
                 return data.cart
             } else {
@@ -75,11 +75,23 @@ export const useCart = () => {
         }
     }
 
+    async function handleCreateCartOrder(){
+        const data = await createCartOrder()
+        return data.order
+    }
+
+    async function handleVerifyCartOrder({razorpay_payment_id, razorpay_order_id, razorpay_signature}){
+        const data = await verifyCartOrder({razorpay_payment_id, razorpay_order_id,razorpay_signature})
+        return data
+    }
+
     return {
         handleAddToCart,
         handleGetCart,
         handleIncrementItemQuantity,
         handleDecrementItemQuantity,
-        handleRemoveItem
+        handleRemoveItem,
+        handleCreateCartOrder,
+        handleVerifyCartOrder
     }
 }

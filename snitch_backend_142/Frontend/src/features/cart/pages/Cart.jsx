@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useCart } from "../hook/useCart";
 import Navbar from "../../products/components/Navbar.jsx";
 import { useNavigate } from "react-router";
+import { useRazorpay } from "react-razorpay";
 
 /* ─────────────────────────────────────────────────────────
    SNITCH — Premium Editorial Cart Page
@@ -22,23 +23,23 @@ const formatCurrency = (amount, currency = "INR") => {
 // ─────────────────────────────────────────────────────────
 // QUANTITY CONTROL
 // ─────────────────────────────────────────────────────────
-const QuantityControl = ({ quantity, onDecrease, onIncrease, loading }) => (
+const QuantityControl = ({ quantity, onDecrease, onIncrease, loading, disabled }) => (
   <div className="flex items-center" aria-label="Quantity selector">
     <button
       id="qty-decrease"
       onClick={onDecrease}
-      disabled={quantity <= 1 || loading}
+      disabled={quantity <= 1 || loading || disabled}
       aria-label="Decrease quantity"
       className={`w-7 h-7 flex items-center justify-center border border-[#ccc4b5] text-[#6e6560] text-[13px] font-medium transition-all duration-300
         ${
-          quantity <= 1 || loading
-            ? "opacity-30 cursor-not-allowed"
+          quantity <= 1 || loading || disabled
+            ? "opacity-40 cursor-not-allowed"
             : "hover:border-[#8c6b4a]/60 hover:text-[#8c6b4a]"
         }`}
     >
       −
     </button>
-    <div className="w-9 h-7 flex items-center justify-center border-t border-b border-[#ccc4b5] text-[11px] font-medium text-[#2a2724] tracking-widest select-none">
+    <div className={`w-9 h-7 flex items-center justify-center border-t border-b border-[#ccc4b5] text-[11px] font-medium tracking-widest select-none text-[#2a2724] ${disabled ? "opacity-40" : ""}`}>
       {loading ? (
         <span className="w-2 h-2 border border-[#8c6b4a]/50 border-t-[#8c6b4a] rounded-full animate-spin block" />
       ) : (
@@ -48,10 +49,10 @@ const QuantityControl = ({ quantity, onDecrease, onIncrease, loading }) => (
     <button
       id="qty-increase"
       onClick={onIncrease}
-      disabled={loading}
+      disabled={loading || disabled}
       aria-label="Increase quantity"
       className={`w-7 h-7 flex items-center justify-center border border-[#ccc4b5] text-[#6e6560] text-[13px] font-medium transition-all duration-300
-        ${loading ? "opacity-30 cursor-not-allowed" : "hover:border-[#8c6b4a]/60 hover:text-[#8c6b4a]"}`}
+        ${loading || disabled ? "opacity-40 cursor-not-allowed" : "hover:border-[#8c6b4a]/60 hover:text-[#8c6b4a]"}`}
     >
       +
     </button>
@@ -61,9 +62,15 @@ const QuantityControl = ({ quantity, onDecrease, onIncrease, loading }) => (
 // ─────────────────────────────────────────────────────────
 // CART ITEM — vertically centered, editorially composed
 // ─────────────────────────────────────────────────────────
-const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) => {
+const CartItem = ({
+  item,
+  onRemove,
+  onIncrementQuantity,
+  onDecrementQuantity,
+}) => {
   const [qtyLoading, setQtyLoading] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
+  const [showStockToast, setShowStockToast] = useState(false);
 
   const { product, variant, quantity, price, _id } = item;
 
@@ -71,13 +78,16 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
   const pId = typeof product === "object" ? product?._id : product;
   const vId = typeof variant === "object" ? variant?._id : variant;
 
-  const productVariant = typeof product === "object" 
-    ? (Array.isArray(product?.variants) 
-        ? product.variants.find(v => v._id === vId) 
-        : product?.variants) 
-    : null;
+  const productVariant =
+    typeof product === "object"
+      ? Array.isArray(product?.variants)
+        ? product.variants.find((v) => v._id === vId)
+        : product?.variants
+      : null;
 
-  const variantAttributes = productVariant?.attributes || (typeof variant === "object" ? variant?.attributes : null);
+  const variantAttributes =
+    productVariant?.attributes ||
+    (typeof variant === "object" ? variant?.attributes : null);
 
   const displayImages =
     productVariant?.images?.length > 0
@@ -90,29 +100,44 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
   const displayImage = displayImages?.[0]?.url || FALLBACK_IMAGE;
 
   const stock = productVariant ? productVariant.stock : null;
+  const isOutOfStock = stock === 0;
+  const exceedsStock = stock !== null && quantity > stock && stock > 0;
+
+  useEffect(() => {
+    if (exceedsStock) {
+      setShowStockToast(true);
+    } else {
+      setShowStockToast(false);
+    }
+  }, [exceedsStock]);
 
   const getStockMessage = (s) => {
     if (s === null || s === undefined) return null;
-    if (s === 0) return "Out of stock";
-    if (s <= 3) return `Only ${s} left`;
-    if (s <= 6) return "Low in stock";
-    if (s <= 10) return "Few pieces remaining";
+    if (s <= 3 && s > 0) return `Only ${s} left`;
+    if (s <= 6 && s > 0) return "Low in stock";
+    if (s <= 10 && s > 0) return "Few pieces remaining";
     return null;
   };
 
   const stockMsg = getStockMessage(stock);
 
   const displayPriceAmount = productVariant?.price?.amount ?? price?.amount;
-  const displayPriceCurrency = productVariant?.price?.currency ?? price?.currency ?? "INR";
+  const displayPriceCurrency =
+    productVariant?.price?.currency ?? price?.currency ?? "INR";
 
   const handleIncrease = async () => {
+    if (stock !== null && quantity >= stock) {
+      setShowStockToast(true);
+      setTimeout(() => setShowStockToast(false), 4000);
+      return;
+    }
     setQtyLoading(true);
     try {
       await onIncrementQuantity({ productId: pId, variantId: vId });
     } catch (error) {
       console.error(error);
     } finally {
-      setQtyLoading(false); 
+      setQtyLoading(false);
     }
   };
 
@@ -134,17 +159,24 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
   };
 
   return (
-    <div className="group flex items-center gap-5 md:gap-7 py-5 border-b border-[#e8e2d8] transition-colors duration-500 -mx-5 md:-mx-0 px-5 md:px-0">
+    <div className={`group flex items-center gap-5 md:gap-7 py-5 border-b border-[#e8e2d8] transition-all duration-700 -mx-5 md:-mx-0 px-5 md:px-0 relative ${isOutOfStock ? "bg-[#faf8f5]/40" : ""}`}>
       {/* ── Product Image ── */}
-      <div className="flex-shrink-0 w-[88px] h-[108px] md:w-[100px] md:h-[122px] bg-[#ede7dd] overflow-hidden">
+      <div className={`flex-shrink-0 w-[88px] h-[108px] md:w-[100px] md:h-[122px] bg-[#ede7dd] overflow-hidden relative transition-all duration-700 ${isOutOfStock ? "opacity-[0.90] grayscale-[0.5]" : ""}`}>
         <img
           src={displayImage}
           alt={productTitle || "Product"}
-          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+          className={`rounded-xl w-full h-full object-cover object-center transition-transform duration-700 ${!isOutOfStock ? "group-hover:scale-[1.03]" : ""}`}
           onError={(e) => {
             e.target.src = FALLBACK_IMAGE;
           }}
         />
+        {isOutOfStock && (
+          <div className="absolute inset-0 bg-[#fcfaf8]/10 flex items-center justify-center backdrop-blur-[0.5px]">
+            <span className="text-center text-[8px] uppercase tracking-[0.3em] text-[#5a5450] bg-[#fcfaf8]/70 backdrop-blur-md px-3 py-1 shadow-[0_2px_10px_rgba(42,39,36,0.04)] font-semibold border border-[#e8e2d8]/40">
+              Out of Stock
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ── Product Info ── */}
@@ -177,17 +209,31 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
           )}
 
           {/* Subtle Stock Indicator */}
-          {stockMsg && (
+          {stockMsg && !isOutOfStock && !showStockToast && (
             <div className="flex items-center gap-1.5 mb-2.5 mt-0.5">
-              <span className={`w-1 h-1 rounded-full opacity-80 ${stock === 0 ? 'bg-[#a34b4b]' : 'bg-[#c28e5a] animate-pulse'}`} />
+              <span className="w-1 h-1 rounded-full opacity-80 bg-[#c28e5a] animate-pulse" />
               <span className="text-[9px] uppercase tracking-[0.2em] text-[#a89278] font-medium">
                 {stockMsg}
               </span>
             </div>
           )}
 
+          {/* Premium Toast for Exceeding Stock */}
+          {showStockToast && !isOutOfStock && (
+            <div className="mt-2 inline-flex items-start gap-2 bg-[#faf7f3] border border-[#e8e2d8] px-3 py-2 shadow-[0_2px_10px_rgba(42,39,36,0.03)] transition-opacity duration-500 max-w-[220px]">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#a89278" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 mt-[1px]">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              <span className="text-[9px] uppercase tracking-[0.1em] text-[#736e68] font-medium leading-[1.4]">
+                Only {stock} item{stock > 1 ? "s" : ""} available.<br />Please update quantity.
+              </span>
+            </div>
+          )}
+
           {/* Price — mobile */}
-          <p className="md:hidden font-['Playfair_Display',serif] text-[15px] text-[#7a5c38]">
+          <p className={`md:hidden font-['Playfair_Display',serif] text-[15px] text-[#7a5c38] ${showStockToast ? 'mt-3' : 'mt-0'}`}>
             {formatCurrency(displayPriceAmount, displayPriceCurrency)}
           </p>
         </div>
@@ -199,6 +245,7 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
             onDecrease={handleDecrease}
             onIncrease={handleIncrease}
             loading={qtyLoading}
+            disabled={isOutOfStock}
           />
 
           {/* Price — desktop */}
@@ -232,15 +279,30 @@ const CartItem = ({ item, onRemove, onIncrementQuantity, onDecrementQuantity }) 
 // ORDER SUMMARY — Spacious, padded, softly framed
 // ─────────────────────────────────────────────────────────
 const OrderSummary = ({ items, onCheckout, navigate }) => {
+  const hasStockIssues = items.some(item => {
+    let s = null;
+    if (typeof item.product === "object" && item.product?.variants) {
+       if (Array.isArray(item.product.variants)) {
+         const vId = typeof item.variant === "object" ? item.variant?._id : item.variant;
+         s = item.product.variants.find(v => v._id === vId)?.stock;
+       } else {
+         s = item.product.variants?.stock;
+       }
+    }
+    return s === 0 || (s !== null && item.quantity > s);
+  });
+
   const subtotal = items.reduce((acc, item) => {
     let itemPriceAmount = item.price?.amount || 0;
     if (typeof item.product === "object" && item.product?.variants) {
       if (Array.isArray(item.product.variants)) {
-        const vId = typeof item.variant === "object" ? item.variant?._id : item.variant;
-        const variant = item.product.variants.find(v => v._id === vId);
+        const vId =
+          typeof item.variant === "object" ? item.variant?._id : item.variant;
+        const variant = item.product.variants.find((v) => v._id === vId);
         itemPriceAmount = variant?.price?.amount ?? itemPriceAmount;
       } else {
-        itemPriceAmount = item.product.variants?.price?.amount ?? itemPriceAmount;
+        itemPriceAmount =
+          item.product.variants?.price?.amount ?? itemPriceAmount;
       }
     }
     return acc + itemPriceAmount * item.quantity;
@@ -249,8 +311,15 @@ const OrderSummary = ({ items, onCheckout, navigate }) => {
   let currency = "INR";
   if (items.length > 0) {
     const firstItem = items[0];
-    if (typeof firstItem.product === "object" && firstItem.product?.variants && !Array.isArray(firstItem.product.variants)) {
-      currency = firstItem.product.variants?.price?.currency ?? firstItem.price?.currency ?? "INR";
+    if (
+      typeof firstItem.product === "object" &&
+      firstItem.product?.variants &&
+      !Array.isArray(firstItem.product.variants)
+    ) {
+      currency =
+        firstItem.product.variants?.price?.currency ??
+        firstItem.price?.currency ??
+        "INR";
     } else {
       currency = firstItem.price?.currency ?? "INR";
     }
@@ -304,7 +373,9 @@ const OrderSummary = ({ items, onCheckout, navigate }) => {
       <button
         id="proceed-to-checkout-btn"
         onClick={onCheckout}
-        className="w-full py-4 bg-[#2a2724] text-white text-[10.5px] font-bold tracking-[0.26em] uppercase transition-all duration-500 hover:bg-[#8c6b4a] mb-4"
+        disabled={hasStockIssues}
+        className={`w-full py-4 text-[10.5px] font-bold tracking-[0.26em] uppercase transition-all duration-500 mb-4
+          ${hasStockIssues ? "bg-[#2a2724] text-white opacity-40 cursor-not-allowed" : "bg-[#2a2724] text-white hover:bg-[#8c6b4a]"}`}
       >
         Proceed to Checkout
       </button>
@@ -426,9 +497,18 @@ const CartLoadingSkeleton = () => (
 // MAIN CART PAGE
 // ─────────────────────────────────────────────────────────
 const Cart = () => {
-  const { handleGetCart, handleIncrementItemQuantity, handleDecrementItemQuantity, handleRemoveItem } = useCart();
+  const {
+    handleGetCart,
+    handleIncrementItemQuantity,
+    handleDecrementItemQuantity,
+    handleRemoveItem,
+    handleCreateCartOrder,
+    handleVerifyCartOrder,
+  } = useCart();
+  const { error, isLoading, Razorpay } = useRazorpay();
   const items = useSelector((state) => state.cart.items);
-  console.log(items);
+  const user = useSelector((state) => state.auth.user);
+  // console.log(items);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -448,9 +528,39 @@ const Cart = () => {
     load();
   }, []);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     setCheckoutLoading(true);
-    setTimeout(() => setCheckoutLoading(false), 800);
+    const order = await handleCreateCartOrder();
+    console.log(order);
+
+    const options = {
+      key: "rzp_test_SuFQ8ycYzbFHo4",
+      amount: order.amount, // Amount in paise
+      currency: order.currency,
+      name: "SNITCH",
+      description: "Test Transaction",
+      order_id: order.id, // Generate order_id on server
+      handler: async (response) => {
+        // console.log(response);
+        const isValid = await handleVerifyCartOrder(response);
+
+        if (isValid) {
+          navigate(`/order-success?order_id=${response?.razorpay_order_id}`);
+        }
+      },
+      prefill: {
+        name: user?.fullname,
+        email: user?.email,
+        contact: user?.contact,
+      },
+      theme: {
+        color: "#9C7B5A",
+      },
+    };
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+
+    setCheckoutLoading(false);
   };
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
