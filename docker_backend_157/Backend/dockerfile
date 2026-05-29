@@ -1,10 +1,12 @@
 FROM node:20-alpine
 
-COPY ./package-lock.json .
-COPY ./package.json .
+WORKDIR /app
+
+COPY ./package-lock.json /app
+COPY ./package.json /app
 
 RUN npm install
 
-COPY ./server.js .
+COPY . /app
 
 CMD ["node", "server.js"]

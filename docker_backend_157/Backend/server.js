@@ -3,7 +3,7 @@ import express from "express";
 const app = express()
 
 app.get("/", (req, res) => {
-    return res.status(200).json({ message: "Hello, World!" })
+    return res.status(200).json({ message: "Hello, World! Mera naam Adarsh" })
     // console.log("Root endpoint was accessed")
 })
 
