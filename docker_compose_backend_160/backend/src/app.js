@@ -2,6 +2,8 @@ import express from 'express';
 
 const app = express();
 
+app.use(express.static('public'));
+
 app.get('/api', (req, res) => {
     res.send('Hello, World! I am Adarsh');
 });
@@ -17,5 +19,9 @@ app.get('/api/users', (req, res) => {
         users
     })
 })
+
+app.get("*name", (req, res) => {
+    res.sendFile("public/index.html",  { root: __dirname });
+});
 
 export default app;
