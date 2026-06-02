@@ -3,7 +3,7 @@ import { getMeContoller, googleCallbackController, loginController, registerCont
 import { registerValidation } from "../validation/auth.validator.js";
 import passport from "passport";
 import config from "../config/config.js";
-import identifyUser from "../middlewares/auth.middleware.js";
+import { identifyUser } from "../middlewares/auth.middleware.js";
 
 const authRouter = express.Router()
 
