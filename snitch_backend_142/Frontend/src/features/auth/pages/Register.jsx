@@ -53,7 +53,7 @@ const Register = () => {
       {/* ── LEFT PANEL (Image Section) ── */}
       <div className="hidden lg:block lg:w-[45%] relative bg-[#e0d7c6]">
         <img
-          src="/fashion-model.png"
+          src="/fashion-model.webp"
           alt="Luxury fashion editorial"
           className="absolute inset-0 w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-[2000ms] ease-out"
         />
