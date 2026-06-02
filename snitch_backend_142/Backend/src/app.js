@@ -10,6 +10,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(cookieParser())
+app.use(express.static("public"))
 
 app.use(passport.initialize())
 
@@ -30,5 +31,10 @@ import cartRouter from "./routes/cart.routes.js"
 app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)
 app.use("/api/cart", cartRouter)
+
+app.use('*name', (req,res)=>{
+    // res.send("This is wild card")
+    res.sendFile(path.join(__dirname, "..", "/public/index.html"))
+})
 
 export default app
