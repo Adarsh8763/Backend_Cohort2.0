@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser"
 import passport from "passport"
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 import config from "./config/config.js"
+import path from "path"
 
 const app = express()
 
@@ -18,7 +19,7 @@ passport.use(new GoogleStrategy({
     clientID: config.CLIENT_ID,
     clientSecret: config.CLIENT_SECRET,
     callbackURL: "/api/auth/google/callback"
-}, (_, __ , profile, done) => {
+}, (_, __, profile, done) => {
     return done(null, profile)
 }))
 
@@ -32,7 +33,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)
 app.use("/api/cart", cartRouter)
 
-app.use('*name', (req,res)=>{
+app.use('*name', (req, res) => {
     // res.send("This is wild card")
     res.sendFile(path.join(__dirname, "..", "/public/index.html"))
 })
