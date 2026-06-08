@@ -6,8 +6,8 @@ import { createPod } from "../kubernetes/pod.js"
 
 const app = express()
 
-app.use(express.json())
 app.use(morgan("dev"))
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.get("/api/sandbox/health", (req, res) => {
@@ -18,8 +18,6 @@ app.get("/api/sandbox/health", (req, res) => {
 })
 
 app.post("/api/sandbox/start", async (req, res) => {
-    console.log("START API HIT");
-
     try {
         const sandboxId = uuid();
 
@@ -30,7 +28,8 @@ app.post("/api/sandbox/start", async (req, res) => {
 
         return res.status(201).json({
             message: "Sandbox environment is being created",
-            sandboxId
+            sandboxId,
+            previewUrl: `http://${sandboxId}.preview.localhost`
         });
     } catch (err) {
         console.error("ERROR:", err);
