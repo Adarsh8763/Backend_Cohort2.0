@@ -16,11 +16,12 @@ app.get("/api/status/readyz", (req, res) => {
 })
 
 const proxies = {}
+const agentProxies = {}
 
-function getProxy(sandboxId){
+function getProxy(sandboxId) {
     const target = `http://sandbox-service-${sandboxId}` // Jaha request forward karna hai
 
-    if(!proxies[sandboxId]){
+    if (!proxies[sandboxId]) {
         proxies[sandboxId] = createProxyMiddleware({
             target,
             changeOrigin: true,
@@ -30,11 +31,30 @@ function getProxy(sandboxId){
     return proxies[sandboxId];
 }
 
+function getAgentProxy(sandboxId) {
+    const target = `http://sandbox-service-${sandboxId}:3000` // Jaha request forward karna hai
+
+    if (!agentProxies[sandboxId]) {
+        agentProxies[sandboxId] = createProxyMiddleware({
+            target,
+            changeOrigin: true,
+            ws: true,
+        });
+    }
+    return agentProxies[sandboxId];
+}
+
 app.use((req, res, next) => {
     const host = req.headers.host
     const sandboxId = host.split('.')[0] // Extract sandbox ID from subdomain
 
-    return getProxy(sandboxId)(req, res, next) // "Sandbox ID ke hisab se proxy middleware lao, aur us middleware ko current request (req, res, next) ke saath execute kar do."
+    if (host.split(".")[1] === 'agent') {
+        return getAgentProxy(sandboxId)(req, res, next)
+    }
+    else if (host.split(".")[1] === "preview") {
+        return getProxy(sandboxId)(req, res, next) // "Sandbox ID ke hisab se proxy middleware lao, aur us middleware ko current request (req, res, next) ke saath execute kar do."
+    }
+
 })
 
 export default app
