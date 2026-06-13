@@ -26,6 +26,10 @@ function getProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
+
+            onError(err, req, res) {
+                console.error("PROXY ERROR:", err);
+            }
         });
     }
     return proxies[sandboxId];
@@ -39,6 +43,10 @@ function getAgentProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
+
+            onError(err, req, res) {
+                console.error("PROXY ERROR:", err);
+            }
         });
     }
     return agentProxies[sandboxId];

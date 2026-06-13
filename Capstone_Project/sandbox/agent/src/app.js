@@ -32,36 +32,37 @@ app.get('/', (req, res) => {
 
 app.get("/list-files", async (req, res) => {
 
-  const listFiles = async (dir, baseDir)=>{
-    const entries = await fs.promises.readdir(dir, { withFileTypes: true})
+  const listFiles = async (dir, baseDir) => {
+    const entries = await fs.promises.readdir(dir, { withFileTypes: true })
     const files = []
 
-    for( const entry of entries){
+    for (const entry of entries) {
       const fullPath = path.join(dir, entry.name)
       const relativePath = path.relative(baseDir, fullPath)
 
       //Exclude certain directories
-      if(entry.isDirectory() && ["node_modules", ".git", "dist"].includes(entry.name)){
+      if (entry.isDirectory() && ["node_modules", ".git", "dist"].includes(entry.name)) {
         continue
       }
 
-      if(entry.isDirectory()){
+      if (entry.isDirectory()) {
         files.push(...await listFiles(fullPath, baseDir))
-      } 
-      else{
+      }
+      else {
         files.push(relativePath)
       }
     }
     return files
   }
 
-  try{
+  try {
     const files = await listFiles(WORKING_DIR, WORKING_DIR)
+    console.log("Files count:", files.length)
     res.status(200).json({
       mssage: "Files listed successfully",
       files
     })
-  } catch(err){
+  } catch (err) {
     res.status(500).json({
       message: `Error listening files: ${err.message}`,
       status: 'error'
@@ -79,6 +80,7 @@ app.get("/list-files", async (req, res) => {
 app.get("/read-files", async (req, res) => {
   const files = req.query.files
 
+
   if (!files) {
     return res.status(400).json({
       message: "No files specified in query parameter",
@@ -86,7 +88,9 @@ app.get("/read-files", async (req, res) => {
     })
   }
 
+  console.log("Files requested:", files)
   const fileList = files.split(",")
+  console.log("Number of files:", fileList.length)
 
   const result = await Promise.all(fileList.map(async (file) => {
     const filePath = path.join(WORKING_DIR, file)
@@ -102,10 +106,17 @@ app.get("/read-files", async (req, res) => {
     }
   }))
 
-  res.status(200).json({
+  const responseData = {
     message: "File contents",
     files: result
-  })
+  }
+
+  console.log(
+    "Response size:",
+    JSON.stringify(responseData).length
+  )
+
+  res.status(200).json(responseData)
 })
 
 /**

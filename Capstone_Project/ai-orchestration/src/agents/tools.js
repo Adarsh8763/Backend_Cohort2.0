@@ -8,7 +8,7 @@ export const listFiles = tool(
         console.log("Using listFiles tool")
         console.log("===============")
 
-        const response = await axios.get("http://019eb599-80c8-77a6-bf52-0affbfbf33ae.agent.localhost/list-files")
+        const response = await axios.get("http://sandbox-service-019ec01e-e06e-72ae-9ce2-246ef62bf7fe:3000/list-files")
         return JSON.stringify(response.data.files)
     },
     {
@@ -25,7 +25,7 @@ export const readFiles = tool(
         console.log("Using readFiles tool")
         console.log("===============")
 
-        const response = await axios.get("http://019eb599-80c8-77a6-bf52-0affbfbf33ae.agent.localhost/read-files?files=" + files.join(","))
+        const response = await axios.get("http://sandbox-service-019ec01e-e06e-72ae-9ce2-246ef62bf7fe:3000/read-files?files=" + files.join(","))
         return JSON.stringify(response.data)  //This is returned to Ai agent which will call this tool and using this ai gent will think what to do next. To see retured value use log explicitly
     },
     {
@@ -43,7 +43,7 @@ export const updateFiles = tool(
         console.log("Using updateFiles tool")
         console.log("===============")
 
-        const response = await axios.patch("http://019eb599-80c8-77a6-bf52-0affbfbf33ae.agent.localhost/update-files", {
+        const response = await axios.patch("http://sandbox-service-019ec01e-e06e-72ae-9ce2-246ef62bf7fe:3000/update-files", {
             updates: files
         })
         return JSON.stringify(response.data.results)
