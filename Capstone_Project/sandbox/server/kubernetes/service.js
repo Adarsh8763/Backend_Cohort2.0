@@ -13,7 +13,6 @@ export async function createService(sandboxId) {
         },
         spec: {
             selector: {
-                app: "sanbox",
                 sandboxId: sandboxId
             },
             type: "ClusterIP",

@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     allowedHosts: true,
-    hmr: {
+    hmr: {               // tell the browser to connect HMR on port 80 (ingress)
       clientPort: 80,
       protocol: 'ws',
     },

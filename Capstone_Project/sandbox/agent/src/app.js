@@ -9,6 +9,17 @@ import os from "os"
 
 const WORKING_DIR = "/workspace" //Jis folder ko access krna h, jisme kaam krna h
 
+const BLOCKED_DIRS = ["node_modules", ".git", "dist"];
+
+function isBlocked(filePath) {
+  return BLOCKED_DIRS.some(dir => filePath.includes(dir));
+}
+
+function isSafePath(filePath) {
+  const resolved = path.resolve(WORKING_DIR, filePath);
+  return resolved.startsWith(path.resolve(WORKING_DIR));
+}
+
 const app = express()
 const httpServer = http.createServer(app)
 
@@ -47,7 +58,7 @@ console.log("🔄 PTY spawned, waiting for events...");
 
 // CORRECT error handlers
 ptyProcess.on('error', (err) => {
-    console.error("❌ PTY ERROR:", err);
+  console.error("❌ PTY ERROR:", err);
 });
 
 ptyProcess.onData((data) => {
@@ -79,8 +90,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("error", (err) => {
-        console.error("Socket error:", err);
-    });
+    console.error("Socket error:", err);
+  });
 })
 
 
@@ -99,6 +110,7 @@ io.on("connection", (socket) => {
 app.get("/list-files", async (req, res) => {
 
   const listFiles = async (dir, baseDir) => {
+
     const entries = await fs.promises.readdir(dir, { withFileTypes: true })
     const files = []
 
@@ -159,6 +171,16 @@ app.get("/read-files", async (req, res) => {
   console.log("Number of files:", fileList.length)
 
   const result = await Promise.all(fileList.map(async (file) => {
+    if (isBlocked(file) || !isSafePath(file)) {
+      return {
+        [file]: "Access denied"
+      };
+    }
+    if (isBlocked(file) || !isSafePath(file)) {
+      return {
+        [file]: "Access denied"
+      };
+    }
     const filePath = path.join(WORKING_DIR, file)
     try {
       const content = await fs.promises.readFile(filePath, "utf-8")
@@ -202,9 +224,14 @@ app.patch("/update-files", async (req, res) => {
 
   const results = await Promise.all(updates.map(async (update) => {
     const { file, content } = update
+    if (isBlocked(file) || !isSafePath(file)) {
+      return {
+        [file]: "Access denied"
+      };
+    }
     const filePath = path.join(WORKING_DIR, file)
     try {
-      // await fs.promises.mkdir(path.dirname(filePath), { recurive: true })
+      // await fs.promises.mkdir(path.dirname(filePath), { recursive: true })
       await fs.promises.writeFile(filePath, content, "utf-8")
       return {
         [filePath]: "File updated successfully"
