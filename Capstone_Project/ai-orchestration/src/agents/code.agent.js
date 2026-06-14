@@ -5,13 +5,12 @@ import { ChatMistralAI } from "@langchain/mistralai"
 import { listFiles, readFiles, updateFiles } from "./tools.js"
 import { createAgent } from "langchain"
 
-
 const mistralModel = new ChatMistralAI({
   model: "mistral-medium-latest",
   apiKey: process.env.MISTRAL_API_KEY,
   temperature: 0.7,
-  timeout: 60000,     // 60 seconds
-  maxRetries: 3,      // retry 3 times on failure
+  timeout: 60000,
+  maxRetries: 0,
 })
 
 const deepseekModel = new ChatOpenAI({
@@ -27,13 +26,41 @@ export const geminiModel = new ChatGoogle({
   model: "gemini-2.5-flash",
   apiKey: process.env.GOOGLE_API_KEY,
   temperature: 0.7,
-  timeout: 60000,     // 60 seconds
-  maxRetries: 3
+  timeout: 60000,
+  maxRetries: 0,
+  generationConfig: {
+    thinkingConfig: {
+      thinkingBudget: 0   // disable thinking = fewer tokens per call
+    }
+  }
 });
 
+// ✅ Manual rate limiter — patches geminiModel directly
+let reqCount = 0;
+let windowStart = Date.now();
+
+const originalInvoke = geminiModel.invoke.bind(geminiModel);
+geminiModel.invoke = async function (...args) {
+  const now = Date.now();
+  if (now - windowStart > 60000) {
+    reqCount = 0;
+    windowStart = now;
+  }
+  reqCount++;
+  if (reqCount >= 15) {
+    const wait = 60000 - (now - windowStart) + 1000;
+    console.log(`⏳ Rate limiting: waiting ${wait}ms`);
+    await new Promise(r => setTimeout(r, wait));
+    reqCount = 0;
+    windowStart = Date.now();
+  }
+  return originalInvoke(...args);
+};
+
 const agent = (createAgent({
-  model: deepseekModel,
+  model: mistralModel,
   tools: [listFiles, readFiles, updateFiles],
+  stepTimeout: 5000,
   systemPrompt: `
                 You are FrontendForge, an expert React engineer building Vite React applications.
 
@@ -72,8 +99,8 @@ const agent = (createAgent({
                 
                 Deliver the requested feature, update files once, and stop.
               `
-})).withConfig({          //Existing object (agent, graph, runnable, chain) ko extra configuration ke saath run karna.
-  recursionLimit: 100     //Agent maximum 100 times tools call kar sakta hai by default ye 25 hota h
+})).withConfig({
+  recursionLimit: 100
 })
 
 export default agent

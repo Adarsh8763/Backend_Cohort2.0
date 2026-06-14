@@ -4,6 +4,9 @@ metadata:
   name: codespace-ingress
   annotations:
     nginx.ingress.kubernetes.io/websocket-services: router-service
+
+    # Required for WebSocket protocol upgrade
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     
     # Time in seconds to wait for a response from the pod
     nginx.ingress.kubernetes.io/proxy-read-timeout: "8000"
@@ -23,9 +26,6 @@ metadata:
     # Sets the cookie name to route. Browser stores:route=abc123(NGINX internally maps that value- to a pod.) and NGINX uses it to remember which pod the user should go to.
     nginx.ingress.kubernetes.io/session-cookie-name: "route"
 
-    # Required for WebSocket protocol upgrade
-    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
-    
   labels:
     app.kubernetes.io/name: codespace-ingress
 spec:

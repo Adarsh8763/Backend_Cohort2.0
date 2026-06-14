@@ -46,4 +46,4 @@ manifests:
     - k8s/serviceAccount-rbac.yml
     - k8s/role-rbac.yml
     - k8s/roleBinding-rbac.yml
-    - k8s/nginx-config.yml
+    # - k8s/nginx-config.yml
