@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: codespace-ingress
   annotations:
+    nginx.ingress.kubernetes.io/websocket-services: router-service
+    
     # Time in seconds to wait for a response from the pod
     nginx.ingress.kubernetes.io/proxy-read-timeout: "6000"
 
@@ -11,6 +13,12 @@ metadata:
 
     # Time in seconds to establish a connection to the pod
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+
+    # Makes a user stay connected to the same pod every time when there is replicas of same pod.
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+
+    # Sets the cookie name to route. Browser stores:route=abc123(NGINX internally maps that value- to a pod.) and NGINX uses it to remember which pod the user should go to.
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
   labels:
     app.kubernetes.io/name: codespace-ingress
 spec:

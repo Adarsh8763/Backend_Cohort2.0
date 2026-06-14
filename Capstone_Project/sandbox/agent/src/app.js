@@ -2,14 +2,27 @@ import express from 'express';
 import morgan from 'morgan';
 import fs from 'fs'
 import path from 'path';
+import { Server } from 'socket.io';
+import http from "http"
+import pty from "node-pty"
+import os from "os"
 
 const WORKING_DIR = "/workspace" //Jis folder ko access krna h, jisme kaam krna h
 
-const app = express();
+const app = express()
+const httpServer = http.createServer(app)
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PATCH"]
+  }
+})
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -17,6 +30,59 @@ app.get('/', (req, res) => {
     status: "success"
   })
 })
+
+
+const shell = process.env.SHELL || 'bash';
+
+// Spawn the PTY process
+const ptyProcess = pty.spawn(shell, [], {
+  name: 'xterm-color',
+  cols: 80,
+  rows: 30,
+  cwd: "/workspace",
+  env: process.env
+});
+
+console.log("🔄 PTY spawned, waiting for events...");
+
+// CORRECT error handlers
+ptyProcess.on('error', (err) => {
+    console.error("❌ PTY ERROR:", err);
+});
+
+ptyProcess.onData((data) => {
+  io.emit('terminal-output', data);
+});
+
+
+//IMP for debugging node-pty
+ptyProcess.onExit(({ exitCode, signal }) => {
+  console.log(`PTY process exited with code: ${exitCode}, signal: ${signal}`);
+});
+
+
+io.on("connection", (socket) => {
+  console.log("Client connected: " + socket.id);
+
+  socket.on("terminal-input", (data) => {
+    try {
+      ptyProcess.write(data);
+    } catch (err) {
+      console.error("Error writing to PTY:", err);
+      socket.emit('terminal-error', { message: "PTY process not available" });
+    }
+  });
+
+  // When the user disconnects, Socket.IO automatically fires the "disconnect" event.
+  socket.on("disconnect", () => {
+    console.log("Client disconnected: " + socket.id);
+  });
+
+  socket.on("error", (err) => {
+        console.error("Socket error:", err);
+    });
+})
+
 
 /**
  * @route GET /list-files
@@ -193,4 +259,4 @@ app.post("/create-files", async (req, res) => {
   })
 })
 
-export default app;
+export default httpServer;
