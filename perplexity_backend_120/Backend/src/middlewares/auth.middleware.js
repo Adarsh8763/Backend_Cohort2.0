@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import redis from "../config/cache.js"
+// import redis from "../config/cache.js"
 
 async function identifyUser(req, res, next){
     const token = req.cookies.token
@@ -10,12 +10,12 @@ async function identifyUser(req, res, next){
         })
     }
 
-    const isTokenBlacklisted = await redis.get(`perplexity:${token}`)
-    if(isTokenBlacklisted){
-        return res.status(401).json({
-            message: "Invalid Token"
-        })
-    }
+    // const isTokenBlacklisted = await redis.get(`perplexity:${token}`)
+    // if(isTokenBlacklisted){
+    //     return res.status(401).json({
+    //         message: "Invalid Token"
+    //     })
+    // }
 
     let decoded
     try{
