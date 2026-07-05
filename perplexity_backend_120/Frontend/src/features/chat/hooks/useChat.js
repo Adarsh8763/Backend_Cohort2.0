@@ -1,5 +1,5 @@
 import { initializeSocketconnection } from "../service/chat.socket";
-import { createNewChat, addNewMessage, setChats, setCurrentChatId, setLoading, setError, addMessages } from "../chatSlice.js"
+import { createNewChat, addNewMessage, setChats, setCurrentChatId, setLoading, setError, addMessages, removeChat } from "../chatSlice.js"
 import { sendMessage, getChats, getMessages, deleteChat } from "../service/chat.api.js"
 import { useDispatch } from "react-redux";
 
@@ -42,7 +42,7 @@ export const useChat = () => {
     }
 
     async function handleGetChats() {
-        try{
+        try {
             dispatch(setLoading(true))
             const data = await getChats()
             const { chats } = data
@@ -55,9 +55,9 @@ export const useChat = () => {
                 }
                 return acc
             },{})))
-        } catch(err){
-            dispatch(setError(err.response?.data?.message || "Failed to fetch message"))
-        } finally{
+        } catch (err) {
+            dispatch(setError(err.response?.data?.message || "Failed to load chats"))
+        } finally {
             dispatch(setLoading(false))
         }
     }
@@ -81,10 +81,20 @@ export const useChat = () => {
         dispatch(setCurrentChatId(chatId))
     }
 
+    async function handleDeleteChat(chatId) {
+        try {
+            await deleteChat(chatId)
+            dispatch(removeChat(chatId))
+        } catch (err) {
+            dispatch(setError(err.response?.data?.message || "Failed to delete chat"))
+        }
+    }
+
     return {
         initializeSocketconnection,
         handleSendMessage,
         handleGetChats,
-        handleOpenChat
+        handleOpenChat,
+        handleDeleteChat
     }
 }

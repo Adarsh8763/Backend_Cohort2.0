@@ -87,8 +87,8 @@ const Dashboard = () => {
       <aside className={`sidebar ${sidebarOpen ? "sidebar--open" : ""}`} id="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <div className="sidebar-logo-mark">P</div>
-            <span className="sidebar-logo-name">Perplexity</span>
+            <div className="sidebar-logo-mark">V</div>
+            <span className="sidebar-logo-name">Vasuk AI</span>
           </div>
           <div className="sidebar-header-actions">
             <button
@@ -126,18 +126,39 @@ const Dashboard = () => {
             <p className="chats-empty">No conversations yet</p>
           ) : (
             chatList.map((chatItem, index) => (
-              <button
-                onClick={() => openChat(chatItem.chatId)}
+              <div
                 key={index}
-                type="button"
-                className={`chat-item ${chatItem.chatId === currentChatId ? "active" : ""}`}
-                id={`chat-item-${chatItem.chatId}`}
+                className="chat-item-wrapper"
               >
-                <svg className="chat-item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-                <span className="chat-item-title">{chatItem.title}</span>
-              </button>
+                <button
+                  onClick={() => openChat(chatItem.chatId)}
+                  type="button"
+                  className={`chat-item ${chatItem.chatId === currentChatId ? "active" : ""}`}
+                  id={`chat-item-${chatItem.chatId}`}
+                >
+                  <svg className="chat-item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                  <span className="chat-item-title">{chatItem.title}</span>
+                </button>
+                <button
+                  type="button"
+                  className="chat-delete-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    chat.handleDeleteChat(chatItem.chatId);
+                  }}
+                  aria-label="Delete chat"
+                  title="Delete chat"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </div>
             ))
           )}
         </div>
@@ -181,7 +202,7 @@ const Dashboard = () => {
             /* Welcome screen */
             <div className="welcome-screen" id="welcome-screen">
               <div className="welcome-logo">
-                <div className="welcome-logo-mark">P</div>
+                <div className="welcome-logo-mark">V</div>
               </div>
               <h1 className="welcome-heading">What do you want to know?</h1>
               <p className="welcome-subtext">
