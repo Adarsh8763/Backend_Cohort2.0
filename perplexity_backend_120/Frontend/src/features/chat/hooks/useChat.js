@@ -42,18 +42,24 @@ export const useChat = () => {
     }
 
     async function handleGetChats() {
-        dispatch(setLoading(true))
-        const data = await getChats()
-        const { chats } = data
-        dispatch(setChats(chats.reverse().reduce((acc, chat) => {
-            acc[chat._id] = {
-                chatId: chat._id,
-                title: chat.title,
-                messages: [],
-                lastUpdated: chat.updatedAt
-            }
-            return acc
-        },{})))
+        try{
+            dispatch(setLoading(true))
+            const data = await getChats()
+            const { chats } = data
+            dispatch(setChats(chats.reverse().reduce((acc, chat) => {
+                acc[chat._id] = {
+                    chatId: chat._id,
+                    title: chat.title,
+                    messages: [],
+                    lastUpdated: chat.updatedAt
+                }
+                return acc
+            },{})))
+        } catch(err){
+            dispatch(setError(err.response?.data?.message || "Failed to fetch message"))
+        } finally{
+            dispatch(setLoading(false))
+        }
     }
 
     async function handleOpenChat(chatId, chats){

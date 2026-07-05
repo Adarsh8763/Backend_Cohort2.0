@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../style/form.scss";
 import FormGroup from "../components/FormGroup";
-import "../../shared/button.scss"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "../hooks/useAuth";
 import { useSelector } from "react-redux";
@@ -29,18 +28,47 @@ const Login = () => {
   }
   
   return (
-    <main>
-      <div className="form-container">
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <FormGroup type="text" name="email" value={email} placeholder="Enter email" onChange={(e)=>{setEmail(e.target.value)}} />
-          <FormGroup type="text" name="password" value={password} placeholder="Enter password" onChange={(e)=>{setPassword(e.target.value)}} />
-          <button className="button primary-button">Login</button>
+    <main className="auth-page">
+      <div className="auth-card">
+        <div className="auth-header">
+          <div className="auth-logo">
+            <div className="auth-logo-mark">P</div>
+            <span className="auth-logo-name">Perplexity</span>
+          </div>
+          <h1>Welcome back</h1>
+          <p className="auth-subtitle">Sign in to continue your research</p>
+        </div>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <FormGroup
+            id="email"
+            type="text"
+            name="email"
+            value={email}
+            placeholder="Email address"
+            onChange={(e) => { setEmail(e.target.value) }}
+          />
+          <FormGroup
+            id="password"
+            type="password"
+            name="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => { setPassword(e.target.value) }}
+          />
+          <button type="submit" className="auth-submit-btn" disabled={loading}>
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
         </form>
-        <p>Don't have an account? <Link className="toggleAuthForm" to="/register">Register</Link> </p>
+
+        <p className="auth-footer">
+          Don't have an account?
+          <Link className="toggleAuthForm" to="/register">Create account</Link>
+        </p>
       </div>
     </main>
   );
 };
 
 export default Login;
+

@@ -1,17 +1,45 @@
 .button {
-  padding-inline: 1rem;
-  padding-block: 0.8rem;
-  border-radius: 1rem;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 
-  &.primary-button{
-    background-color: rgb(212, 27, 27);
-    color: whitesmoke;
+  &.primary-button {
+    background-color: var(--accent, #3B82F6);
+    color: #fff;
+    border-color: transparent;
+
+    &:hover {
+      background-color: var(--accent-hover, #2563EB);
+    }
+
+    &:active {
+      opacity: 0.88;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
   }
-  &:active{
-    scale: 0.95;
+
+  &.secondary-button {
+    background-color: transparent;
+    color: var(--text-primary, #F8FAFC);
+    border-color: var(--border, rgba(255, 255, 255, 0.08));
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
   }
 }
