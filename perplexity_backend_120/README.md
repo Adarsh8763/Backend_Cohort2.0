@@ -237,26 +237,30 @@ sequenceDiagram
 ```
 perplexity_backend_120/
 │
+├── assets/                         # Project images and screenshots
+│
 ├── Backend/                        # Express API server
-│   ├── server.js                   # Entry point — HTTP server + Socket.io init
-│   ├── package.json
 │   ├── .env                        # Environment variables (never commit)
+│   ├── .env.example
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── server.js                   # Entry point — HTTP server + Socket.io init
 │   ├── public/                     # Compiled frontend bundle (served by Express)
 │   │
 │   └── src/
 │       ├── app.js                  # Express app, middleware stack, route mounts
 │       ├── config/
-│       │   ├── database.js         # Mongoose connection
-│       │   └── cache.js            # ioredis client
+│       │   ├── cache.js            # ioredis client
+│       │   └── database.js         # Mongoose connection
 │       ├── controllers/
 │       │   ├── auth.controller.js  # Register, login, logout, email verify
 │       │   └── chat.controller.js  # Send message, get chats/messages, delete
 │       ├── middlewares/
 │       │   └── auth.middleware.js  # JWT cookie verification
 │       ├── models/
-│       │   ├── user.model.js       # { username, email, password, verified }
 │       │   ├── chat.model.js       # { user, title }
-│       │   └── message.model.js    # { chat, content, role: "user"|"ai" }
+│       │   ├── message.model.js    # { chat, content, role: "user"|"ai" }
+│       │   └── user.model.js       # { username, email, password, verified }
 │       ├── routes/
 │       │   ├── auth.routes.js      # /api/auth/*
 │       │   └── chat.routes.js      # /api/chats/*
@@ -270,36 +274,44 @@ perplexity_backend_120/
 │           └── auth.validator.js   # express-validator rules
 │
 └── Frontend/                       # React + Vite SPA
+    ├── .gitignore
+    ├── eslint.config.js
     ├── index.html                  # Root HTML, Google Fonts, meta tags
-    ├── vite.config.js
     ├── package.json
+    ├── package-lock.json
+    ├── vite.config.js
+    ├── public/
+    │   └── vite.svg
     │
     └── src/
         ├── main.jsx                # React root, Redux Provider, RouterProvider
         ├── app/
         │   ├── App.jsx             # Top-level component
-        │   ├── AppRoutes.jsx       # Route definitions (/, /login, /register)
-        │   └── app.store.js        # Redux store configuration
+        │   ├── app.store.js        # Redux store configuration
+        │   └── AppRoutes.jsx       # Route definitions (/, /login, /register)
         │
         └── features/
             ├── auth/               # Authentication feature slice
             │   ├── auth.slice.js
+            │   ├── components/
+            │   │   ├── FormGroup.jsx
+            │   │   └── Protected.jsx   # Route guard
+            │   ├── hooks/
+            │   │   └── useAuth.js
             │   ├── pages/
             │   │   ├── Login.jsx
             │   │   └── Register.jsx
-            │   ├── components/
-            │   │   └── Protected.jsx   # Route guard
-            │   ├── hooks/
             │   ├── service/
+            │   │   └── auth.api.js
             │   └── style/
             │       └── form.scss
             │
             ├── chat/               # Chat feature slice
             │   ├── chatSlice.js    # Redux chat state
-            │   ├── pages/
-            │   │   └── Dashboard.jsx   # Main chat UI
             │   ├── hooks/
             │   │   └── useChat.js      # Chat business logic hook
+            │   ├── pages/
+            │   │   └── Dashboard.jsx   # Main chat UI
             │   ├── service/
             │   │   ├── chat.api.js     # Axios API calls
             │   │   └── chat.socket.js  # Socket.io client
@@ -307,8 +319,8 @@ perplexity_backend_120/
             │       └── Chat.scss
             │
             └── shared/             # Global design system
-                ├── global.scss     # CSS custom properties + resets
-                └── button.scss     # Reusable button styles
+                ├── button.scss     # Reusable button styles
+                └── global.scss     # CSS custom properties + resets
 ```
 
 ---
@@ -517,18 +529,10 @@ Here is exactly what happens between the moment a user submits a message and whe
 
 ## 🖼 Screenshots
 
-### 🏠 Home Page
+### 📝 Register Page
 
 <p align="center">
-  <img src="./assets/home.png" alt="Home Page" width="100%" />
-</p>
-
----
-
-### 💬 Chat Interface
-
-<p align="center">
-  <img src="./assets/chat.png" alt="Chat Interface" width="100%" />
+  <img src="./assets/register.png" alt="Register Page" width="100%" />
 </p>
 
 ---
@@ -541,10 +545,18 @@ Here is exactly what happens between the moment a user submits a message and whe
 
 ---
 
-### 📝 Register Page
+### 🏠 Home Page
 
 <p align="center">
-  <img src="./assets/register.png" alt="Register Page" width="100%" />
+  <img src="./assets/home.png" alt="Home Page" width="100%" />
+</p>
+
+---
+
+### 💬 Chat Interface
+
+<p align="center">
+  <img src="./assets/chat.png" alt="Chat Interface" width="100%" />
 </p>
 
 ---
