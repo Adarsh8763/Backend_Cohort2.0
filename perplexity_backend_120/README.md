@@ -22,7 +22,7 @@
 
 <br/>
 
-[🚀 Live Demo](https://backend-cohort2-0-3-lx0x.onrender.com) · [📖 Docs](#-installation) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues)
+[🚀 Live Demo](https://backend-cohort2-0-3-lx0x.onrender.com) · [📖 Docs](#-installation) · [🐛 Report Bug](https://github.com/Adarsh8763/Backend_Cohort2.0/issues/new) · [✨ Request Feature](https://github.com/Adarsh8763/Backend_Cohort2.0/issues/new)
 
 </div>
 
