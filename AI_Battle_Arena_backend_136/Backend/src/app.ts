@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(express.static("./public"))
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://ai-battle-arena-51i7.onrender.com/",
     credentials: true
 }))
 
