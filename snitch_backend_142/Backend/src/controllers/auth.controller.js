@@ -131,5 +131,5 @@ export const googleCallbackController = async (req, res) => {
 
     res.cookie("token", token)
 
-    res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "/")
+    res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "https://snitch-6ohg.onrender.com/")
 }
