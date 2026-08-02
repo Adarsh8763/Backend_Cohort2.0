@@ -40,7 +40,6 @@ export function useAuth(){
             dispatch(setUser(data.user))
         }catch(err){
             dispatch(setUser(null))
-            dispatch(setError((err.response?.data?.message) || "Hydration failed"))
         }finally{
             dispatch(setLoading(false))
         }
