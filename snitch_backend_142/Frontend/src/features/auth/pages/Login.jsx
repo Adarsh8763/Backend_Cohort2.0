@@ -145,21 +145,21 @@ const Login = () => {
               </div>
             </div>
 
+            {/* Error Message */}
+            {loginError && (
+              <p className="text-[#a05c3b] text-[11px] font-light tracking-wide text-center py-1.5 px-3 bg-[#f9f0e8] border border-[#e0c8af]">
+                {loginError}
+              </p>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={!formData.email || !formData.password}
-              className={`w-full bg-[#3b3834] text-white py-2.5 mt-3 text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-300 shadow-md ${(!formData.email || !formData.password) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#8c6b4a] hover:shadow-lg'}`}
+              className={`w-full bg-[#3b3834] text-white py-2.5 text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-300 shadow-md ${(!formData.email || !formData.password) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#8c6b4a] hover:shadow-lg'}`}
             >
               Sign In
             </button>
-
-            {/* Error Message */}
-            {loginError && (
-              <p className="text-[#a05c3b] text-[11px] font-light tracking-wide text-center py-1.5 px-3 bg-[#f9f0e8] border border-[#e0c8af] mt-1">
-                {loginError}
-              </p>
-            )}
 
             {/* Divider */}
             <div className="flex items-center py-1 mt-2">

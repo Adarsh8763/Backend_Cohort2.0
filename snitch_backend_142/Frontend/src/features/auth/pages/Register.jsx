@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
 
 const Register = () => {
   const { handleRegister } = useAuth();
@@ -13,7 +12,7 @@ const Register = () => {
     password: "",
     isSeller: false,
   });
-
+  const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -24,11 +23,36 @@ const Register = () => {
     }));
   };
 
-  const error = useSelector((state) => state.auth.error);
-  const isFormValid = formData.fullName && formData.email && formData.contactNumber && formData.password;
+  const handleBlur = (e) => {
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+  };
+
+  // Validation rules
+  const errors = {
+    fullName: !formData.fullName.trim() ? "Full name is required" : "",
+    email: !formData.email.trim()
+      ? "Email is required"
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      ? "Enter a valid email address"
+      : "",
+    contactNumber: !formData.contactNumber.trim()
+      ? "Contact number is required"
+      : !/^\d{10}$/.test(formData.contactNumber.replace(/\D/g, ""))
+      ? "Enter a valid 10-digit number"
+      : "",
+    password: !formData.password
+      ? "Password is required"
+      : formData.password.length < 6
+      ? "Password must be at least 6 characters"
+      : "",
+  };
+
+  const isFormValid = !Object.values(errors).some(Boolean);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Mark all as touched to show all errors on submit attempt
+    setTouched({ fullName: true, email: true, contactNumber: true, password: true });
     if (!isFormValid) return;
 
     const data = {
@@ -38,9 +62,7 @@ const Register = () => {
       contact: formData.contactNumber,
       isSeller: formData.isSeller,
     };
-    await handleRegister(data);
-    // Guard: if registration failed, auth error will be set — don't navigate
-    if (error) return;
+    const result = await handleRegister(data);
     if (formData.isSeller) {
       navigate("/seller/dashboard");
     } else {
@@ -104,10 +126,14 @@ const Register = () => {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Jane Doe"
                 required
                 className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] px-3 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
               />
+              {touched.fullName && errors.fullName && (
+                <p className="text-[#a05c3b] text-[10px] font-light tracking-wide">{errors.fullName}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -121,10 +147,14 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="jane@example.com"
                 required
                 className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] px-3 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
               />
+              {touched.email && errors.email && (
+                <p className="text-[#a05c3b] text-[10px] font-light tracking-wide">{errors.email}</p>
+              )}
             </div>
 
             {/* Contact Number */}
@@ -138,10 +168,14 @@ const Register = () => {
                 name="contactNumber"
                 value={formData.contactNumber}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="+1 (555) 000-0000"
                 required
                 className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] px-3 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
               />
+              {touched.contactNumber && errors.contactNumber && (
+                <p className="text-[#a05c3b] text-[10px] font-light tracking-wide">{errors.contactNumber}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -156,6 +190,7 @@ const Register = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="••••••••"
                   required
                   className="w-full bg-white border border-[#e0d7c6] text-[#4a4742] placeholder-[#d1c8b8] pl-3 pr-9 py-1.5 text-[13px] font-light focus:outline-none focus:border-[#8c6b4a] focus:ring-1 focus:ring-[#8c6b4a] transition-all duration-300 shadow-sm"
@@ -177,6 +212,9 @@ const Register = () => {
                   )}
                 </button>
               </div>
+              {touched.password && errors.password && (
+                <p className="text-[#a05c3b] text-[10px] font-light tracking-wide">{errors.password}</p>
+              )}
             </div>
 
             {/* isSeller Toggle */}
