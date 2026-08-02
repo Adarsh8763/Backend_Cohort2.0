@@ -106,7 +106,8 @@ export const getMeContoller = async (req, res) => {
 
 export const googleCallbackController = async (req, res) => {
 
-    console.log(req.user)
+    try{
+        console.log(req.user)
 
     const { id, displayName, emails, photos } = req.user
 
@@ -132,4 +133,11 @@ export const googleCallbackController = async (req, res) => {
     res.cookie("token", token)
 
     res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "https://snitch-6ohg.onrender.com/")
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json({
+            "error": error
+        })
+    }
 }
