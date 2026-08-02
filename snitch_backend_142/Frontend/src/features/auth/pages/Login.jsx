@@ -1,19 +1,15 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { setError } from "../state/auth.slice.js";
 
 const Login = () => {
   const { handleLogin } = useAuth();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const loginError = useSelector((state) => state.auth.error);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
+  const [loginError, setLoginError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -22,21 +18,28 @@ const Login = () => {
       ...prev,
       [name]: value,
     }));
-    if (loginError) dispatch(setError(null));
+    if (loginError) setLoginError(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await handleLogin({
-      email: formData.email,
-      password: formData.password,
-    });
-    // Guard: user is undefined when login throws (handleLogin catches and returns nothing)
-    if (!user) return;
-    if (user.role === "seller") {
-      navigate("/seller/dashboard");
-    } else {
-      navigate("/");
+    setLoginError(null);
+    try {
+      const user = await handleLogin({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (!user) {
+        setLoginError("Invalid email or password. Please try again.");
+        return;
+      }
+      if (user.role === "seller") {
+        navigate("/seller/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch {
+      setLoginError("Invalid email or password. Please try again.");
     }
   };
 
