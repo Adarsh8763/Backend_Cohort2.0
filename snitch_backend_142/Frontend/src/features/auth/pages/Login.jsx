@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { setError } from "../state/auth.slice.js";
 
 const Login = () => {
   const { handleLogin } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loginError = useSelector((state) => state.auth.error);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,6 +22,7 @@ const Login = () => {
       ...prev,
       [name]: value,
     }));
+    if (loginError) dispatch(setError(null));
   };
 
   const handleSubmit = async (e) => {
@@ -145,6 +150,13 @@ const Login = () => {
             >
               Sign In
             </button>
+
+            {/* Error Message */}
+            {loginError && (
+              <p className="text-[#a05c3b] text-[11px] font-light tracking-wide text-center py-1.5 px-3 bg-[#f9f0e8] border border-[#e0c8af] mt-1">
+                {loginError}
+              </p>
+            )}
 
             {/* Divider */}
             <div className="flex items-center py-1 mt-2">
