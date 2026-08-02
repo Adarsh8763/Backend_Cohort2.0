@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     contact: {
         type: String,
         required: false,
-        unique: true
+        unique: true,
+        sparse: true
     },
     role: {
         type: String,
