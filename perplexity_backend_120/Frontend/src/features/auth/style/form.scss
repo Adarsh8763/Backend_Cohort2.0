@@ -164,4 +164,41 @@
       text-decoration: underline;
     }
   }
-}
+}
+
+// Warning / error banner shown on failed auth
+.auth-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background-color: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.28);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: #fbbf24;
+  animation: errorFadeIn 0.2s ease;
+
+  .auth-error-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: #f59e0b;
+  }
+
+  span {
+    line-height: 1.4;
+  }
+}
+
+@keyframes errorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
