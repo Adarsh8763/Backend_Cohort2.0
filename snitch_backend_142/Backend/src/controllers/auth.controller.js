@@ -106,35 +106,35 @@ export const getMeContoller = async (req, res) => {
 
 export const googleCallbackController = async (req, res) => {
 
-    try{
+    try {
         console.log(req.user)
 
-    const { id, displayName, emails, photos } = req.user
+        const { id, displayName, emails, photos } = req.user
 
-    const email = emails[0].value
-    const profilePic = photos[0].value
+        const email = emails[0].value
+        const profilePic = photos[0].value
 
-    let user = await userModel.findOne({ email })
+        let user = await userModel.findOne({ email })
 
-    if (!user) {
-        user = await userModel.create({
-            fullname: displayName,
-            email: email,
-            googleId: id
-        })
+        if (!user) {
+            user = await userModel.create({
+                fullname: displayName,
+                email: email,
+                googleId: id
+            })
+        }
+
+        const token = jwt.sign(
+            { id: user._id },
+            config.JWT_SECRET,
+            { expiresIn: "5d" }
+        )
+
+        res.cookie("token", token)
+
+        res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "https://snitch-6ohg.onrender.com/")
     }
-
-    const token = jwt.sign(
-        { id: user._id },
-        config.JWT_SECRET,
-        { expiresIn: "5d" }
-    )
-
-    res.cookie("token", token)
-
-    res.redirect(config.NODE_ENV === "development" ? "http://localhost:5173/" : "https://snitch-6ohg.onrender.com/")
-    }
-    catch(error){
+    catch (error) {
         console.log(error)
         res.status(500).json({
             "error": error
