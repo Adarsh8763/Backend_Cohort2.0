@@ -15,7 +15,7 @@ async function registerController(req, res) {
 
     if (isUserAlreadyExist) {
         return res.status(409).json({
-            message: "User already exist with this" + (isUserAlreadyExist.username === username ? "username" : "email")
+            message: "User already exist with this " + (isUserAlreadyExist.username === username ? "username" : "email")
         })
     }
     const hashPassword = await bcrypt.hash(password, 10)
@@ -40,7 +40,7 @@ async function registerController(req, res) {
             html: `<p>Hello, ${username}!</p>
                 <p>Thank you for registering with us. We're excited to have you on board!</p>
                 <p>Your email has been successfully registered. You can now log in to your account and explore our services.</p>
-                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
+                <a href="https://backend-cohort2-0-3-lx0x.onrender.com/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
                 <p>Best regards,<br/>The Perplexity Team</p>`
         });
 

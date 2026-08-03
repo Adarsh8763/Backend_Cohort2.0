@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../style/form.scss";
 import FormGroup from "../components/FormGroup";
 import { useAuth } from "../hooks/useAuth";
@@ -18,6 +18,8 @@ const Register = () => {
   const { handleRegister } = useAuth()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => { dispatch(clearError()) }, [])
 
   async function handleSubmit(e){
     e.preventDefault()
