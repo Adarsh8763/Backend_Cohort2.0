@@ -200,12 +200,12 @@ async function resendVerificationEmailController(req, res) {
 
     await sendEmail({
         to: user.email,
-        subject: "Welcome to Perplexity",
+        subject: "Welcome to Vasuk AI",
         html: `<p>Hello, ${user.username}!</p>
                 <p>Thank you for registering with us. We're excited to have you on board!</p>
                 <p>Your email has been successfully registered. You can now log in to your account and explore our services.</p>
-                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
-                <p>Best regards,<br/>The Perplexity Team</p>`
+                <a href="https://backend-cohort2-0-3-lx0x.onrender.com/api/auth/verify-email?token=${emailVerificationToken}">Verify email</a>
+                <p>Best regards,<br/>The Vasuk AI Team</p>`
     });
 
     res.status(201).json({
