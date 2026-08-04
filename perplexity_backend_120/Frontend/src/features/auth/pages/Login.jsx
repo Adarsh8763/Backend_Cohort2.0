@@ -18,8 +18,8 @@ const Login = () => {
   const { handleLogin } = useAuth()
   const location = useLocation()
 
-  // Message passed from Register (on success or user-already-exists redirect)
-  const infoMessage = location.state?.message || null
+  // Capture once on mount so re-renders don't lose it
+  const [infoMessage] = useState(location.state?.message || null)
 
   function validate() {
     if (!email.trim()) return "Email is required."
