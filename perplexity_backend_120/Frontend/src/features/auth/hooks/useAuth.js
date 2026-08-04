@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { register, login, getMe, logout, resendVerificationEmail } from "../service/auth.api"
-import { setUser, setLoading, setError } from "../auth.slice"
+import { setUser, setLoading } from "../auth.slice"
 import { useEffect } from "react";
 
 
@@ -15,8 +15,8 @@ export function useAuth(){
             return { success: true, status: 201 }
         }catch(err){
             const status = err.response?.status
-            dispatch(setError((err.response?.data?.message) || "Registration failed"))
-            return { success: false, status }
+            const message = err.response?.data?.message || "Registration failed"
+            return { success: false, status, message }
         }finally{
             dispatch(setLoading(false))
         }
@@ -27,6 +27,7 @@ export function useAuth(){
             dispatch(setLoading(true))
             const data = await login(email, password)
             dispatch(setUser(data.user))
+            return { success: true }
         }catch(err){
             const status = err.response?.status
             const serverMsg = err.response?.data?.message
@@ -36,7 +37,7 @@ export function useAuth(){
             } else if (status === 401) {
                 msg = "Invalid credentials. Please verify your email is correct or register first."
             }
-            dispatch(setError(msg))
+            return { success: false, error: msg }
         }finally{
             dispatch(setLoading(false))
         }

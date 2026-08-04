@@ -1,29 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../style/form.scss";
 import FormGroup from "../components/FormGroup";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate, Navigate } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { clearError, setError } from "../auth.slice";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("");
+  const [localError, setLocalError] = useState(null);
 
   const user = useSelector(state => state.auth.user)
   const loading = useSelector(state => state.auth.loading)
-  const error = useSelector(state => state.auth.error)
 
   const { handleRegister } = useAuth()
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    dispatch(clearError())
-    return () => { dispatch(clearError()) }
-  }, [])
-
 
   // Password strength rules
   const passwordRules = [
@@ -48,25 +40,29 @@ const Register = () => {
 
   async function handleSubmit(e){
     e.preventDefault()
-    dispatch(clearError())
+    setLocalError(null)
 
     const validationError = validate()
     if (validationError) {
-      dispatch(setError(validationError))
+      setLocalError(validationError)
       return
     }
 
     const result = await handleRegister(username, email, password)
 
     if (result?.success) {
-      // Registered successfully → go to login
-      navigate("/login", { replace: true, state: { message: "Account created! Please verify your email, then sign in." } })
+      navigate("/login", { replace: true, state: { message: "Account created! Please verify your email before signing in." } })
       return
     }
 
     if (result?.status === 409) {
-      // User already exists → redirect to login with hint
       navigate("/login", { replace: true, state: { message: "An account with this email/username already exists. Please sign in." } })
+      return
+    }
+
+    // Any other server error
+    if (!result?.success) {
+      setLocalError(result?.message || "Registration failed. Please try again.")
     }
   }
 
@@ -127,12 +123,12 @@ const Register = () => {
             </div>
           )}
 
-          {error && (
+          {localError && (
             <div className="auth-error" role="alert">
               <svg className="auth-error-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
               </svg>
-              <span>{error}</span>
+              <span>{localError}</span>
             </div>
           )}
           <button type="submit" className="auth-submit-btn" disabled={loading}>
