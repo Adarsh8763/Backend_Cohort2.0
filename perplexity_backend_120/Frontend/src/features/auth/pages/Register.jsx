@@ -17,13 +17,11 @@ const Register = () => {
   const { handleRegister } = useAuth()
   const navigate = useNavigate()
 
-  // Password strength rules
+  // Password strength rules — must match backend validator
   const passwordRules = [
-    { label: "At least 8 characters", test: (p) => p.length >= 8 },
-    { label: "One uppercase letter (A–Z)", test: (p) => /[A-Z]/.test(p) },
-    { label: "One lowercase letter (a–z)", test: (p) => /[a-z]/.test(p) },
-    { label: "One number (0–9)", test: (p) => /[0-9]/.test(p) },
-    { label: "One special character (!@#$…)", test: (p) => /[^A-Za-z0-9]/.test(p) },
+    { label: "At least 6 characters", test: (p) => p.length >= 6 },
+    { label: "At least 1 uppercase letter (A–Z)", test: (p) => /[A-Z]/.test(p) },
+    { label: "At least 1 number (0–9)", test: (p) => /[0-9]/.test(p) },
   ]
 
   const isPasswordWeak = password.length > 0 && !passwordRules.every(r => r.test(password))

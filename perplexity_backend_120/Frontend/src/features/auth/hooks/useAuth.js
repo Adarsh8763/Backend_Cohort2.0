@@ -15,7 +15,10 @@ export function useAuth(){
             return { success: true, status: 201 }
         }catch(err){
             const status = err.response?.status
-            const message = err.response?.data?.message || "Registration failed"
+            const message =
+                err.response?.data?.message ||
+                err.response?.data?.errors?.[0]?.msg ||
+                "Registration failed"
             return { success: false, status, message }
         }finally{
             dispatch(setLoading(false))
