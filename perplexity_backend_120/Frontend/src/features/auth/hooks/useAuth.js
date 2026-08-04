@@ -72,12 +72,11 @@ export function useAuth(){
 
     async function handleResendVerificationEmail(email){
         try{
-            dispatch(setLoading(true))
             await resendVerificationEmail(email)
+            return { success: true }
         }catch(err){
-            dispatch(setError((err.response?.data?.message) || "Resend Verification Email failed"))
-        }finally{
-            dispatch(setLoading(false))
+            const message = err.response?.data?.message || "Failed to resend verification email."
+            return { success: false, message }
         }
     }
 

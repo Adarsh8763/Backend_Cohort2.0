@@ -93,6 +93,9 @@ const Login = () => {
               <span>{localError}</span>
             </div>
           )}
+          {localError?.toLowerCase().includes("verify") && (
+            <ResendVerification email={email} />
+          )}
           <button type="submit" className="auth-submit-btn" disabled={loading}>
             {loading ? "Signing in…" : "Sign in"}
           </button>
@@ -106,5 +109,56 @@ const Login = () => {
     </main>
   );
 };
+
+function ResendVerification({ email }) {
+  const { handleResendVerificationEmail } = useAuth()
+  const [resendState, setResendState] = useState("idle") // idle | sending | sent | error
+  const [resendError, setResendError] = useState(null)
+
+  async function handleResend() {
+    if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setResendError("Please enter your email address above first.")
+      setResendState("error")
+      return
+    }
+    setResendState("sending")
+    setResendError(null)
+    const result = await handleResendVerificationEmail(email)
+    if (result?.success) {
+      setResendState("sent")
+    } else {
+      setResendError(result?.message || "Could not resend email. Try again.")
+      setResendState("error")
+    }
+  }
+
+  if (resendState === "sent") {
+    return (
+      <div className="auth-info resend-info" role="status">
+        <svg className="auth-info-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+        </svg>
+        <span>Verification email sent! Check your inbox.</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="resend-block">
+      <span className="resend-hint">Didn't receive the email?</span>
+      <button
+        type="button"
+        className="resend-btn"
+        onClick={handleResend}
+        disabled={resendState === "sending"}
+      >
+        {resendState === "sending" ? "Sending…" : "Resend verification email"}
+      </button>
+      {resendState === "error" && resendError && (
+        <span className="resend-error">{resendError}</span>
+      )}
+    </div>
+  )
+}
 
 export default Login;
