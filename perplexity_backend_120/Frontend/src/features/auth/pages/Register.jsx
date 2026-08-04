@@ -19,7 +19,11 @@ const Register = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  useEffect(() => { dispatch(clearError()) }, [])
+  useEffect(() => {
+    dispatch(clearError())
+    return () => { dispatch(clearError()) }
+  }, [])
+
 
   // Password strength rules
   const passwordRules = [

@@ -24,7 +24,11 @@ const Login = () => {
   // Message passed from Register (on success or user-already-exists redirect)
   const infoMessage = location.state?.message || null
 
-  useEffect(() => { dispatch(clearError()) }, [])
+  useEffect(() => {
+    dispatch(clearError())
+    return () => { dispatch(clearError()) }
+  }, [])
+
 
   function validate() {
     if (!email.trim()) return "Email is required."
