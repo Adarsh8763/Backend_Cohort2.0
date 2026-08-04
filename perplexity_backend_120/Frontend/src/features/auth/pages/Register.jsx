@@ -4,7 +4,7 @@ import FormGroup from "../components/FormGroup";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate, Navigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { clearError } from "../auth.slice";
+import { clearError, setError } from "../auth.slice";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -21,10 +21,49 @@ const Register = () => {
 
   useEffect(() => { dispatch(clearError()) }, [])
 
+  // Password strength rules
+  const passwordRules = [
+    { label: "At least 8 characters", test: (p) => p.length >= 8 },
+    { label: "One uppercase letter (A–Z)", test: (p) => /[A-Z]/.test(p) },
+    { label: "One lowercase letter (a–z)", test: (p) => /[a-z]/.test(p) },
+    { label: "One number (0–9)", test: (p) => /[0-9]/.test(p) },
+    { label: "One special character (!@#$…)", test: (p) => /[^A-Za-z0-9]/.test(p) },
+  ]
+
+  const isPasswordWeak = password.length > 0 && !passwordRules.every(r => r.test(password))
+  const showPasswordHints = password.length > 0 && isPasswordWeak
+
+  function validate() {
+    if (!username.trim()) return "Username is required."
+    if (!email.trim()) return "Email is required."
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Please enter a valid email address (e.g. user@example.com)."
+    if (!password) return "Password is required."
+    if (isPasswordWeak) return "Password does not meet the requirements listed below."
+    return null
+  }
+
   async function handleSubmit(e){
     e.preventDefault()
     dispatch(clearError())
-    await handleRegister(username, email, password)
+
+    const validationError = validate()
+    if (validationError) {
+      dispatch(setError(validationError))
+      return
+    }
+
+    const result = await handleRegister(username, email, password)
+
+    if (result?.success) {
+      // Registered successfully → go to login
+      navigate("/login", { replace: true, state: { message: "Account created! Please verify your email, then sign in." } })
+      return
+    }
+
+    if (result?.status === 409) {
+      // User already exists → redirect to login with hint
+      navigate("/login", { replace: true, state: { message: "An account with this email/username already exists. Please sign in." } })
+    }
   }
 
   if(!loading && user){
@@ -68,6 +107,22 @@ const Register = () => {
             placeholder="Password"
             onChange={(e) => { setPassword(e.target.value) }}
           />
+
+          {showPasswordHints && (
+            <div className="password-hints" role="list" aria-label="Password requirements">
+              {passwordRules.map((rule) => (
+                <div
+                  key={rule.label}
+                  className={`password-hint-item ${rule.test(password) ? "met" : "unmet"}`}
+                  role="listitem"
+                >
+                  <span className="hint-icon">{rule.test(password) ? "✓" : "✗"}</span>
+                  <span>{rule.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           {error && (
             <div className="auth-error" role="alert">
               <svg className="auth-error-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

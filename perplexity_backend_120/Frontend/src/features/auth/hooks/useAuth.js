@@ -12,8 +12,11 @@ export function useAuth(){
         try{
             dispatch(setLoading(true))
             const data = await register(username, email, password)
+            return { success: true, status: 201 }
         }catch(err){
+            const status = err.response?.status
             dispatch(setError((err.response?.data?.message) || "Registration failed"))
+            return { success: false, status }
         }finally{
             dispatch(setLoading(false))
         }
@@ -24,13 +27,19 @@ export function useAuth(){
             dispatch(setLoading(true))
             const data = await login(email, password)
             dispatch(setUser(data.user))
-            console.log(data.user)
         }catch(err){
-            dispatch(setError((err.response?.data?.message) || "Login failed"))
+            const status = err.response?.status
+            const serverMsg = err.response?.data?.message
+            let msg = serverMsg || "Login failed"
+            if (status === 400 && serverMsg?.toLowerCase().includes("verify")) {
+                msg = "Please verify your email before logging in. Check your inbox."
+            } else if (status === 401) {
+                msg = "Invalid credentials. Please verify your email is correct or register first."
+            }
+            dispatch(setError(msg))
         }finally{
             dispatch(setLoading(false))
         }
-
     }
 
     async function handleGetMe(){

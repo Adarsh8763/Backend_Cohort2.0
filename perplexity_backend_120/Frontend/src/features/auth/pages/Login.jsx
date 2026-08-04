@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import "../style/form.scss";
 import FormGroup from "../components/FormGroup";
-import { Link, useNavigate } from "react-router"
+import { Link, useNavigate, useLocation } from "react-router"
 import { useAuth } from "../hooks/useAuth";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router";
-import { clearError } from "../auth.slice";
+import { clearError, setError } from "../auth.slice";
 
 const Login = () => {
 
@@ -19,12 +19,30 @@ const Login = () => {
   const { handleLogin } = useAuth()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Message passed from Register (on success or user-already-exists redirect)
+  const infoMessage = location.state?.message || null
 
   useEffect(() => { dispatch(clearError()) }, [])
-  
+
+  function validate() {
+    if (!email.trim()) return "Email is required."
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Please enter a valid email address (e.g. user@example.com)."
+    if (!password) return "Password is required."
+    return null
+  }
+
   async function handleSubmit(e){
     e.preventDefault()
     dispatch(clearError())
+
+    const validationError = validate()
+    if (validationError) {
+      dispatch(setError(validationError))
+      return
+    }
+
     await handleLogin(email, password)
   }
 
@@ -45,6 +63,14 @@ const Login = () => {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {infoMessage && (
+            <div className="auth-info" role="status">
+              <svg className="auth-info-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+              </svg>
+              <span>{infoMessage}</span>
+            </div>
+          )}
           <FormGroup
             id="email"
             type="text"

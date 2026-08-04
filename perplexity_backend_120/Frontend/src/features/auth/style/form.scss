@@ -201,4 +201,65 @@
     transform: translateY(0);
   }
 }
+
+// Password strength requirements (shown while typing if weak)
+.password-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 14px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: errorFadeIn 0.2s ease;
+
+  .password-hint-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    transition: color 0.18s ease;
+
+    .hint-icon {
+      font-size: 11px;
+      width: 14px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    &.met {
+      color: #4ade80; // green-400
+    }
+
+    &.unmet {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// Info / success banner (shown after redirect from register)
+.auth-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background-color: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.28);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: #4ade80;
+  animation: errorFadeIn 0.2s ease;
+
+  .auth-info-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: #4ade80;
+  }
+
+  span {
+    line-height: 1.4;
+  }
+}
 
