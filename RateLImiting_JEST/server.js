@@ -3,9 +3,10 @@ import express from "express";
 import Redis from "ioredis";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import userModel from "./models/user.model";
+import userModel from "./models/user.model.js";
+import rateLimit from "express-rate-limit";
 
-
+// Connect to MongoDB
 const connectToDB = async () => {
   try{
     await mongoose.connect(process.env.MONGO_URI);
@@ -15,26 +16,79 @@ const connectToDB = async () => {
   }
 }
 
+connectToDB();
+
+// Connect to Redis
 const redis = new Redis(process.env.REDIS_URI);
 
 redis.once("connect", () => {
   console.log("Connected to Redis");
 })
 
+// Middelewares
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/users", async (req, res) => {
+// Rate Limiting
+const globalLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,  // 5 minutes
+  max: 100,                    // 100 requests per window per IP
+  message: {
+    error: 'Too many requests. Please try again later.'
+  },
+  statusCode: 429,
+  standardHeaders: true,   // sends RateLimit-* headers
+  legacyHeaders: false,
+});
+
+// Apply to every route
+app.use(globalLimiter);
+
+
+// Routes
+app.get("/user/:id", async (req, res) => {
   try{
-    const users = await userModel.findOne({_id: req.params.id});
-    res.json(users);
+    const cachedUser = await redis.get(`user:${req.params.id}`);
+    if (cachedUser) {
+      return res.json({
+        msg: "User fetched from cache",
+        user: JSON.parse(cachedUser)
+      });
+    }
+    const user = await userModel.findOne({_id: req.params.id});
+    await redis.set(`user:${req.params.id}`, JSON.stringify(user), "EX", 3600); // Cache for 1 hour
+    res.json({
+      msg: "User fetched from database",
+      user
+    });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+app.post("/user", async (req, res) => {
+  try{
+    const { name, email, password } = req.body;
+    const user = new userModel({ name, email, password });
+    await user.save();
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/", (req, res) => {
+  let sum = 0;
+  for (let i = 0; i < 1e9; i++) {
+    sum += i;
+  }
+  res.json({ msg: "Sum calculated", sum });
+});
+
+// Start the server
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
