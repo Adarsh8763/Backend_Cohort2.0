@@ -80,12 +80,18 @@ app.post("/user", async (req, res) => {
   }
 });
 
+// Set EJS as the view engine
+app.set('view engine', 'ejs');   //Kaun sa view engine we are using ye batana padega
+app.set("views", "./views")
+
+app.use(express.static("public"))
+
 app.get("/", (req, res) => {
-  let sum = 0;
-  for (let i = 0; i < 1e9; i++) {
-    sum += i;
-  }
-  res.json({ msg: "Sum calculated", sum });
+  res.render("index", {
+    username: "Adarsh",
+    bio: "This is the sample bio for this user",
+    profileImg: "https://images.unsplash.com/photo-1508341591423-4347099e1f19?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  })
 });
 
 // Start the server
