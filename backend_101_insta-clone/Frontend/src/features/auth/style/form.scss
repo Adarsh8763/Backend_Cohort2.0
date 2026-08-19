@@ -69,6 +69,28 @@
       margin-top: var(--space-xs);
       width: 100%;
     }
+
+    .postImg-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1rem;
+      background-color: var(--bg-input);
+      border: 1px dashed var(--border-hover);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: border-color var(--ease), color var(--ease);
+      text-align: center;
+
+      &:hover {
+        border-color: var(--accent);
+        color: var(--text-primary);
+      }
+    }
   }
 
   .form-footer {

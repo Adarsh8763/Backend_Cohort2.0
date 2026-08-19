@@ -1,0 +1,97 @@
+/* ─── Profile Page ───────────────────────────────────────── */
+
+/* Avatar */
+.profile-avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .profile-avatar {
+    position: relative;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    transition: border-color var(--ease);
+
+    &:hover {
+      border-color: var(--accent);
+
+      .avatar-overlay {
+        opacity: 1;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .avatar-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-input);
+      color: var(--text-muted);
+      font-size: 2rem;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity var(--ease);
+    }
+  }
+
+  .profile-username {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+}
+
+/* Status messages */
+.status-msg {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+
+  &.success {
+    color: #4caf82;
+    background-color: rgba(76, 175, 130, 0.08);
+    border: 1px solid rgba(76, 175, 130, 0.2);
+  }
+
+  &.error {
+    color: var(--accent);
+    background-color: rgba(232, 64, 64, 0.08);
+    border: 1px solid rgba(232, 64, 64, 0.2);
+  }
+}
+
+/* Disabled button */
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}

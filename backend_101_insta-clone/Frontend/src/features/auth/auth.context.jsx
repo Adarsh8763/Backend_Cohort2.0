@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import {login, register, getMe} from "./services/auth.api"
+import {login, register, getMe, updateProfileImg} from "./services/auth.api"
 
 export const AuthContext = createContext()  //Creates an empty container to hold global data
 
@@ -37,10 +37,23 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const handleUpdateProfileImg = async (imgFile) => {
+        setLoading(true)
+        try {
+            const response = await updateProfileImg(imgFile)
+            setUser(response.user)
+            return response
+        } catch(err) {
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return(
         // Provider => fills the AuthContext container with value
         // Niche pura code ka mtlb => iske andar jo bhi children h wo wrap ho gya <AuthContext.Provider> andar and wo ab ke gloablly available chizo ko direct use kr skta h
-        <AuthContext.Provider value = {{user, loading, handleLogin, handleRegister}}>
+        <AuthContext.Provider value = {{user, loading, handleLogin, handleRegister, handleUpdateProfileImg}}>
             {children}    
         </AuthContext.Provider>
     )

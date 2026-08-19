@@ -2,6 +2,8 @@ const express = require("express")
 const authRouter = express.Router()
 const authController = require("../controller/auth.controller")
 const identifyUser = require("../middlewares/auth.middleware")
+const multer = require("multer")
+const upload = multer({ storage: multer.memoryStorage() })
 
 /*
     @route - POST /api/auth/register
@@ -23,5 +25,12 @@ authRouter.post("/login", authController.loginController)
     @access - protected
 */
 authRouter.get("/get-me", identifyUser, authController.getMeController)
+
+/*
+    @route - PATCH /api/auth/update-profile-img
+    @description - Update the logged-in user's profile picture
+    @access - protected
+*/
+authRouter.patch("/update-profile-img", upload.single("profileImg"), identifyUser, authController.updateProfileImgController)
 
 module.exports = authRouter

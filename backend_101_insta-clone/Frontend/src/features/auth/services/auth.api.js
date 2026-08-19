@@ -27,3 +27,9 @@ export async function getMe() {
   return response.data;
 }
 
+export async function updateProfileImg(imgFile) {
+  const formData = new FormData();
+  formData.append("profileImg", imgFile);
+  const response = await api.patch("/update-profile-img", formData);
+  return response.data;
+}

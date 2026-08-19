@@ -1,6 +1,12 @@
 const userModel = require("../models/user.model")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+const ImageKit = require("@imagekit/nodejs")
+const { toFile } = require("@imagekit/nodejs")
+
+const imagekit = new ImageKit({
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY
+})
 
 async function registerController (req, res){
     const {username, email, password, bio} = req.body
@@ -104,8 +110,35 @@ async function getMeController (req,res){
     })
 }
 
+async function updateProfileImgController(req, res){
+    const userId = req.user.id
+
+    const uploaded = await imagekit.files.upload({
+        file: await toFile(Buffer.from(req.file.buffer), "profile"),
+        fileName: "profile_" + userId,
+        folder: "Cohort-2/insta-clone/profiles"
+    })
+
+    const user = await userModel.findByIdAndUpdate(
+        userId,
+        { profileImg: uploaded.url },
+        { new: true }
+    )
+
+    res.status(200).json({
+        msg: "Profile image updated",
+        user: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profileImg: user.profileImg
+        }
+    })
+}
+
 module.exports = {
     registerController,
     loginController,
-    getMeController
+    getMeController,
+    updateProfileImgController
 }
