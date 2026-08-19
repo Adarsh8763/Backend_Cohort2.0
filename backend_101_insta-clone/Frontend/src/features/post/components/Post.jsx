@@ -6,12 +6,12 @@ const Post = ({ user, post, handleLikePost, handleUnlikePost }) => {
       <div className="user">
         <div className="profile-outer-circle">
           <div className="profile-inner-circle">
-            <img className="profileImg" src={user.profileImg} />
+            <img className="profileImg" src={user.profileImg} alt={user.username} />
           </div>
         </div>
         <h3>{user.username}</h3>
       </div>
-      <img className="postImg" src={post.imgUrl} />
+      <img className="postImg" src={post.imgUrl} alt={post.caption} />
       <div className="icons">
         <div className="left">
           <svg
@@ -51,7 +51,9 @@ const Post = ({ user, post, handleLikePost, handleUnlikePost }) => {
         </div>
       </div>
       <div className="bottom">
-        <p className="caption">{post.caption}</p>
+        <p className="caption">
+          <strong>{user.username}</strong>{post.caption}
+        </p>
       </div>
     </div>
   );

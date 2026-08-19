@@ -1,17 +1,31 @@
+/* ─── Button ─────────────────────────────────────────────── */
 .button {
-  padding-inline: 1rem;
-  padding-block: 0.8rem;
-  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background-color var(--ease), transform var(--ease), opacity var(--ease);
+  white-space: nowrap;
 
-  &.primary-button{
-    background-color: rgb(212, 27, 27);
-    color: whitesmoke;
+  &.primary-button {
+    background-color: var(--accent);
+    color: #fff;
+
+    &:hover {
+      background-color: var(--accent-hover);
+    }
   }
-  &:active{
-    scale: 0.95;
+
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.9;
   }
 }

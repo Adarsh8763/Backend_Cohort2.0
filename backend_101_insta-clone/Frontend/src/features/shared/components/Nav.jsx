@@ -7,8 +7,8 @@ const Nav = () => {
 
   return (
     <div className="nav-bar">
-        <p> <b>Insta</b></p>
-        <button onClick={()=>{navigate('/create-post')}} className='button primary-button'>New Post</button>
+        <p className="nav-brand">Insta<span>.</span></p>
+        <button onClick={()=>{navigate('/create-post')}} className='button primary-button'>+ New Post</button>
     </div>
   )
 }

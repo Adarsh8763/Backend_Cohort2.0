@@ -29,21 +29,23 @@ const Register = () => {
     setPassword("")
     setEmail("")
   }
+
   return (
-    <div>
-      <main>
-        <div className="form-container">
-          <h1>Register</h1>
-          <form onSubmit={onSubmitHandler}>
-          <input onChange= {(e)=> {setUsername(e.target.value)}} type="text" name='username' value={username} placeholder='Enter username'/>
-          <input onChange= {(e)=> {setEmail(e.target.value)}} type="text" name='email' value={email} placeholder='Enter email'/>
-          <input onChange={(e)=>{setPassword(e.target.value)}} type="text" name='password' value={password} placeholder='Enter password'/>
-          <button className='button primary-button'>Register</button>
-          <p>Already have an account? <Link className='toggleAuthForm' to='/login'>Login</Link> </p>
-        </form>
+    <main className="auth-page">
+      <div className="form-container">
+        <div className="form-header">
+          <p className="brand">Insta<span>.</span></p>
+          <p className="subtitle">Join the community — create your account.</p>
         </div>
-      </main>
-    </div>
+        <form onSubmit={onSubmitHandler}>
+          <input onChange={(e)=>{setUsername(e.target.value)}} type="text" name='username' value={username} placeholder='Username'/>
+          <input onChange={(e)=>{setEmail(e.target.value)}} type="email" name='email' value={email} placeholder='Email address'/>
+          <input onChange={(e)=>{setPassword(e.target.value)}} type="password" name='password' value={password} placeholder='Password'/>
+          <button className='button primary-button'>Create Account</button>
+        </form>
+        <p className="form-footer">Already have an account? <Link className='toggleAuthForm' to='/login'>Sign in</Link></p>
+      </div>
+    </main>
   )
 }
 

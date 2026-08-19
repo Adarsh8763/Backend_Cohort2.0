@@ -1,15 +1,26 @@
-.nav-bar{
-    width: 330px;
-    padding-inline: 1rem;
-    padding-block: .8rem;
+/* ─── Navbar ─────────────────────────────────────────────── */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding: 0.9rem var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .nav-brand {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
 
-    p{
-        font-size: 1.4rem;
-        color: whitesmoke;
+    span {
+      color: var(--accent);
     }
-
-}
+  }
+}

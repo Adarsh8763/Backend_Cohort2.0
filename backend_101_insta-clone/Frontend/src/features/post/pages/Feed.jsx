@@ -15,15 +15,21 @@ const Feed = () => {
 
   if (loading){
     return(
-      <main>
-        <h1>Feed is loading...</h1>
+      <main className="feed-page">
+        <Nav/>
+        <div className="feed">
+          <p style={{color: 'var(--text-muted)', marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem'}}>Loading feed…</p>
+        </div>
       </main>
     )
   }
   if(!feed){
     return (
-      <main>
-        <h1>No Feed is there in DB or U haven't logged in yet</h1>
+      <main className="feed-page">
+        <Nav/>
+        <div className="feed">
+          <p style={{color: 'var(--text-muted)', marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem'}}>No posts yet — log in or create one!</p>
+        </div>
       </main>
     )
   }
@@ -34,7 +40,7 @@ const Feed = () => {
       <div className="feed">
         <div className="posts">
           {feed.map(post=>{
-            return <Post user={post.user} post={post} handleLikePost={handleLikePost} handleUnlikePost={handleUnlikePost}/>
+            return <Post key={post._id} user={post.user} post={post} handleLikePost={handleLikePost} handleUnlikePost={handleUnlikePost}/>
           })}
         </div>
       </div>

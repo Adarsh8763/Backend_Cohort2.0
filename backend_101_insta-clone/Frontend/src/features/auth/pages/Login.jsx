@@ -14,8 +14,13 @@ const Login = () => {
 
   if (loading) {
     return (
-      <main>
-        <h1>Loading...</h1>
+      <main className="auth-page">
+        <div className="form-container">
+          <div className="form-header">
+            <p className="brand">Insta<span>.</span></p>
+            <p className="subtitle">Signing you in…</p>
+          </div>
+        </div>
       </main>
     );
   }
@@ -36,9 +41,12 @@ const Login = () => {
   }
 
   return (
-    <main>
+    <main className="auth-page">
       <div className="form-container">
-        <h1>Login</h1>
+        <div className="form-header">
+          <p className="brand">Insta<span>.</span></p>
+          <p className="subtitle">Welcome back — sign in to continue.</p>
+        </div>
         <form onSubmit={onSubmitHandler}>
           <input
             onChange={(e) => {
@@ -47,24 +55,24 @@ const Login = () => {
             type="text"
             name="username"
             value={username}
-            placeholder="Enter username"
+            placeholder="Username"
           />
           <input
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            type="text"
+            type="password"
             name="password"
             value={password}
-            placeholder="Enter password"
+            placeholder="Password"
           />
-          <button className="button primary-button">Login</button>
+          <button className="button primary-button">Sign In</button>
         </form>
-        <p>
-          Don't have an account?{" "}
+        <p className="form-footer">
+          New here?
           <Link className="toggleAuthForm" to="/register">
-            Register
-          </Link>{" "}
+            Create an account
+          </Link>
         </p>
       </div>
     </main>
