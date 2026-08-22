@@ -10,8 +10,10 @@ app.use(cookieParser())
 
 //Routes
 const authRouter = require("./routes/auth.routes")
+const homeRouter = require("./routes/home.routes")
 
 app.use("/api/auth", authRouter)
+app.use("/api/home", homeRouter)
 
 module.exports = app;
 
