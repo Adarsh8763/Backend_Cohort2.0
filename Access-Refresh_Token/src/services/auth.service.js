@@ -1,3 +1,4 @@
+const userModel = require("../models/user.model");
 const { generateAccessToken, generateRefreshToken } = require("../utils/generateTokens")
 
 const registerService = async (data) => {
@@ -27,6 +28,9 @@ const registerService = async (data) => {
 
         const accessToken = generateAccessToken(user._id)
         const refreshToken = generateRefreshToken(user._id)
+
+        user.refreshToken = refreshToken
+        await user.save()
 
         return {
             accessToken,
@@ -62,6 +66,9 @@ const loginService = async (data) => {
         const accessToken = generateAccessToken(user._id)
         const refreshToken = generateRefreshToken(user._id)
 
+        user.refreshToken = refreshToken
+        await user.save()
+
         return {
             accessToken,
             refreshToken,
@@ -73,7 +80,30 @@ const loginService = async (data) => {
     }
 }
 
+const getAccessTokenService = async (refreshToken) => {
+    const decode = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
+
+    if(!decode){
+        throw new Error("Unauthorized") 
+    }
+
+    const user = await userModel.findById(decode.id)
+
+    if(!user){
+        throw new Error("Unauthorized")
+    }
+
+    if(refreshToken !== user.refreshToken){
+        throw new Error("Unauthorized")
+    }
+
+    const accessToken = generateAccessToken(user._id)
+
+    return accessToken
+}
+
 module.exports = {
     registerService,
-    loginService
+    loginService,
+    getAccessTokenService
 }
