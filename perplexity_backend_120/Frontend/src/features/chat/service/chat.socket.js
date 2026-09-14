@@ -1,7 +1,7 @@
 import { io } from "socket.io-client"
 
 export const initializeSocketconnection = () => {
-    const socket = io("http://localhost:3000", {
+    const socket = io("https://backend-cohort2-0-3-lx0x.onrender.com", {
         withCredentials: true
     })
 

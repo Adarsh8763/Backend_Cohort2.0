@@ -4,7 +4,7 @@ let io
 export function initSocket(httpServer) {
     io = new Server(httpServer, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: "https://backend-cohort2-0-3-lx0x.onrender.com",
             credentials: true
         }
     })
