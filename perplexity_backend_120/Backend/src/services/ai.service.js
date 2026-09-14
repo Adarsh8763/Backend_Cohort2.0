@@ -5,7 +5,7 @@ import * as z from "zod"
 import { searchInternet } from "./internet.service.js";
 
 const model = new ChatMistralAI({
-    model: "mistral-small-latest",
+    model: "ministral-3b-latest",
     temperature: 0
 });
 
